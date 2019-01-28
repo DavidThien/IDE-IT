@@ -1,0 +1,35 @@
+--------------------
+GOALS FROM LAST WEEK
+--------------------
+
+N/A (First week of project)
+
+--------------------
+PROGRESS THIS WEEK
+--------------------
+
+-Started Google Doc for team to share links to helpful resources
+	-Added links to Eclipse API reference, Eclipse Plugin Development FAQ
+-Worked on project proposal document
+	-Started proposal outline to help divide/track work done on proposal document
+	-Wrote about key differences in our approach vs. others
+	-Wrote "Challenges and Risks" section
+-Started Google Slides document for group presentation
+	-Created diagram of basic overview of plugin functionality
+	-Created outline of topics to discuss
+-Helped organize schedule by adding markers to track completed/uncompleted items
+
+--------------------
+GOALS FOR NEXT WEEK
+--------------------
+
+-Research Eclipse API and developer forums regarding basic functionality of plugin backend
+	-Implementing listeners for user keypresses
+	-Implementing listeners for user mouse clicks
+	-Implementing listeners for document changes
+-Add more resources to our shared links document
+-Coordinate with team members on a specification for our design
+	-Work with front end team to agree upon certain functions/modules they will have access to
+		-Allows them to begin work earlier
+-Get a basic plug-in framework operating in my instance of Eclipse
+	-Play around with it, test functionality noted above
