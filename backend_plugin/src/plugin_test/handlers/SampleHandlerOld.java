@@ -12,7 +12,7 @@ import plugin_editor_test.*;
 // new stuff
 
 
-public class SampleHandler extends AbstractHandler {
+public class SampleHandlerOld extends AbstractHandler {
 
 	
 	@Override
@@ -23,7 +23,7 @@ public class SampleHandler extends AbstractHandler {
 		System.out.println("Menu item works");
 		
 		// Key Listener - there should be a much better way to handle this
-		KeyListenerHandler testHandler = new KeyListenerHandler();
+		KeyListenerHandlerOld testHandler = new KeyListenerHandlerOld();
 		testHandler.earlyStartup();
 		
 		// Opens a dialog box with some generic info

@@ -17,8 +17,8 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="plugin_test.handlers.SampleHandler"
-            commandId="Plugin_test.commands.sampleCommand">
+            class="PossibleKeyPressHandler.SampleHandler"
+            commandId="PossibleKeyPressHandler.SampleHandler">
       </handler>
    </extension>
    <extension

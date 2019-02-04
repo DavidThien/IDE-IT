@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IStartup;
 
-public class KeyListenerHandler implements IStartup {
+public class KeyListenerHandlerOld implements IStartup {
 	
 	private String typedChars;
 	
