@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Plugin_test
+Bundle-SymbolicName: backend_plugin;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: plugin_test.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ plugin_editor_test;bundle-version="1.0.0",
+ org.eclipse.ui.workbench,
+ org.eclipse.ui.workbench.texteditor
+Bundle-RequiredExecutionEnvironment: JavaSE-9
+Automatic-Module-Name: Plugin_test
+Import-Package: org.eclipse.jface.text
+Export-Package: plugin_test
+Bundle-ActivationPolicy: lazy
