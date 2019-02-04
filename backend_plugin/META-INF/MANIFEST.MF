@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: plugin_test.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- plugin_editor_test;bundle-version="1.0.0",
  org.eclipse.ui.workbench,
  org.eclipse.ui.workbench.texteditor
 Bundle-RequiredExecutionEnvironment: JavaSE-9
