@@ -1,0 +1,33 @@
+-----------------------
+GOALS FROM PREVIOS WEEK
+-----------------------
+	- N/A (No report was due last week)
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+	- Designed and wrote interface design
+		- Observer Design Pattern
+		- Provided information to Front End
+	- Researched various Eclipse functionality
+		- Shared resources with team
+	- Researched and tested plug in dependency
+		- Was able to prove plug in dependency works in a way that allows
+			front and and back end to develop separate plug ins. FE will 
+			use BE as a dependency and use our service
+	- Prototyped reading key inputs
+		- This particular method was found to be clunky and unreliable
+	- Modified Project Proposal 
+		- Rewrote the approach to be BE specific
+		- Added architecture design
+			- including interface details
+
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	- Prepare presentation materials
+		- including practicing presentation
+	- Prototype a working evaluation function for comment block feature
+	- Create a simple FE interface to display when notifications are triggered
+	- Help create the user manual
+	- Continue research into Eclipse plugin functionality
