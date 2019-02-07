@@ -1,0 +1,70 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------
+	- N/A (No report was due last week)
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+	- Designed and wrote interface design
+		- Observer Design Pattern
+		- Provided information to Front End
+	- Researched various Eclipse plugin functionality and Eclipse APIs
+		- Shared resources with team
+	- Researched and tested plug in dependency
+		- Was able to prove plug in dependency works in a way that allows
+			front and and back end to develop separate plug ins. FE will 
+			use BE as a dependency and use our service
+	- Prototyped reading key inputs
+		- This particular method was found to be clunky and unreliable
+	- Modified Project Proposal 
+		- Rewrote the approach to be BE specific
+		- Added architecture design
+			- including interface details
+	- Infrastructure for IDE-IT backend
+		- Discussed and designed
+		- Added to Project Proposal
+	- Coordinated with teammates to determine a specification for the backend team
+	- Installed a basic working plugin framework in Eclipse (a simple "Hello world" example)
+		- May be scrapped or modified to be used as our starting framework for IDE-IT BE
+	- Learning how to use activators to manage plugin lifetime
+		- Had difficulties in having a plug in automatically start upon Eclipse startup
+  	- Using JUnit with SWT to to create automated testing of plugins
+  	- Integrating JUnit SWTbot test with Travis CI
+  	- Set up eclipse version control integration
+
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	Responsible parties are listed after each goal (or subgoal, where applicable)
+
+	- Prepare presentation materials  (All)
+		- including practicing presentation
+	- Create the user manual (All)
+	- Implement functional prototypes
+		- Listeners for user keypresses    (Eric)
+		- Listeners for user mouse clicks    (Eric)
+		- Functional listeners for document changes    (Eric)
+		- Evaluation function for comment block feature    (John)
+	- Create a simple FE interface to display when notifications are triggered    (John)
+		- Use public facing interface 
+	- Continue research into Eclipse plugin functionality (All)
+		- Share new materials with team
+	- Integrate with Travis CI (David)
+	- Create installable package other can download (David)
+		- Implement and test
+	- Determine how plugin dependencies should work with eclipse marketplace (David)
+	- Implement activators so plugin lifetime is automatically managed correctly (John)
+
+
+--------------
+MEETING AGENDA
+--------------
+With TA:
+	- Review Architecture and Implementation plan feedback (if available)
+	- User manual clarification
+		- .md file in git?
+With Manager / Senior Engineer
+	- Any concerns with project proposal as it stands now?
+	
+
