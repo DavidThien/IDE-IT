@@ -5,26 +5,26 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            id="Plugin_test.commands.category"
+            id="backend_plugin.commands.category"
             name="Sample Category">
       </category>
       <command
-            categoryId="Plugin_test.commands.category"
+            categoryId="backend_plugin.commands.category"
             name="Sample Command"
-            id="Plugin_test.commands.sampleCommand">
+            id="backend_plugin.commands.sampleCommand">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="PossibleKeyPressHandler.SampleHandler"
-            commandId="PossibleKeyPressHandler.SampleHandler">
+            class="trackers.TrackerStarterTemp"
+            commandId="backend_plugin.commands.sampleCommand">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="Plugin_test.commands.sampleCommand"
+            commandId="backend_plugin.commands.sampleCommand"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6">
@@ -35,11 +35,11 @@
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               id="Plugin_test.menus.sampleMenu"
+               id="backend_plugin.menus.sampleMenu"
                label="Sample Menu"
                mnemonic="M">
             <command
-                  commandId="Plugin_test.commands.sampleCommand"
+                  commandId="backend_plugin.commands.sampleCommand"
                   id="Plugin_test.menus.sampleCommand"
                   mnemonic="S">
             </command>
@@ -48,12 +48,12 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="Plugin_test.toolbars.sampleToolbar">
+               id="backend_plugin.toolbars.sampleToolbar">
             <command
-                  id="Plugin_test.toolbars.sampleCommand"
-                  commandId="Plugin_test.commands.sampleCommand"
+                  id="backend_plugin.toolbars.sampleCommand"
+                  commandId="backend_plugin.commands.sampleCommand"
                   icon="icons/sample.png"
-                  tooltip="Say hello world">
+                  tooltip="Begin tracking changes in current document">
             </command>
          </toolbar>
       </menuContribution>

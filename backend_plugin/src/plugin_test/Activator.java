@@ -4,8 +4,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import PossibleKeyPressHandler.KeyListenerHandler;
-import plugin_test.handlers.KeyListenerHandlerOld;
+import trackers.DocumentChangesTracker;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -29,9 +28,6 @@ public class Activator extends AbstractUIPlugin {
 		System.out.println("Activator started!!");
 		super.start(context);
 		plugin = this;
-		
-		KeyListenerHandler keyListener = new KeyListenerHandler();
-		keyListener.startListening();
 	}
 
 	@Override
