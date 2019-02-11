@@ -3,6 +3,8 @@ package interfaces;
 import java.util.ArrayList;
 import java.util.List;
 
+import evaluators.EvaluatorManager;
+
 /** Designed to be used in conjunction with the FeatureSuggestionObserver class. 
  * Observers can register themselves with FeatureSuggestions. FeatureSuggestion will 
  * notify all registered Observers with features it detects the user may want to be 
@@ -10,6 +12,7 @@ import java.util.List;
  */
 public class FeatureSuggestion implements FeatureSuggestionInterface {
 	
+	private EvaluatorManager manager;
 	private List<FeatureSuggestionObserver> observers;
 	private List<String> featureIDs;
 	private boolean isRunning;
@@ -18,6 +21,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 		// debug
 		System.out.println("FS created");
 		
+		manager = new EvaluatorManager(this);
 		observers = new ArrayList<FeatureSuggestionObserver>();
 		featureIDs = generateFeatureIDs();
 		isRunning = false;
@@ -98,6 +102,11 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 		return feats;
 	}
 	
+	/**
+	 * Notifies all observers that a feature should be suggested to the user
+	 * 
+	 * @param featureID string that represents a featureID
+	 */
 	public void notifyAllObservers(String featureID) {
 		for (FeatureSuggestionObserver o : observers) {
 			o.notify(featureID);

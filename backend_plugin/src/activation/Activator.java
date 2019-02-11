@@ -8,6 +8,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import evaluators.EvaluatorManager;
+import interfaces.FeatureSuggestion;
 import listeners.EditorWindowListener;
 
 /**
@@ -35,14 +36,8 @@ public class Activator extends AbstractUIPlugin {
 		// Debug
 		System.out.println("Activator started!!");
 		
-		EvaluatorManager manager = new EvaluatorManager();	
-		
-		// Add a listener to the Eclipse workspace that automatically handles adding
-		// evaluators for document editor windows to the EvaluatorManager
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IWorkbenchPage page = window.getActivePage();
-		EditorWindowListener windowListener = new EditorWindowListener(manager);
-		page.addPartListener(windowListener);
+		// This mimics how a FE service would use our plugin
+		FeatureSuggestion fs = new FeatureSuggestion();
 	}
 
 	@Override

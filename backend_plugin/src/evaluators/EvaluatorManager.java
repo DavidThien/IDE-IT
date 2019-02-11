@@ -5,10 +5,14 @@ import java.util.Map;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import interfaces.FeatureSuggestion;
 import listeners.DocumentChangesTracker;
+import listeners.EditorWindowListener;
 
 /**
  * This class keeps track of all evaluators that are open across all
@@ -23,9 +27,18 @@ public class EvaluatorManager {
 	/**
 	 * Creates a new EvaluatorManager
 	 */
-	public EvaluatorManager() {
-		this.fs = new FeatureSuggestion();
+	public EvaluatorManager(FeatureSuggestion fs) {
+		this.fs = fs;
 		this.openPartEvaluators = new HashMap<IEditorPart, Evaluator>();
+		
+		// Eric's code to set up a listener over Eclipse as a whole
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
+		EditorWindowListener windowListener = new EditorWindowListener(this);
+		page.addPartListener(windowListener);
+		
+		//TODO:
+		// Check if there's an open document already, if so then add a listener to that document
 	}
 	
 	/**
