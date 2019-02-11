@@ -28,6 +28,7 @@ public class BlockCommentEvaluator {
 	 */
 	public BlockCommentEvaluator() {
 		firstBackSlashDetected = false;
+		prevInsert = "";
 	}
 	
 	/**
