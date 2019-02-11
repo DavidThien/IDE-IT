@@ -16,8 +16,6 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	private List<String> featureIDs;
 	private boolean isRunning;
 	
-	private Evaluator evaluator;
-	
 	protected FeatureSuggestion() {
 		// debug
 		System.out.println("FS created");
@@ -25,7 +23,6 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 		observers = new ArrayList<FeatureSuggestionObserver>();
 		featureIDs = generateFeatureIDs();
 		isRunning = false;
-		evaluator = new Evaluator(this);
 	}
 	
 	/**

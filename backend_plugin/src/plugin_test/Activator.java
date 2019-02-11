@@ -1,9 +1,13 @@
 package plugin_test;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import temp.EditorWindowListener;
 import trackers.DocumentChangesTracker;
 
 /**
@@ -32,6 +36,14 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		fs = new FeatureSuggestion();
 		fs.start();
+		
+		// Create an EditorWindowListener. When the user opens a Java document
+		// in a new document editor window, this will assign an evaluator to that
+		// document editor that reports to the feature suggester.
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchPage page = window.getActivePage();
+		EditorWindowListener windowListener = new EditorWindowListener(fs);
+		page.addPartListener(windowListener);
 	}
 
 	@Override
