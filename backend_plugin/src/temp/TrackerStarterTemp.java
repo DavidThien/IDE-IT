@@ -1,4 +1,4 @@
-package trackers;
+package temp;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -16,9 +16,6 @@ import evaluators.Evaluator;
  * when it is first loaded, we need this class to handle when the user clicks the icon
  * in the toolbar to start the tracking (this class is defined in the plugin.xml file
  * as the class that contains action code for that toolbar button)
- * 
- * Note: A document must already be open, otherwise this will throw a NullPointerException
- * when trying to access the current active editor window
  */
 public class TrackerStarterTemp extends AbstractHandler {
 

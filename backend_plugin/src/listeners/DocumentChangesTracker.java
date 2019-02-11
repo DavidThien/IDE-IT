@@ -1,4 +1,4 @@
-package trackers;
+package listeners;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;

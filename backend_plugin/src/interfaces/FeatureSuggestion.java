@@ -1,4 +1,4 @@
-package plugin_test;
+package interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	private List<String> featureIDs;
 	private boolean isRunning;
 	
-	protected FeatureSuggestion() {
+	public FeatureSuggestion() {
 		// debug
 		System.out.println("FS created");
 		

@@ -2,9 +2,6 @@ package evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
 
-import plugin_test.FeatureSuggestion;
-import trackers.TrackerController;
-
 /**
  * The Evaluator is designed to control all of the evaluation classes. The Evaluator creates a TrackerController, which
  * it uses to create different Listeners.
@@ -17,27 +14,21 @@ import trackers.TrackerController;
  */
 public class Evaluator {
 
-	// Dev notes:
-	// It would be great if we could use TrackerController as what determines when listeners should be created
-	// i.e. on new document open, then create a new document listener
 	// TODO: Create an interface / abstract class for different evaluation functions
 	// This would allow us to keep a set / list and then just iterate through the list / set
-	
-	private TrackerController trackerController;
+
 	private BlockCommentEvaluator blockCommentEval; 
-	private FeatureSuggestion fs;
+	private EvaluatorManager em;
 	
 	/**
 	 * Default constructor
 	 * @param fs FeatureSuggestion object that the Evaluator updates when a feature should be suggested
 	 */
-	public Evaluator(FeatureSuggestion fs) {
+	public Evaluator(EvaluatorManager em) {
 		// DEBUG
 		System.out.println("Evaluator Started");
 		
-		this.fs = fs;
-		trackerController = new TrackerController(this);
-		trackerController.createDocumentListener();
+		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
 	}
 	
@@ -49,7 +40,7 @@ public class Evaluator {
 	
 		// Block comment evaluation
 		if (blockCommentEval.evaluate(event)) {
-			fs.notifyAllObservers("Block Comment");
+			this.em.getFeatureSuggestor().notifyAllObservers("Block Comment");
 		}
 	}
 	
