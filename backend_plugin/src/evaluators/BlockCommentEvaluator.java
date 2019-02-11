@@ -28,7 +28,7 @@ public class BlockCommentEvaluator {
 	 */
 	public BlockCommentEvaluator() {
 		firstBackSlashDetected = false;
-		prevInsert = "";
+		this.prevInsert = "";
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class BlockCommentEvaluator {
 		int currentOffset = event.getOffset();
 		String currentInsert = event.getText();
 		if (prevOffset == currentOffset - 1) {
-			if (prevInsert.equals("/") && currentInsert.equals("/")) {
+			if (this.prevInsert.equals("/") && currentInsert.equals("/")) {
 				System.out.println("Placed two slashes");
 				
 				// If we have two back slashes, then check if we've found two previously
