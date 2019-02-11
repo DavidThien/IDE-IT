@@ -1,0 +1,34 @@
+-Goals for this week (from last week's status report):
+
+	-Implement a listener for key presses
+	-Implement a listener for document changes
+	-Write specification for backend
+	-Work on implementation plan
+	-Work on presentation materials
+	-Work on user manual
+
+-Progress made this week:
+
+	-Implemented a listener for key presses
+	-Implemented a listener for document changes
+	-Created an EvaluatorManager object
+		-Handles automatically applying key press/document
+		change listeners to opened editor windows
+	-Helped write specification for backend
+	-Worked on presentation materials
+	-Worked on implementation plan
+		-Motivation section
+			-Revised motivation section from proposal
+		-Helped write challenges section
+		-Made architecture diagrams
+		-Proofread/revised
+
+-Plan/Goals for the following week:
+
+	-Implement auto-activation of plugin on Eclipse startup
+		-Can get rid of having to click button in toolbar to
+		start plugin
+	-Assist with writing/refining evaluation functions
+		-Block comment feature mostly working, need to tweak a bit
+		-Work on evaluation for adding imports
+	-Participate in IDE-IT presentation
