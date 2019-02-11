@@ -10,6 +10,8 @@ import trackers.DocumentChangesTracker;
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
+	
+	private FeatureSuggestion fs;
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "Plugin_test"; //$NON-NLS-1$
@@ -28,6 +30,8 @@ public class Activator extends AbstractUIPlugin {
 		System.out.println("Activator started!!");
 		super.start(context);
 		plugin = this;
+		fs = new FeatureSuggestion();
+		fs.start();
 	}
 
 	@Override

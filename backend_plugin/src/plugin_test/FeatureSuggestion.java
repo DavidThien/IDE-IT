@@ -3,6 +3,8 @@ package plugin_test;
 import java.util.ArrayList;
 import java.util.List;
 
+import evaluators.Evaluator;
+
 /** Designed to be used in conjunction with the FeatureSuggestionObserver class. 
  * Observers can register themselves with FeatureSuggestions. FeatureSuggestion will 
  * notify all registered Observers with features it detects the user may want to be 
@@ -14,10 +16,16 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	private List<String> featureIDs;
 	private boolean isRunning;
 	
+	private Evaluator evaluator;
+	
 	protected FeatureSuggestion() {
+		// debug
+		System.out.println("FS created");
+		
 		observers = new ArrayList<FeatureSuggestionObserver>();
 		featureIDs = generateFeatureIDs();
 		isRunning = false;
+		evaluator = new Evaluator(this);
 	}
 	
 	/**
@@ -58,6 +66,9 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	@Override
 	public void start() {
 		isRunning = true;
+		
+		// Debug 
+		System.out.println("Starting fs");
 	}
 
 	/**
@@ -66,6 +77,9 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	@Override
 	public void stop() {
 		isRunning = false;
+		
+		// Debug
+		System.out.println("Stopping fs");
 	}
 
 	/**
@@ -87,6 +101,14 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 		List<String> feats = new ArrayList<String>();
 		feats.add("multiline_comment");
 		return feats;
+	}
+	
+	public void notifyAllObservers(String featureID) {
+		for (FeatureSuggestionObserver o : observers) {
+			o.notify(featureID);
+		}
+		// DEBUG
+		System.out.println("Notified observers of " + featureID);
 	}
 
 }

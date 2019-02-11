@@ -3,6 +3,8 @@ package trackers;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 
+import evaluators.Evaluator;
+
 /**
  * This class is responsible for listening for changes made within an
  * Eclipse editor window. It contains methods that are called when text
@@ -12,9 +14,11 @@ import org.eclipse.jface.text.IDocumentListener;
  */
 public class DocumentChangesTracker implements IDocumentListener {
 	
-	public DocumentChangesTracker() {
+	private Evaluator evaluator;
+	
+	public DocumentChangesTracker(Evaluator evaluator) {
 		super();
-		
+		this.evaluator = evaluator;
 	}
 
 	/**
@@ -34,12 +38,12 @@ public class DocumentChangesTracker implements IDocumentListener {
 	 */
 	@Override
 	public void documentChanged(DocumentEvent event) {
-		// For now, will just print out the text inserted into/removed
-		// from the document
 		
 		// event has options like getText() to get the text that was added
 		// or removed from the document, getOffset() to get the offset in
 		// the document where the insertion/removal occured, etc.
-		System.out.println(event.getText());
+		
+		// send event to the Evaluator
+		evaluator.evaluateDocChanges(event);
 	}
 }
