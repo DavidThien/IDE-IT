@@ -9,21 +9,31 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import evaluators.EvaluatorManager;
 
 /**
- * This listener class detects actions regarding windows that open
- * in the UI, such as opening a document in a new editor window. Its
- * purpose is to manage adding listeners to each document editor
- * when it opens.
+ * This listener class detects actions regarding windows in the Eclipse UI,
+ * such as opening a document in a new editor window, switching between editor tabs,
+ * etc. Its purpose is to manage adding listeners to each document editor
+ * when necessary.
  */
 public class EditorWindowListener implements IPartListener2 {
 	
 	private EvaluatorManager em;
 	
+	/**
+	 * Creates a new EditorWindowListener
+	 * @param em
+	 */
 	public EditorWindowListener(EvaluatorManager em) {
 		this.em = em;
 	}
 
+	/**
+	 * Adds an evaluator to a window when the user switches to it (i.e. switching tabs).
+	 * Only adds the evaluator if the window is a document editor containing a .java
+	 * file, and the window does not already have an evaluator assigned to it.
+	 */
 	@Override
 	public void partActivated(IWorkbenchPartReference partRef) {
+		// Called when a window is activated (i.e. user switches to a tab)
 		IWorkbenchPart part = partRef.getPart(false);
 		if (part instanceof IEditorPart) {
 			IEditorPart editor = (IEditorPart) part;
@@ -56,6 +66,11 @@ public class EditorWindowListener implements IPartListener2 {
 		
 	}
 
+	/**
+	 * Adds an evaluator to a newly opened window in the Eclipse UI.
+	 * Only adds the evaluator if the window is a document editor
+	 * containing a .java file 
+	 */
 	@Override
 	public void partOpened(IWorkbenchPartReference partRef) {
 		// Called when a window is first opened.

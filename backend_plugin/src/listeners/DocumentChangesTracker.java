@@ -22,8 +22,8 @@ public class DocumentChangesTracker implements IDocumentListener {
 	}
 
 	/**
-	 * Runs right before the user's change to the document is
-	 * actually entered into the document
+	 * Fires before a user's change to a document inside a document editor
+	 * is actually entered into the document
 	 */
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
@@ -33,8 +33,8 @@ public class DocumentChangesTracker implements IDocumentListener {
 	}
 
 	/**
-	 * Runs after the user's change to the document is actually
-	 * entered into the document
+	 * Fires after a user's change to a document inside a document editor 
+	 * is actually entered into the document
 	 */
 	@Override
 	public void documentChanged(DocumentEvent event) {

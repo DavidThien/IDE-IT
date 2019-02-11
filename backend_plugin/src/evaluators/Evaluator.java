@@ -22,7 +22,7 @@ public class Evaluator {
 	
 	/**
 	 * Default constructor
-	 * @param fs FeatureSuggestion object that the Evaluator updates when a feature should be suggested
+	 * @param em EvaluatorManager object that tracks all Evaluator instances
 	 */
 	public Evaluator(EvaluatorManager em) {
 		// DEBUG

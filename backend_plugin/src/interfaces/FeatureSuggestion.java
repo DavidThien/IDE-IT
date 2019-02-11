@@ -3,8 +3,6 @@ package interfaces;
 import java.util.ArrayList;
 import java.util.List;
 
-import evaluators.Evaluator;
-
 /** Designed to be used in conjunction with the FeatureSuggestionObserver class. 
  * Observers can register themselves with FeatureSuggestions. FeatureSuggestion will 
  * notify all registered Observers with features it detects the user may want to be 

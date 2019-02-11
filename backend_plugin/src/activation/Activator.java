@@ -29,15 +29,16 @@ public class Activator extends AbstractUIPlugin {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		System.out.println("Activator started!!");
 		super.start(context);
 		plugin = this;
 		
+		// Debug
+		System.out.println("Activator started!!");
+		
 		EvaluatorManager manager = new EvaluatorManager();	
 		
-		// When the user opens a Java document in a new document editor window,
-		// this will assign an evaluator to that document editor that reports
-		// to the feature suggester.
+		// Add a listener to the Eclipse workspace that automatically handles adding
+		// evaluators for document editor windows to the EvaluatorManager
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IWorkbenchPage page = window.getActivePage();
 		EditorWindowListener windowListener = new EditorWindowListener(manager);
