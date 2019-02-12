@@ -1,0 +1,35 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------
+	- Prepare presentation materials
+		- including practicing presentation
+	- Prototype a working evaluation function for comment block feature
+	- Create a simple FE interface to display when notifications are triggered
+	- Help create the user manual
+	- Continue research into Eclipse plugin functionality
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+	- Prepared presentation materials
+	- Implemented a working evaluation function for comment block feature
+		- Still some limitations, but it catches commenting out consecutive lines
+	- Asked Front End team to provide a simple FE interface to display when notifications are triggered
+	- Created rough draft of user manual
+		- Added details in Overview and Usage
+	- Researched various Eclipse functionality
+		- Discovered and utilized IRegion API functionality
+	- Researched plugin dependency with our current implementation
+		- Verified how other plugins can use ours as a service
+
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	- Finalize user manual
+		- Including list of featureID strings
+	- Re-prepare and give presentation in class
+	- Implement working evaluation function for:
+		- Adding import statements
+		- Removing unused import statements
+	- Create unit tests for FeatureSuggestion class
+	- Work with front end team to make sure they can interface with our plugin
