@@ -60,7 +60,7 @@ public class BlockCommentEvaluator {
 						
 						// Check if consecutive lines
 						int prevToCurrentDif = currentRegion.getOffset() - (prevRegion.getOffset() + prevRegion.getLength());
-						int currentToPrevDif = currentRegion.getOffset() + currentRegion.getLength() - prevRegion.getOffset();
+						int currentToPrevDif = prevRegion.getOffset() - (currentRegion.getOffset() + currentRegion.getLength());
 						
 						// Uses a buffer of 2 characters because sometimes IRegion doesn't count the newly inserted "//"
 						if ((prevToCurrentDif >= 0 && prevToCurrentDif <= 2) || 
