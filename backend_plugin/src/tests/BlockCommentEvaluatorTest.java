@@ -82,7 +82,6 @@ public class BlockCommentEvaluatorTest {
 		BlockCommentEvaluator testEvaluator = new BlockCommentEvaluator();
 		length = 1;
 		textAdded = "/";
-		System.out.println("Starting test 2");
 		// Create mock document event changes
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the third line
