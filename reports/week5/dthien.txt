@@ -1,0 +1,26 @@
+# David Thien Week 4 Status Report
+
+## Goals from previous week
+- Set up plugin testing (contingent on finishing comment detection feature)
+- Integrate with Travis CI
+- Create installable package other can download
+- Determine how plugin dependencies should work with eclipse marketplace
+- Set up basic interface so the front end can call into the backend
+- Implement activators so plugin lifetime is automatically managed correctly
+- Help set up presentation demo
+
+## Progress this week
+- Plugin testing in progress, currently finishing set-up with maven
+- Figured out how to intergrate Eclipse testing with Travis, just need to finish up maven tests (previous task)
+- Have an installable .jar file for the plugin now
+- Plugin dependencies will work through eclipse features
+  + Marketplace has to approve plugin, but quick process; this is a FE thing or - more likely - a 3rd respository thing to integrate with eclipse features
+- Plugin lifetimes are managed automatically and initialized on eclipse startup
+
+## Goals for next week
+- Finish setting up maven/travis for testing
+- Figure out how to do testing for editor inputs
+- Reoraganize plugin lifetimes (currently pretty messy)
+- Finish setting up target for eclipse features installer
+- Set up RCP target for maven autobuilds integrating with eclipse featuers
+- Coordinate w/ front end to figure out how to do integration testing across the interface
