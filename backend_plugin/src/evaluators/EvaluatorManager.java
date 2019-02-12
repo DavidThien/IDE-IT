@@ -3,7 +3,6 @@ package evaluators;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -86,5 +85,13 @@ public class EvaluatorManager {
 		
 		// Add this part->evaluator mapping to the list of open evaluators
 		this.openPartEvaluators.put(editorWindow, newEvaluator);
+	}
+
+	/**
+	 * Notifies the FeatureSuggestion that a feature evaluation was triggered
+	 * @param featureID
+	 */
+	public void notifyFeatureSuggestion(String featureID) {
+		this.fs.notifyAllObservers(featureID);
 	}
 }

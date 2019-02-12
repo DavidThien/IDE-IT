@@ -56,7 +56,7 @@ public class Evaluator {
 		DocumentChangesTracker docTracker = new DocumentChangesTracker(this);
 		doc.addDocumentListener(docTracker);
 	}
-	
+
 	/**
 	 * Checks all evaluation functions that need DocumentEvent changes
 	 * @param event
@@ -65,7 +65,7 @@ public class Evaluator {
 	
 		// Block comment evaluation
 		if (blockCommentEval.evaluate(event)) {
-			this.em.getFeatureSuggestor().notifyAllObservers("Block Comment");
+			this.em.notifyFeatureSuggestion("Block Comment");
 		}
 	}
 	

@@ -18,6 +18,7 @@ public class Startup implements IStartup {
 				IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 				if (window != null) {
 					// Once we are loaded, make a new FeatureSuggestion
+					// Need to determine how FE will get the FeatureSuggestion object
 					new FeatureSuggestion();
 				}
 			}

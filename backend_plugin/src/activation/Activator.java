@@ -1,15 +1,8 @@
 package activation;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-import evaluators.EvaluatorManager;
-import interfaces.FeatureSuggestion;
-import listeners.EditorWindowListener;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -34,10 +27,11 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		
 		// Debug
-		System.out.println("Activator started!!");
+		// System.out.println("Activator started!!");
 		
-		// This mimics how a FE service would use our plugin
-		FeatureSuggestion fs = new FeatureSuggestion();
+		// Need to determine how we are going to initialize our service. Either FE will create a
+		// FeatureSuggestion() that starts the service, or we will create one and they can
+		// obtain it somehow
 	}
 
 	@Override
