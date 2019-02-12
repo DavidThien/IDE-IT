@@ -15,7 +15,7 @@ import evaluators.BlockCommentEvaluator;
  */
 public class BlockCommentEvaluatorTest {
 	
-	private static String content = "Line1\n Line2\n Line3\n";
+	private static final String content = "Line1\n Line2\n Line3\n";
 
 	/**
 	 * Tests the block comment evaluation function returns true when line 0 then line 1 of a document are commented out
@@ -58,12 +58,12 @@ public class BlockCommentEvaluatorTest {
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluate(event));
 		} catch (BadLocationException e) {
+			// Should never get here
+			// fail included as sanity check
 			fail("BadLocationException thrown in consecutiveLinesDownCommentedOut Test");
 			e.printStackTrace();
 		}
 	}
-
-	
 
 	/**
 	 * Tests the block comment evaluation function returns true when line 2 then line 1 of a document are commented out
@@ -105,9 +105,10 @@ public class BlockCommentEvaluatorTest {
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluate(event));
 		} catch (BadLocationException e) {
+			// Should never get here
+			// fail included as sanity check
 			fail("BadLocationException thrown in consecutiveLinesUpCommentedOut Test");
 			e.printStackTrace();
 		}
 	}
-
 }
