@@ -38,7 +38,7 @@ public class EditorWindowListener implements IPartListener2 {
 		if (part instanceof IEditorPart) {
 			IEditorPart editor = (IEditorPart) part;
 			IEditorInput input = editor.getEditorInput();
-			String filename = input.getName();		
+			java.lang.String filename = input.getName();		
 			if (filename.endsWith(".java") && !em.getOpenEvaluators().containsKey(editor)) {
 				// This window is active, but does not yet have an evaluator attached to it.
 				// This might be the case when the user first opens Eclipse, and already has

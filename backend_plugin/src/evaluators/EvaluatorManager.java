@@ -32,10 +32,25 @@ public class EvaluatorManager {
 		this.openPartEvaluators = new HashMap<IEditorPart, Evaluator>();
 		
 		// Eric's code to set up a listener over Eclipse as a whole
-		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IWorkbenchPage page = window.getActivePage();
-		EditorWindowListener windowListener = new EditorWindowListener(this);
-		page.addPartListener(windowListener);
+		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+			for (IWorkbenchPage page : window.getPages()) {
+				for (IEditorReference editRef : page.getEditorReferences()) {
+					IEditorPart ePart = editRef.getEditor(false);
+					if (ePart != null) {
+						IEditorInput eInput = ePart.getEditorInput();
+						if (eInput != null) {
+							java.lang.String filename = eInput.getName();
+							if (filename != null && filename.endsWith(".java") &&
+									!this.getOpenEvaluators().containsKey(ePart)) {
+								addEvaluator(ePart);
+							}
+						}
+					}
+				}
+				EditorWindowListener windowListener = new EditorWindowListener(this);
+				page.addPartListener(windowListener);
+			}
+		}
 		
 		//TODO:
 		// Check if there's an open document already, if so then add a listener to that document

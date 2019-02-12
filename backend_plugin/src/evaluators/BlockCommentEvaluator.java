@@ -41,9 +41,10 @@ public class BlockCommentEvaluator {
 		// Took logic Eric created to check for a double back slash
 		// May be a way to optimize this, but it works
 		int currentOffset = event.getOffset();
-		String currentInsert = event.getText();
+		java.lang.String currentInsert = event.getText();
 		if (prevOffset == currentOffset - 1) {
-			if (this.prevInsert.equals("/") && currentInsert.equals("/")) {
+			if (currentInsert != null && this.prevInsert != null &&
+				this.prevInsert.equals("/") && currentInsert.equals("/")) {
 				System.out.println("Placed two slashes");
 				
 				// If we have two back slashes, then check if we've found two previously
