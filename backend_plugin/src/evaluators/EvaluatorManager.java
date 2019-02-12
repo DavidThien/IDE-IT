@@ -3,15 +3,12 @@ package evaluators;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.texteditor.ITextEditor;
 
 import interfaces.FeatureSuggestion;
-import listeners.DocumentChangesTracker;
 import listeners.EditorWindowListener;
 
 /**
@@ -59,28 +56,17 @@ public class EvaluatorManager {
 	}
 	
 	/**
-	 * Takes an IEditorPart and initializes a listener and evaluator for 
-	 * the IEditorPart window. Adds the evaluator to the list of open
+	 * Takes an IEditorPart and initializes an evaluator for the
+	 * IEditorPart window. Adds the evaluator to the list of open
 	 * evaluators.
-	 * @param part
+	 * @param editorWindow
 	 */
-	public void addEvaluator(IEditorPart part) {
+	public void addEvaluator(IEditorPart editorWindow) {
 		
-		// Add listeners to the part, and add the evaluator
-		// to the list of evaluators
-		ITextEditor editor = (ITextEditor) part;
-		
-		// Gets the document stored inside that text editor window
-		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
-
-		// Create an evaluator
-		Evaluator newEvaluator = new Evaluator(this);
-		
-		// 	Adds a MyDocumentListener to the document inside the text editor window
-		DocumentChangesTracker docTracker = new DocumentChangesTracker(newEvaluator);
-		doc.addDocumentListener(docTracker);
+		// Create an evaluator for the given editor window
+		Evaluator newEvaluator = new Evaluator(this, editorWindow);
 		
 		// Add this part->evaluator mapping to the list of open evaluators
-		this.openPartEvaluators.put(part, newEvaluator);
+		this.openPartEvaluators.put(editorWindow, newEvaluator);
 	}
 }

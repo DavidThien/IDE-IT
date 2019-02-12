@@ -1,6 +1,11 @@
 package evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.texteditor.ITextEditor;
+
+import listeners.DocumentChangesTracker;
 
 /**
  * The Evaluator is designed to control all of the evaluation classes. The Evaluator creates a TrackerController, which
@@ -21,15 +26,35 @@ public class Evaluator {
 	private EvaluatorManager em;
 	
 	/**
-	 * Default constructor
+	 * Constructs an Evaluator that evaluates the given IEditorPart window
+	 * under the given EvaluationManager em
 	 * @param em EvaluatorManager object that tracks all Evaluator instances
+	 * @param editorWindow the document editor window to add an evaluator to
 	 */
-	public Evaluator(EvaluatorManager em) {
+	public Evaluator(EvaluatorManager em, IEditorPart editorWindow) {
 		// DEBUG
 		System.out.println("Evaluator Started");
 		
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
+		this.initializeListeners(editorWindow);
+	}
+
+	/**
+	 * Creates the document change listener that this Evaluator will
+	 * use to listen for changes within the given IEditorPart document
+	 * editor window
+	 * @param editorWindow
+	 */
+	private void initializeListeners(IEditorPart editorWindow) {
+
+		// Get the document stored inside the editor window
+		ITextEditor editor = (ITextEditor) editorWindow;
+		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+
+		// Add a DocumentChangesTracker to the document
+		DocumentChangesTracker docTracker = new DocumentChangesTracker(this);
+		doc.addDocumentListener(docTracker);
 	}
 	
 	/**
