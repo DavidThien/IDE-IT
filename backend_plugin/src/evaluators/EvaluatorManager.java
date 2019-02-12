@@ -3,7 +3,10 @@ package evaluators;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
