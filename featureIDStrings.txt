@@ -1,0 +1,5 @@
+blockCommentSuggestion
+addImportStatementsSuggestion
+removeUnusedImportsStatementSuggestion
+correctIndentationsSuggestion
+variableRenameRefactorSuggestion
