@@ -1,0 +1,69 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------
+	- Set up plugin testing (contingent on finishing comment detection feature)
+	- Integrate with Travis CI
+	- Create installable package other can download
+	- Determine how plugin dependencies should work with eclipse marketplace
+	- Set up basic interface so the front end can call into the backend
+	- Implement activators so plugin lifetime is automatically managed correctly
+	- Prepare presentation materials
+	- Prototype a working evaluation function for comment block feature
+	- Create a simple FE interface to display when notifications are triggered
+	- Create the user manual
+	- Continue research into Eclipse plugin functionality
+	- Implement a listener for key presses
+	- Implement a listener for document changes
+	- Write specification for backend
+	- Work on implementation plan
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+	- Re-designed internal architecture
+	- Implemented a listener for key presses
+	- Implemented a listener for document changes
+	- Configured plugin to automatically start
+	- Created an EvaluatorManager object
+		- Handles automatically applying key press/document
+		    change listeners to opened editor windows
+	- Wrote and updated documentation
+		- Including specification, user manual, implementation
+	- Prepared presentation materials
+	- Implemented a working evaluation function for comment block feature
+		- Still some limitations, but it catches commenting out consecutive lines
+	- Asked Front End team to provide a simple FE interface to display when notifications are triggered
+	- Researched various Eclipse functionality
+		- Discovered and utilized IRegion API functionality
+	- Researched plugin dependency with our current implementation
+		- Verified how other plugins can use ours as a service
+
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	Responsible parties are listed after each goal (or subgoal, where applicable)
+
+	- Finish setting up maven/travis for testing (David)
+	- Figure out how to do testing for editor inputs (David/John)
+	- Reoraganize plugin lifetimes currently pretty messy (David)
+	- Finish setting up target for eclipse features installer (David)
+	- Coordinate w/ front end to figure out how to do integration testing across the interface (David)
+	- Finalize user manual (All)
+		- Including list of featureID strings
+	- Re-prepare and give presentation in class (Eric/John)
+	- Implement working evaluation function for: (Eric/John)
+		- Adding import statements
+		- Removing unused import statements
+	- Refine evaluation function for block comment (Eric/John)
+	- Create unit tests for FeatureSuggestion class (John)
+	- Work with front end team to make sure they can interface with our plugin (John)
+
+--------------
+MEETING AGENDA
+--------------
+With TA:
+	- User manual feedback
+With Engineer/Manager
+	- 
+	
+
