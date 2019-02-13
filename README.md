@@ -10,9 +10,11 @@ This repository / plugin is specifically for the backend service of IDE-IT. This
 
 ## Installation
 
--Eclipse market place
-	-Download source code
-	-Able to add it to other plugins
+To install the project from source, import the git repository into an eclipse workspace. Note that the eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help" -> "Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
+
+Once the project has been imported, simply right click on the project and click on "Export". Then click on "Plug-in Development" and "Deployable plug-ins and fragments" continuing through the wizard and selecting an output folder. This will create a file named something like `backend_plugin_1.0.0.201902122015.jar` inside a `plugins` folder. From there, the plugin can be installed by going to "Help" -> "Install New Software". Click "Add" and then "Local", browsing for the `plugins` folder that was created upon export. Select the plugin in the available software options that appear, and then continue through the wizard to install the plugin.
+
+A standalone jar file for the latest version of eclipse is coming soon, as well as an installer directly through the eclipse marketplace (pending approval).
 
 ## Usage
 
