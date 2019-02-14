@@ -22,6 +22,7 @@ public class EvaluatorManager {
 
 	private FeatureSuggestion fs;
 	private Map<IEditorPart, Evaluator> openPartEvaluators;
+	private Map<IWorkbenchPage, EditorWindowListener> openWindowListeners;
 	
 	/**
 	 * Creates a new EvaluatorManager
@@ -29,30 +30,7 @@ public class EvaluatorManager {
 	public EvaluatorManager(FeatureSuggestion fs) {
 		this.fs = fs;
 		this.openPartEvaluators = new HashMap<IEditorPart, Evaluator>();
-		
-		// Eric's code to set up a listener over Eclipse as a whole
-		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
-			for (IWorkbenchPage page : window.getPages()) {
-				for (IEditorReference editRef : page.getEditorReferences()) {
-					IEditorPart ePart = editRef.getEditor(false);
-					if (ePart != null) {
-						IEditorInput eInput = ePart.getEditorInput();
-						if (eInput != null) {
-							java.lang.String filename = eInput.getName();
-							if (filename != null && filename.endsWith(".java") &&
-									!this.getOpenEvaluators().containsKey(ePart)) {
-								addEvaluator(ePart);
-							}
-						}
-					}
-				}
-				EditorWindowListener windowListener = new EditorWindowListener(this);
-				page.addPartListener(windowListener);
-			}
-		}
-		
-		//TODO:
-		// Check if there's an open document already, if so then add a listener to that document
+		this.openWindowListeners = new HashMap<IWorkbenchPage, EditorWindowListener>();
 	}
 	
 	/**
@@ -93,5 +71,42 @@ public class EvaluatorManager {
 	 */
 	public void notifyFeatureSuggestion(String featureID) {
 		this.fs.notifyAllObservers(featureID);
+	}
+
+	public void start() {
+		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+			for (IWorkbenchPage page : window.getPages()) {
+				EditorWindowListener windowListener = new EditorWindowListener(this);
+				page.addPartListener(windowListener);
+				this.openWindowListeners.put(page, windowListener);
+				for (IEditorReference editRef : page.getEditorReferences()) {
+					IEditorPart ePart = editRef.getEditor(false);
+					if (ePart != null) {
+						IEditorInput eInput = ePart.getEditorInput();
+						if (eInput != null) {
+							java.lang.String filename = eInput.getName();
+							if (filename != null && filename.endsWith(".java") &&
+									!this.getOpenEvaluators().containsKey(ePart)) {
+								addEvaluator(ePart);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Stops all Evaluators and removes any window or document listeners
+	 */
+	public void stop() {
+		for (IWorkbenchPage workbenchPage : this.openWindowListeners.keySet()) {
+			workbenchPage.removePartListener(this.openWindowListeners.get(workbenchPage));
+		}
+		this.openWindowListeners.clear();
+		for (IEditorPart documentEditor : this.openPartEvaluators.keySet()) {
+			this.openPartEvaluators.get(documentEditor).stop();
+		}
+		this.openPartEvaluators.clear();
 	}
 }

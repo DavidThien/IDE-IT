@@ -24,6 +24,8 @@ public class Evaluator {
 
 	private BlockCommentEvaluator blockCommentEval; 
 	private EvaluatorManager em;
+	private IDocument document;
+	private DocumentChangesTracker documentChangesTracker;
 	
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
@@ -51,10 +53,12 @@ public class Evaluator {
 		// Get the document stored inside the editor window
 		ITextEditor editor = (ITextEditor) editorWindow;
 		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		this.document = doc;
 
 		// Add a DocumentChangesTracker to the document
 		DocumentChangesTracker docTracker = new DocumentChangesTracker(this);
 		doc.addDocumentListener(docTracker);
+		this.documentChangesTracker = docTracker;
 	}
 
 	/**
@@ -67,6 +71,10 @@ public class Evaluator {
 		if (blockCommentEval.evaluate(event)) {
 			this.em.notifyFeatureSuggestion("Block Comment");
 		}
+	}
+
+	public void stop() {
+		this.document.removeDocumentListener(this.documentChangesTracker);
 	}
 	
 }
