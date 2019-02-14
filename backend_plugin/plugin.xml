@@ -31,34 +31,6 @@
       </key>
    </extension>
    <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               id="backend_plugin.menus.sampleMenu"
-               label="Sample Menu"
-               mnemonic="M">
-            <command
-                  commandId="backend_plugin.commands.sampleCommand"
-                  id="Plugin_test.menus.sampleCommand"
-                  mnemonic="S">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="backend_plugin.toolbars.sampleToolbar">
-            <command
-                  id="backend_plugin.toolbars.sampleCommand"
-                  commandId="backend_plugin.commands.sampleCommand"
-                  icon="icons/sample.png"
-                  tooltip="Begin tracking changes in current document">
-            </command>
-         </toolbar>
-      </menuContribution>
-   </extension>
-   <extension
          point="org.eclipse.ui.startup">
       <startup
             class="activation.Startup">
