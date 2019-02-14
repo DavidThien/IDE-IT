@@ -3,34 +3,6 @@
 <plugin>
 
    <extension
-         point="org.eclipse.ui.commands">
-      <category
-            id="backend_plugin.commands.category"
-            name="Sample Category">
-      </category>
-      <command
-            categoryId="backend_plugin.commands.category"
-            name="Sample Command"
-            id="backend_plugin.commands.sampleCommand">
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="temp.TrackerStarterTemp"
-            commandId="backend_plugin.commands.sampleCommand">
-      </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="backend_plugin.commands.sampleCommand"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+6">
-      </key>
-   </extension>
-   <extension
          point="org.eclipse.ui.startup">
       <startup
             class="activation.Startup">
