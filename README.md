@@ -6,7 +6,7 @@ IDE Intelligent Tutorials
 
 The Integrated Development Environment - Intelligent Tutorials (IDE-IT) is a plug in for Eclipse that provides developers suggestions on Eclipse features that they may not be aware of. The number of features available in Eclipse, and IDEs in general, can be overwhelming, and it isn’t always clear to the user that they exist. These include features such as auto complete, block commenting, automatic imports, refactoring code on variable renaming, etc. However, learning that these features exist isn’t an easy process. The discoverability of IDE features is something that is a detriment to current programmers. The goal of IDE-IT is to provide developers with suggestions on how to take advantage of Eclipse’s features in a way that is relevant to what they are currently doing.
 
-Future plans for IDE-IT include supporting more Eclipse features. We plan to support at least the following list:
+We plan to provide support for at least the following list of Eclipse features:
 
 * Block Commenting
 * Adding import statements using “shift-cmd-o”
