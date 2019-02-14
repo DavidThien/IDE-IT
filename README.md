@@ -6,6 +6,14 @@ IDE Intelligent Tutorials
 
 The Integrated Development Environment - Intelligent Tutorials (IDE-IT) is a plug in for Eclipse that provides developers suggestions on Eclipse features that they may not be aware of. The number of features available in Eclipse, and IDEs in general, can be overwhelming, and it isn’t always clear to the user that they exist. These include features such as auto complete, block commenting, automatic imports, refactoring code on variable renaming, etc. However, learning that these features exist isn’t an easy process. The discoverability of IDE features is something that is a detriment to current programmers. The goal of IDE-IT is to provide developers with suggestions on how to take advantage of Eclipse’s features in a way that is relevant to what they are currently doing.
 
+Future plans for IDE-IT include supporting more Eclipse features. We plan to support at least the following list:
+
+* Block Commenting
+* Adding import statements using “shift-cmd-o”
+* Removing unnecessary/unused import statements using “shift-cmd-o”
+* Correcting indentation
+* Refactor code base by renaming a variable throughout the entire project
+
 This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a front-end service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT front-end plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom front-end framework, see below on how to incorporate our service to your own plugin.
 
 ## Installation
@@ -67,8 +75,6 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
 
 ## Implementation Details
 
-![Plugin diagram](images/diagram.png "Diagram of IDE-IT Back-end Implementation")
-
 * FeatureSuggestion
   * Must be created by the front-end plugin that uses our service. Creating and starting the FeatureSuggestion starts the entire service our plugin provides. This is the only object a front-end plugin should have access to.
 * FeatureSuggestionInterface
@@ -83,13 +89,3 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
   * Responsible for evaluating document changes detected within a single document editor window. When document changes are detected, the Evaluator will cycle through each feature evaluation function, passing the document change event information. If a feature evaluation function returns true (indicating that the user has neglected to use the respective feature), it will notify the EvaluatorManager with the unique ID string of the feature that was triggered.
 * DocumentChangesTracker
   * An extension of IDocumentListener from the Eclipse Plugin API. Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes made within that document editor window. When changes are detected, the DocumentChangesTracker will pass the change information back to the Evaluator.
-
-## Future Plans
-
-Future plans for IDE-IT include supporting more Eclipse features. We plan to support at least the following list:
-
-* Block Commenting
-* Adding import statements using “shift-cmd-o”
-* Removing unnecessary/unused import statements using “shift-cmd-o”
-* Correcting indentation
-* Refactor code base by renaming a variable throughout the entire project
