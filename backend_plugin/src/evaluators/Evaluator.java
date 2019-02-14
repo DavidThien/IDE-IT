@@ -24,6 +24,7 @@ public class Evaluator {
 
 	private BlockCommentEvaluator blockCommentEval; 
 	private EvaluatorManager em;
+	private RemoveImportEvaluator removeImportEval;
 	
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
@@ -37,6 +38,7 @@ public class Evaluator {
 		
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
+		removeImportEval = new RemoveImportEvaluator();
 		this.initializeListeners(editorWindow);
 	}
 
@@ -66,6 +68,14 @@ public class Evaluator {
 		// Block comment evaluation
 		if (blockCommentEval.evaluate(event)) {
 			this.em.notifyFeatureSuggestion("Block Comment");
+		}
+		
+		// Import Remove evaluation
+		// Needs to trigger on document save / compile
+		// Markers only updates on save / compile
+		if (removeImportEval.evaluate(event)) {
+			// Do nothing for now
+			this.em.notifyFeatureSuggestion("Unused import");
 		}
 	}
 	
