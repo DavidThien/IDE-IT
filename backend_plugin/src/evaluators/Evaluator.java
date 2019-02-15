@@ -26,7 +26,7 @@ public class Evaluator {
 	private EvaluatorManager em;
 	private IDocument document;
 	private DocumentChangesTracker documentChangesTracker;
-	
+
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
 	 * under the given EvaluationManager em
@@ -36,10 +36,14 @@ public class Evaluator {
 	public Evaluator(EvaluatorManager em, IEditorPart editorWindow) {
 		// DEBUG
 		System.out.println("Evaluator Started");
-		
+
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
-		this.initializeListeners(editorWindow);
+
+		if (editorWindow instanceof ITextEditor) {
+			ITextEditor textEditor = (ITextEditor) editorWindow;
+			this.initializeListeners(textEditor);
+		}
 	}
 
 	/**
@@ -48,11 +52,10 @@ public class Evaluator {
 	 * editor window
 	 * @param editorWindow
 	 */
-	private void initializeListeners(IEditorPart editorWindow) {
+	private void initializeListeners(ITextEditor textEditor) {
 
-		// Get the document stored inside the editor window
-		ITextEditor editor = (ITextEditor) editorWindow;
-		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		// Get the document stored inside the text editor window
+		IDocument doc = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
 		this.document = doc;
 
 		// Add a DocumentChangesTracker to the document
