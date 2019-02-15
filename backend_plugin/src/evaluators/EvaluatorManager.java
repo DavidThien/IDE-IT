@@ -84,7 +84,7 @@ public class EvaluatorManager {
 					if (ePart != null) {
 						IEditorInput eInput = ePart.getEditorInput();
 						if (eInput != null) {
-							java.lang.String filename = eInput.getName();
+							String filename = eInput.getName();
 							if (filename != null && filename.endsWith(".java") &&
 									!this.getOpenEvaluators().containsKey(ePart)) {
 								addEvaluator(ePart);
