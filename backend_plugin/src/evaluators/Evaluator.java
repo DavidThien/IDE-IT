@@ -33,17 +33,13 @@ public class Evaluator {
 	 * @param em EvaluatorManager object that tracks all Evaluator instances
 	 * @param editorWindow the document editor window to add an evaluator to
 	 */
-	public Evaluator(EvaluatorManager em, IEditorPart editorWindow) {
+	public Evaluator(EvaluatorManager em, ITextEditor textEditor) {
 		// DEBUG
 		System.out.println("Evaluator Started");
 
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
-
-		if (editorWindow instanceof ITextEditor) {
-			ITextEditor textEditor = (ITextEditor) editorWindow;
-			this.initializeListeners(textEditor);
-		}
+		this.initializeListeners(textEditor);
 	}
 
 	/**
