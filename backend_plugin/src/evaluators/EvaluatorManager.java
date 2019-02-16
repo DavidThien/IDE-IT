@@ -9,6 +9,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 import interfaces.FeatureSuggestion;
 import listeners.EditorWindowListener;
@@ -56,13 +57,13 @@ public class EvaluatorManager {
 	 * evaluators.
 	 * @param editorWindow
 	 */
-	public void addEvaluator(IEditorPart editorWindow) {
+	public void addEvaluator(ITextEditor textEditor) {
 		
 		// Create an evaluator for the given editor window
-		Evaluator newEvaluator = new Evaluator(this, editorWindow);
+		Evaluator newEvaluator = new Evaluator(this, textEditor);
 		
 		// Add this part->evaluator mapping to the list of open evaluators
-		this.openPartEvaluators.put(editorWindow, newEvaluator);
+		this.openPartEvaluators.put(textEditor, newEvaluator);
 	}
 
 	/**
@@ -74,20 +75,34 @@ public class EvaluatorManager {
 	}
 
 	public void start() {
+
+		// For each workbench page in Eclipse
 		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
 			for (IWorkbenchPage page : window.getPages()) {
+
+				// Add a window listener to the page to listen for new windows opening
 				EditorWindowListener windowListener = new EditorWindowListener(this);
 				page.addPartListener(windowListener);
+
+				// Add the listener to the list of open window listeners
 				this.openWindowListeners.put(page, windowListener);
+
+				// For all editor windows that are already open
 				for (IEditorReference editRef : page.getEditorReferences()) {
 					IEditorPart ePart = editRef.getEditor(false);
-					if (ePart != null) {
-						IEditorInput eInput = ePart.getEditorInput();
+
+					// If the editor window is a text editor
+					if (ePart != null && ePart instanceof ITextEditor) {
+						ITextEditor textEditor = (ITextEditor) ePart;
+						IEditorInput eInput = textEditor.getEditorInput();
+
+						// If the document in the window is a .java document, add an
+						// evaluator to the window
 						if (eInput != null) {
 							String filename = eInput.getName();
 							if (filename != null && filename.endsWith(".java") &&
 									!this.getOpenEvaluators().containsKey(ePart)) {
-								addEvaluator(ePart);
+								addEvaluator(textEditor);
 							}
 						}
 					}
@@ -100,10 +115,14 @@ public class EvaluatorManager {
 	 * Stops all Evaluators and removes any window or document listeners
 	 */
 	public void stop() {
+
+		// Remove all window listeners that this EvaluatorManager created
 		for (IWorkbenchPage workbenchPage : this.openWindowListeners.keySet()) {
 			workbenchPage.removePartListener(this.openWindowListeners.get(workbenchPage));
 		}
 		this.openWindowListeners.clear();
+
+		// Remove all evaluators that this EvaluatorManager created
 		for (IEditorPart documentEditor : this.openPartEvaluators.keySet()) {
 			this.openPartEvaluators.get(documentEditor).stop();
 		}

@@ -1,10 +1,10 @@
 package listeners;
 
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 import evaluators.EvaluatorManager;
 
@@ -33,16 +33,18 @@ public class EditorWindowListener implements IPartListener2 {
 	 */
 	@Override
 	public void partActivated(IWorkbenchPartReference partRef) {
-		// Called when a window is activated (i.e. user switches to a tab)
 		IWorkbenchPart part = partRef.getPart(false);
-		if (part instanceof IEditorPart) {
-			IEditorPart editor = (IEditorPart) part;
+
+		// If the window is a text editor window
+		if (part instanceof ITextEditor) {
+			ITextEditor editor = (ITextEditor) part;
 			IEditorInput input = editor.getEditorInput();
-			java.lang.String filename = input.getName();		
+			String filename = input.getName();
+
+			// If the document inside the text editor window is a .java file and the
+			// text editor window does not already have an evaluator assigned to it,
+			// Assign an evaluator to the text editor window
 			if (filename.endsWith(".java") && !em.getOpenEvaluators().containsKey(editor)) {
-				// This window is active, but does not yet have an evaluator attached to it.
-				// This might be the case when the user first opens Eclipse, and already has
-				// some open documents
 				em.addEvaluator(editor);
 			}
 		}
@@ -73,15 +75,17 @@ public class EditorWindowListener implements IPartListener2 {
 	 */
 	@Override
 	public void partOpened(IWorkbenchPartReference partRef) {
-		// Called when a window is first opened.
 		IWorkbenchPart part = partRef.getPart(false);
-		if (part instanceof IEditorPart) {
-			IEditorPart editor = (IEditorPart) part;
+
+		// If the window is a text editor window
+		if (part instanceof ITextEditor) {
+			ITextEditor editor = (ITextEditor) part;
 			IEditorInput input = editor.getEditorInput();
-			String filename = input.getName();		
+			String filename = input.getName();
+
+			// If the document inside the text editor window is a .java file,
+			// assign an evaluator to the text editor window
 			if (filename.endsWith(".java")) {
-				// This window is a document editor containing
-				// a Java file, so assign an evaluator to it			
 				em.addEvaluator(editor);
 			}
 		}
