@@ -38,7 +38,7 @@ public class Evaluator {
 		
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
-		removeImportEval = new RemoveImportEvaluator();
+		removeImportEval = new RemoveImportEvaluator(editorWindow.getTitle());
 		this.initializeListeners(editorWindow);
 	}
 

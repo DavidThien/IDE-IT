@@ -2,6 +2,8 @@ package evaluators;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -17,18 +19,31 @@ import org.eclipse.jface.text.DocumentEvent;
  */
 public class RemoveImportEvaluator {
 	
+	// TODO
+	// Dev notes: by John
+	// Need to test when renaming files
+	// This relies on matching up the listener to a file name
+	// Unsure of behavior when a file is renamed with an open window. It probably breaks
+	
+	
+	String docName;
+	IResource docResource;
+	
 	/**
-	 * Default constructor. This isn't a static class because we need to create separate evaluators for each opened document
+	 * Constructor
+	 * @param docName the name of the document this evaluator is attached to
 	 */
-	public RemoveImportEvaluator() {
-		
+	public RemoveImportEvaluator(String docName) {
+		this.docName = docName;
+		// docResource is currently unused
+		//this.docResource = findResource();
 	}
 	
 	/**
-	 * Checks the current document to see if there are any unused import statements
+	 * Checks the document that matches the docName to see if there are any unused import statements
 	 * 
 	 * @param event
-	 * @return true if there are unused import statements in the current document, false otherwise
+	 * @return true if there are unused import statements in the document, false otherwise
 	 */
 	public boolean evaluate(DocumentEvent event) {
 		
@@ -36,26 +51,38 @@ public class RemoveImportEvaluator {
 		// This doesn't need to check every DocumentEvent, it only needs to check each time Eclipse is saved / compiled
 		// The markers only update upon saving the file
 		// We don't use the DocumentEvent at all
-		// It's possible to create a listener for the workspace, and maybe we can detect changes off of that? 
+		// It's possible to create a listener for the workspace, and maybe we can detect changes off of that?
+		
+		// There has to be a way to only get Markers off certain resources / files
+		// Right now we grab all markers in for the entire project, then filter by ID, then by filename
 		
 		try {
+			// Grab the workspace, then grab all markers in the workspace
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IMarker markers[] = workspace.getRoot().findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-		
+			
 			for (IMarker marker : markers) {
 				Map<String, Object> markerAttributes = marker.getAttributes();
+				IResource resource = marker.getResource();
+				
+				// DEBUG
+//				System.out.println("Resource name: " + resource.getName());
+//				System.out.println("Doc name: " + docTitle);
+				
+				// DEBUG:
+//				System.out.println("");
+//				for(Entry<String, Object> entry : markerAttributes.entrySet()) {
+//					System.out.println("Key: " + entry.getKey() + "     Value: " + entry.getValue().toString());
+//				}
+				
 				
 				// All unused imports will have IProblem.UnusedImport value under the "id" key
-				System.out.println("MarkerID: " + marker.getId());
-				if (marker.getId() == IProblem.UnusedImport) {
+//				System.out.println("MarkerID: " + markerAttributes.get("id"));
+				if (resource.getName().equals(docName) && (int)markerAttributes.get("id") == IProblem.UnusedImport) {
 					return true;
 				}
+
 				
-				if (markerAttributes.containsKey("id")) {
-					if ((int)markerAttributes.get("id") == IProblem.UnusedImport) {
-						return true;
-					}
-				}
 			}
 		} catch (CoreException e) {
 			System.out.println("Exception happened in RemoveImportEvaluator");
@@ -63,5 +90,68 @@ public class RemoveImportEvaluator {
 	
 		return false;
 	}
+	
+	
+	
+	// NOTES:
+	// Below is currently not working
+	// I'm trying to traverse the project and subfolders to find a matching resource that's a file and matches
+	// the name of the docName provided. 
+	// This seems cumbersome and not great - It may be easier to just keep iterating through the markers
+	// Even if we get the resource working properly - we may have to deal with name change shenanigans
+	
+	
+	/**
+	 * Recursively calls itself to traverse the project to find the resource associated with the document name provided
+	 * @return
+	 */
+	private IResource findResource() {
+
+		try {
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IResource result = findResourceHelper(workspace.getRoot().members());
+			
+			if (result != null) {
+				return result;
+			} else {
+				System.out.println("Mismatch of IResource name and file name. Something went wrong");
+				return null;
+			}
+		} catch (CoreException e) {
+			System.out.println("Core Exception in RemoveImportEvaluato.findResource");
+		}
+		return null;
+		
+	}
+	
+	private IResource findResourceHelper(IResource res[]) {
+		
+		if (res.length == 0) {
+			return null;
+		}
+		
+		for (IResource r : res) {
+			// If it's a file, check the name and return it
+			if (r.getType() == IFile.FILE) {
+				// If a file, then check the name. If it matches, return
+				if (((IFile)r).getName().equals(docName)) {
+					return r;
+				}
+			}
+			// If it's a folder and we haven't found the resource yet, keep traversing
+			if (r.getType() == IFolder.FOLDER) {
+				try {
+					return findResourceHelper(((IFolder)r).members());
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}	
+		}
+		
+		return null;
+	}
+	
+		
 		
 }
