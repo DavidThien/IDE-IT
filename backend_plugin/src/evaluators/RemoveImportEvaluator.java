@@ -1,5 +1,6 @@
 package evaluators;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -10,7 +11,16 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.compiler.IProblem;
+import org.eclipse.jdt.core.util.IAnnotation;
+import org.eclipse.jdt.core.util.IAnnotationComponent;
 import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.ui.texteditor.ITextEditor;
+
+import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
+
+
+
 
 /**
  * Evaluator function to determine if there are any unused import statements in the current document. If any unused import
@@ -26,15 +36,16 @@ public class RemoveImportEvaluator {
 	// Unsure of behavior when a file is renamed with an open window. It probably breaks
 	
 	
-	String docName;
+	ITextEditor editor;
 	IResource docResource;
 	
 	/**
 	 * Constructor
 	 * @param docName the name of the document this evaluator is attached to
 	 */
-	public RemoveImportEvaluator(String docName) {
-		this.docName = docName;
+	public RemoveImportEvaluator(ITextEditor editor) {
+		this.editor = editor;
+		
 		// docResource is currently unused
 		//this.docResource = findResource();
 	}
@@ -56,37 +67,70 @@ public class RemoveImportEvaluator {
 		// There has to be a way to only get Markers off certain resources / files
 		// Right now we grab all markers in for the entire project, then filter by ID, then by filename
 		
-		try {
-			// Grab the workspace, then grab all markers in the workspace
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IMarker markers[] = workspace.getRoot().findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+		
+		Iterator it = editor.getDocumentProvider().getAnnotationModel(editor.getEditorInput()).getAnnotationIterator();
+		
+//		System.out.println("Iterator things:");
+		while (it.hasNext()) {
+			Annotation current = (Annotation)it.next();
 			
-			for (IMarker marker : markers) {
-				Map<String, Object> markerAttributes = marker.getAttributes();
-				IResource resource = marker.getResource();
+			if (current instanceof SimpleMarkerAnnotation) {
+				IMarker mark = ((SimpleMarkerAnnotation) current).getMarker();
+				System.out.println("matching SimpleMarkerAnnotation");
 				
-				// DEBUG
-//				System.out.println("Resource name: " + resource.getName());
-//				System.out.println("Doc name: " + docTitle);
-				
-				// DEBUG:
-//				System.out.println("");
-//				for(Entry<String, Object> entry : markerAttributes.entrySet()) {
-//					System.out.println("Key: " + entry.getKey() + "     Value: " + entry.getValue().toString());
-//				}
-				
-				
-				// All unused imports will have IProblem.UnusedImport value under the "id" key
-//				System.out.println("MarkerID: " + markerAttributes.get("id"));
-				if (resource.getName().equals(docName) && (int)markerAttributes.get("id") == IProblem.UnusedImport) {
-					return true;
+				try {
+					System.out.println("Attribute ID: " + mark.getAttribute("id"));
+					if ((int)mark.getAttribute("id") == IProblem.UnusedImport) {
+						return true;
+					}
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-
+				
 				
 			}
-		} catch (CoreException e) {
-			System.out.println("Exception happened in RemoveImportEvaluator");
+		
+//			
+//			System.out.println("Class: " + current.getClass().toString());
+//			System.out.println("Annotation Text:" + current.getText());
+//			System.out.println("Annotation Type: " + current.getType());
+//			System.out.println(current.toString());
 		}
+		
+		
+		
+//		try {
+//			// Grab the workspace, then grab all markers in the workspace
+//			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+//			IMarker markers[] = workspace.getRoot().findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+//			
+//			for (IMarker marker : markers) {
+//				Map<String, Object> markerAttributes = marker.getAttributes();
+//				IResource resource = marker.getResource();
+//				
+//				// DEBUG
+////				System.out.println("Resource name: " + resource.getName());
+////				System.out.println("Doc name: " + docTitle);
+//				
+//				// DEBUG:
+////				System.out.println("");
+////				for(Entry<String, Object> entry : markerAttributes.entrySet()) {
+////					System.out.println("Key: " + entry.getKey() + "     Value: " + entry.getValue().toString());
+////				}
+//				
+//				
+//				// All unused imports will have IProblem.UnusedImport value under the "id" key
+////				System.out.println("MarkerID: " + markerAttributes.get("id"));
+//				if (resource.getName().equals(docName) && (int)markerAttributes.get("id") == IProblem.UnusedImport) {
+//					return true;
+//				}
+//
+//				
+//			}
+//		} catch (CoreException e) {
+//			System.out.println("Exception happened in RemoveImportEvaluator");
+//		}
 	
 		return false;
 	}
@@ -105,53 +149,53 @@ public class RemoveImportEvaluator {
 	 * Recursively calls itself to traverse the project to find the resource associated with the document name provided
 	 * @return
 	 */
-	private IResource findResource() {
-
-		try {
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IResource result = findResourceHelper(workspace.getRoot().members());
-			
-			if (result != null) {
-				return result;
-			} else {
-				System.out.println("Mismatch of IResource name and file name. Something went wrong");
-				return null;
-			}
-		} catch (CoreException e) {
-			System.out.println("Core Exception in RemoveImportEvaluato.findResource");
-		}
-		return null;
-		
-	}
-	
-	private IResource findResourceHelper(IResource res[]) {
-		
-		if (res.length == 0) {
-			return null;
-		}
-		
-		for (IResource r : res) {
-			// If it's a file, check the name and return it
-			if (r.getType() == IFile.FILE) {
-				// If a file, then check the name. If it matches, return
-				if (((IFile)r).getName().equals(docName)) {
-					return r;
-				}
-			}
-			// If it's a folder and we haven't found the resource yet, keep traversing
-			if (r.getType() == IFolder.FOLDER) {
-				try {
-					return findResourceHelper(((IFolder)r).members());
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}	
-		}
-		
-		return null;
-	}
-	
-		
+//	private IResource findResource() {
+//
+//		try {
+//			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+//			IResource result = findResourceHelper(workspace.getRoot().members());
+//			
+//			if (result != null) {
+//				return result;
+//			} else {
+//				System.out.println("Mismatch of IResource name and file name. Something went wrong");
+//				return null;
+//			}
+//		} catch (CoreException e) {
+//			System.out.println("Core Exception in RemoveImportEvaluato.findResource");
+//		}
+//		return null;
+//		
+//	}
+//	
+//	private IResource findResourceHelper(IResource res[]) {
+//		
+//		if (res.length == 0) {
+//			return null;
+//		}
+//		
+//		for (IResource r : res) {
+//			// If it's a file, check the name and return it
+//			if (r.getType() == IFile.FILE) {
+//				// If a file, then check the name. If it matches, return
+//				if (((IFile)r).getName().equals(docName)) {
+//					return r;
+//				}
+//			}
+//			// If it's a folder and we haven't found the resource yet, keep traversing
+//			if (r.getType() == IFolder.FOLDER) {
+//				try {
+//					return findResourceHelper(((IFolder)r).members());
+//				} catch (CoreException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}	
+//		}
+//		
+//		return null;
+//	}
+//	
+//		
 		
 }

@@ -41,7 +41,7 @@ public class Evaluator {
 
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
-		removeImportEval = new RemoveImportEvaluator("fake name");
+		removeImportEval = new RemoveImportEvaluator(textEditor);
 		this.initializeListeners(textEditor);
 	}
 

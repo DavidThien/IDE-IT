@@ -15,6 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources;bundle-version="3.13.200"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: Plugin_test
-Import-Package: org.eclipse.jface.text
+Import-Package: org.eclipse.jface.text,
+ org.eclipse.ui.texteditor
 Export-Package: activation
 Bundle-ActivationPolicy: lazy
