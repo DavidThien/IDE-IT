@@ -64,6 +64,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	 */
 	@Override
 	public void start() {
+		this.manager.start();
 		isRunning = true;
 		
 		// Debug 
@@ -75,6 +76,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	 */
 	@Override
 	public void stop() {
+		this.manager.stop();
 		isRunning = false;
 		
 		// Debug

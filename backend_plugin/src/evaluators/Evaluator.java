@@ -24,20 +24,22 @@ public class Evaluator {
 
 	private BlockCommentEvaluator blockCommentEval; 
 	private EvaluatorManager em;
-	
+	private IDocument document;
+	private DocumentChangesTracker documentChangesTracker;
+
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
 	 * under the given EvaluationManager em
 	 * @param em EvaluatorManager object that tracks all Evaluator instances
 	 * @param editorWindow the document editor window to add an evaluator to
 	 */
-	public Evaluator(EvaluatorManager em, IEditorPart editorWindow) {
+	public Evaluator(EvaluatorManager em, ITextEditor textEditor) {
 		// DEBUG
 		System.out.println("Evaluator Started");
-		
+
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
-		this.initializeListeners(editorWindow);
+		this.initializeListeners(textEditor);
 	}
 
 	/**
@@ -46,15 +48,16 @@ public class Evaluator {
 	 * editor window
 	 * @param editorWindow
 	 */
-	private void initializeListeners(IEditorPart editorWindow) {
+	private void initializeListeners(ITextEditor textEditor) {
 
-		// Get the document stored inside the editor window
-		ITextEditor editor = (ITextEditor) editorWindow;
-		IDocument doc = editor.getDocumentProvider().getDocument(editor.getEditorInput());
+		// Get the document stored inside the text editor window
+		IDocument doc = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
+		this.document = doc;
 
 		// Add a DocumentChangesTracker to the document
 		DocumentChangesTracker docTracker = new DocumentChangesTracker(this);
 		doc.addDocumentListener(docTracker);
+		this.documentChangesTracker = docTracker;
 	}
 
 	/**
@@ -67,6 +70,10 @@ public class Evaluator {
 		if (blockCommentEval.evaluate(event)) {
 			this.em.notifyFeatureSuggestion("Block Comment");
 		}
+	}
+
+	public void stop() {
+		this.document.removeDocumentListener(this.documentChangesTracker);
 	}
 	
 }
