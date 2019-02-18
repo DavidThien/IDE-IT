@@ -13,6 +13,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.util.IAnnotation;
 import org.eclipse.jdt.core.util.IAnnotationComponent;
+
+
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -74,9 +76,23 @@ public class RemoveImportEvaluator {
 		while (it.hasNext()) {
 			Annotation current = (Annotation)it.next();
 			
+			
+//			if (current.getText().startsWith("The import") && current.getText().endsWith("never used")) {
+//				System.out.println("Found unused import");
+//				return true;
+//			}
+			
 			if (current instanceof SimpleMarkerAnnotation) {
 				IMarker mark = ((SimpleMarkerAnnotation) current).getMarker();
 				System.out.println("matching SimpleMarkerAnnotation");
+				
+				((SimpleMarkerAnnotation)current).getText();
+				
+				
+				System.out.println("Class: " + current.getClass().toString());
+				System.out.println("Annotation Text:" + current.getText());
+				System.out.println("Annotation Type: " + current.getType());
+				System.out.println(current.toString());
 				
 				try {
 					System.out.println("Attribute ID: " + mark.getAttribute("id"));
@@ -91,11 +107,7 @@ public class RemoveImportEvaluator {
 				
 			}
 		
-//			
-//			System.out.println("Class: " + current.getClass().toString());
-//			System.out.println("Annotation Text:" + current.getText());
-//			System.out.println("Annotation Type: " + current.getType());
-//			System.out.println(current.toString());
+
 		}
 		
 		
