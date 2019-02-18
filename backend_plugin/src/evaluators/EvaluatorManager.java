@@ -9,6 +9,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 import interfaces.FeatureSuggestion;
 import listeners.EditorWindowListener;
@@ -22,6 +23,7 @@ public class EvaluatorManager {
 
 	private FeatureSuggestion fs;
 	private Map<IEditorPart, Evaluator> openPartEvaluators;
+	private Map<IWorkbenchPage, EditorWindowListener> openWindowListeners;
 	
 	/**
 	 * Creates a new EvaluatorManager
@@ -29,30 +31,7 @@ public class EvaluatorManager {
 	public EvaluatorManager(FeatureSuggestion fs) {
 		this.fs = fs;
 		this.openPartEvaluators = new HashMap<IEditorPart, Evaluator>();
-		
-		// Eric's code to set up a listener over Eclipse as a whole
-		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
-			for (IWorkbenchPage page : window.getPages()) {
-				for (IEditorReference editRef : page.getEditorReferences()) {
-					IEditorPart ePart = editRef.getEditor(false);
-					if (ePart != null) {
-						IEditorInput eInput = ePart.getEditorInput();
-						if (eInput != null) {
-							java.lang.String filename = eInput.getName();
-							if (filename != null && filename.endsWith(".java") &&
-									!this.getOpenEvaluators().containsKey(ePart)) {
-								addEvaluator(ePart);
-							}
-						}
-					}
-				}
-				EditorWindowListener windowListener = new EditorWindowListener(this);
-				page.addPartListener(windowListener);
-			}
-		}
-		
-		//TODO:
-		// Check if there's an open document already, if so then add a listener to that document
+		this.openWindowListeners = new HashMap<IWorkbenchPage, EditorWindowListener>();
 	}
 	
 	/**
@@ -78,13 +57,13 @@ public class EvaluatorManager {
 	 * evaluators.
 	 * @param editorWindow
 	 */
-	public void addEvaluator(IEditorPart editorWindow) {
+	public void addEvaluator(ITextEditor textEditor) {
 		
 		// Create an evaluator for the given editor window
-		Evaluator newEvaluator = new Evaluator(this, editorWindow);
+		Evaluator newEvaluator = new Evaluator(this, textEditor);
 		
 		// Add this part->evaluator mapping to the list of open evaluators
-		this.openPartEvaluators.put(editorWindow, newEvaluator);
+		this.openPartEvaluators.put(textEditor, newEvaluator);
 	}
 
 	/**
@@ -93,5 +72,60 @@ public class EvaluatorManager {
 	 */
 	public void notifyFeatureSuggestion(String featureID) {
 		this.fs.notifyAllObservers(featureID);
+	}
+
+	public void start() {
+
+		// For each workbench page in Eclipse
+		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
+			for (IWorkbenchPage page : window.getPages()) {
+
+				// Add a window listener to the page to listen for new windows opening
+				EditorWindowListener windowListener = new EditorWindowListener(this);
+				page.addPartListener(windowListener);
+
+				// Add the listener to the list of open window listeners
+				this.openWindowListeners.put(page, windowListener);
+
+				// For all editor windows that are already open
+				for (IEditorReference editRef : page.getEditorReferences()) {
+					IEditorPart ePart = editRef.getEditor(false);
+
+					// If the editor window is a text editor
+					if (ePart != null && ePart instanceof ITextEditor) {
+						ITextEditor textEditor = (ITextEditor) ePart;
+						IEditorInput eInput = textEditor.getEditorInput();
+
+						// If the document in the window is a .java document, add an
+						// evaluator to the window
+						if (eInput != null) {
+							String filename = eInput.getName();
+							if (filename != null && filename.endsWith(".java") &&
+									!this.getOpenEvaluators().containsKey(ePart)) {
+								addEvaluator(textEditor);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Stops all Evaluators and removes any window or document listeners
+	 */
+	public void stop() {
+
+		// Remove all window listeners that this EvaluatorManager created
+		for (IWorkbenchPage workbenchPage : this.openWindowListeners.keySet()) {
+			workbenchPage.removePartListener(this.openWindowListeners.get(workbenchPage));
+		}
+		this.openWindowListeners.clear();
+
+		// Remove all evaluators that this EvaluatorManager created
+		for (IEditorPart documentEditor : this.openPartEvaluators.keySet()) {
+			this.openPartEvaluators.get(documentEditor).stop();
+		}
+		this.openPartEvaluators.clear();
 	}
 }
