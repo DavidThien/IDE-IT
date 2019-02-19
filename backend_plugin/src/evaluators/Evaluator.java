@@ -2,9 +2,13 @@ package evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.source.AnnotationModelEvent;
+import org.eclipse.jface.text.source.IAnnotationModel;
+import org.eclipse.jface.text.source.IAnnotationModelListener;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import listeners.AnnotationModelListener;
 import listeners.DocumentChangesTracker;
 
 /**
@@ -28,6 +32,9 @@ public class Evaluator {
 
 	private IDocument document;
 	private DocumentChangesTracker documentChangesTracker;
+	
+	private IAnnotationModel annoModel;
+	private AnnotationModelListener annoChangesTracker;
 
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
@@ -61,6 +68,12 @@ public class Evaluator {
 		DocumentChangesTracker docTracker = new DocumentChangesTracker(this);
 		doc.addDocumentListener(docTracker);
 		this.documentChangesTracker = docTracker;
+		
+		// Add a AnnotationModelListener to the AnnotationModel
+		AnnotationModelListener annoTracker = new AnnotationModelListener(this);
+		this.annoModel = textEditor.getDocumentProvider().getAnnotationModel(textEditor.getEditorInput());
+		this.annoModel.addAnnotationModelListener(annoTracker);
+		this.annoChangesTracker = annoTracker;
 	}
 
 	/**
@@ -73,18 +86,21 @@ public class Evaluator {
 		if (blockCommentEval.evaluate(event)) {
 			this.em.notifyFeatureSuggestion("Block Comment");
 		}
-		
-		// Import Remove evaluation
-		// Needs to trigger on document save / compile
-		// Markers only updates on save / compile
-		if (removeImportEval.evaluate(event)) {
-			// Do nothing for now
+	}
+	
+	/**
+	 * Checks all evaluation functions that need IAnnotationModel changes
+	 * @param model
+	 */
+	public void evaluateAnnotationModelChanges(IAnnotationModel model) {
+		if (removeImportEval.evaluate(model)) {
 			this.em.notifyFeatureSuggestion("Unused import");
 		}
 	}
 
 	public void stop() {
 		this.document.removeDocumentListener(this.documentChangesTracker);
+		this.annoModel.removeAnnotationModelListener(this.annoChangesTracker);
 	}
 	
 }

@@ -17,6 +17,8 @@ import org.eclipse.jdt.core.util.IAnnotationComponent;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.AnnotationModelEvent;
+import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
@@ -58,7 +60,7 @@ public class RemoveImportEvaluator {
 	 * @param event
 	 * @return true if there are unused import statements in the document, false otherwise
 	 */
-	public boolean evaluate(DocumentEvent event) {
+	public boolean evaluate(IAnnotationModel model) {
 		
 		//TODO:
 		// This doesn't need to check every DocumentEvent, it only needs to check each time Eclipse is saved / compiled
@@ -70,42 +72,55 @@ public class RemoveImportEvaluator {
 		// Right now we grab all markers in for the entire project, then filter by ID, then by filename
 		
 		
-		Iterator it = editor.getDocumentProvider().getAnnotationModel(editor.getEditorInput()).getAnnotationIterator();
+//		Iterator<Annotation> it = editor.getDocumentProvider().getAnnotationModel(editor.getEditorInput()).getAnnotationIterator();
+//		Annotation anns[] = event.getChangedAnnotations();
+//		
+//		System.out.println();
+//		System.out.println("Changed annotations:");
+//		for (Annotation a : anns) {
+//			System.out.println("Annotation text: " + a.getText());
+//			System.out.println("Annotation type: " + a.getType());
+//		}
+//		
+		
+		
+		//Iterator<Annotation> it = event.getAnnotationModel().getAnnotationIterator();
+		Iterator<Annotation> it = model.getAnnotationIterator();
 		
 //		System.out.println("Iterator things:");
 		while (it.hasNext()) {
-			Annotation current = (Annotation)it.next();
+			Annotation current = it.next();
 			
 			
-//			if (current.getText().startsWith("The import") && current.getText().endsWith("never used")) {
-//				System.out.println("Found unused import");
-//				return true;
-//			}
-			
-			if (current instanceof SimpleMarkerAnnotation) {
-				IMarker mark = ((SimpleMarkerAnnotation) current).getMarker();
-				System.out.println("matching SimpleMarkerAnnotation");
-				
-				((SimpleMarkerAnnotation)current).getText();
-				
-				
-				System.out.println("Class: " + current.getClass().toString());
-				System.out.println("Annotation Text:" + current.getText());
-				System.out.println("Annotation Type: " + current.getType());
-				System.out.println(current.toString());
-				
-				try {
-					System.out.println("Attribute ID: " + mark.getAttribute("id"));
-					if ((int)mark.getAttribute("id") == IProblem.UnusedImport) {
-						return true;
-					}
-				} catch (CoreException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				
+			if (current.getText().startsWith("The import") && current.getText().endsWith("never used")) {
+				System.out.println("Found unused import");
+				return true;
 			}
+			
+//			if (current instanceof SimpleMarkerAnnotation) {
+//				IMarker mark = ((SimpleMarkerAnnotation) current).getMarker();
+//				System.out.println("matching SimpleMarkerAnnotation");
+//				
+//				((SimpleMarkerAnnotation)current).getText();
+//				
+//				
+//				System.out.println("Class: " + current.getClass().toString());
+//				System.out.println("Annotation Text:" + current.getText());
+//				System.out.println("Annotation Type: " + current.getType());
+//				System.out.println(current.toString());
+//				
+//				try {
+//					System.out.println("Attribute ID: " + mark.getAttribute("id"));
+//					if ((int)mark.getAttribute("id") == IProblem.UnusedImport) {
+//						return true;
+//					}
+//				} catch (CoreException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//				
+//			}
 		
 
 		}
