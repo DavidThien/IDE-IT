@@ -26,8 +26,8 @@ public class Evaluator {
 	// TODO: Create an interface / abstract class for different evaluation functions
 	// This would allow us to keep a set / list and then just iterate through the list / set
 
-	private BlockCommentEvaluator blockCommentEval; 
 	private EvaluatorManager em;
+	private BlockCommentEvaluator blockCommentEval;
 	private RemoveImportEvaluator removeImportEval;
 
 	private IDocument document;
@@ -81,8 +81,6 @@ public class Evaluator {
 	 * @param event
 	 */
 	public void evaluateDocChanges(DocumentEvent event) {
-	
-		// Block comment evaluation
 		if (blockCommentEval.evaluate(event)) {
 			this.em.notifyFeatureSuggestion("Block Comment");
 		}
