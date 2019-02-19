@@ -1,0 +1,6 @@
+language: java
+script:
+  - cd backend_plugin
+  - mvn clean verify
+notifications:
+  slack: uw-cse-ugrad:QghBbR1mlo7Cv4fQ6Byigcks
