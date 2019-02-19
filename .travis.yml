@@ -3,3 +3,5 @@ script:
   - cd backend_plugin
   - mvn clean verify
   - cat test
+notifications:
+  slack: uw-cse-ugrad:QghBbR1mlo7Cv4fQ6Byigcks
