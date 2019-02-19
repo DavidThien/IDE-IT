@@ -1,0 +1,21 @@
+# David Thien Week 6 Status Report
+
+## Goals from previous week
+- Finish setting up maven/travis for testing
+- Figure out how to do testing for editor inputs
+- Reoraganize plugin lifetimes (currently pretty messy)
+- Finish setting up target for eclipse features installer
+- Set up RCP target for maven autobuilds integrating with eclipse featuers
+- Coordinate w/ front end to figure out how to do integration testing across the interface
+
+## Progress this week
+- Maven is fully set up for the eclipse project
+- Figured out how to set up document changes for testing
+- Plugin lifetime reorganized
+- Github code reviews
+
+## Goals for next week
+- Finish setting up Travis
+- Add more tests for all modules
+- Figure out integration testing (front end is using ant instead of maven)
+- More evaluation functions
