@@ -46,17 +46,17 @@ This plugin serves as a backend service for IDE-IT as a whole. What that means i
 
 In order to use this service, you must have a frontend plugin that designates the IDE-IT backend plugin as a dependency. See installation instructions above for how to get either the jar file or the source code downloaded into your own project. Take the following steps to to integrate our service with your frontend plugin:
 
-1. Within your own plugin, you must create a new instance of FeatureSuggestion (the class can be found within our downloaded jar file or source code) and then call the start() method within that object.
+1. Create a class that extends the FeatureSuggestionObserver class. In your class, provide an implementation of the notify(String featureID) method. Your implementation of the notify(String) method will determine what your plugin will do with the information collected by the IDE-IT backend plugin (see the list of featureID Strings below for possible inputs to this function).
 
-2. Create your own FeatureSuggestionObserver class that extends the FeatureSuggestionObserver abstract class provided through the IDE-IT backend plugin.
+2. In your own plugin's code, create a new instance of FeatureSuggestion, as well as an instance of your class that extends FeatureSuggestionObserver.
 
-3. Instantiate your new Observer object and register it with the FeatureSuggestion instance created earlier by using the FeatureSuggestion’s registerObserver(FeatureSuggestionObserver) method.
+3. In your plugin's code, register the instantiated FeatureSuggestionObserver object with the instantiated FeatureSuggestion object, using the FeatureSuggestion's registerObserver(FeatureSuggestionObserver obs) method.
 
-4. Now, your Observer object will be notified whenever the IDE-IT backend plugin detects that the user could benefit from knowing about a feature. The implementation of your Observer object’s notify(String) method will determine what your plugin will do with the information collected by the IDE-IT backend plugin.
+4. In your plugin's code, call the start() method of the instantiated FeatureSuggestion object. This will begin evaluation of user input. Your FeatureSuggestionObserver object will now be notified whenever the IDE-IT backend plugin detects that the user could benefit from knowing about a feature.
 
 Observers are notified with a string that uniquely identifies an Eclipse feature. The current list of supported featureID strings can be found [in this repository](https://github.com/DavidThien/IDE-IT/blob/master/featureIDStrings.txt).
 
-The following is a list of the featureID strings and detailed descriptions of what Eclipse IDE features they represent:
+The following is a list of the featureID strings and descriptions of what Eclipse IDE features they represent:
 
 * blockCommentSuggestion
   * Comment out multiple selected lines of code at once
