@@ -1,0 +1,33 @@
+-Goals for this week (from last week's status report):
+
+	-Implement auto-activation of plugin on Eclipse startup
+		-Can get rid of having to click button in toolbar to
+		start plugin
+	-Assist with writing/refining evaluation functions
+		-Block comment feature mostly working, need to tweak a bit
+		-Work on evaluation for adding imports
+	-Participate in IDE-IT presentation
+
+-Progress made this week:
+
+	-Implemented start/stop functionality for FeatureSuggestion
+		-This will be used by the frontend instead of auto-activation of
+		plugin on Eclipse startup
+		-Allows front end to start and stop backend service as needed
+		-Allows for a way to remove all listeners when finished using
+		backend so that they do not continue to take up memory/computation
+	-Helped research API points of interest for add/remove imports evaluation functions
+	-Worked on/participated in presentation of IDE-IT
+	-Updated manual and report to address feedback
+	-Refactored some functionality for better efficiency
+		-Removed unused code/classes
+		-Adjusted Evaluator to only be able to be created for text editors
+			-No need for an evaluator for a non-text-editor window
+
+-Plan/Goals for the following week:
+
+	-Implement evaluation function for adding imports
+		-John working on evaluation function for removing imports
+	-Work on manual/report
+	-Work with John and David to get build file working
+	-Write some unit tests
