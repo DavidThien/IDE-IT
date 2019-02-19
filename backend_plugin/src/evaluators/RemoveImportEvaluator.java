@@ -1,28 +1,9 @@
 package evaluators;
 
 import java.util.Iterator;
-import java.util.Map;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.compiler.IProblem;
-import org.eclipse.jdt.core.util.IAnnotation;
-import org.eclipse.jdt.core.util.IAnnotationComponent;
-
-
-import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.source.Annotation;
-import org.eclipse.jface.text.source.AnnotationModelEvent;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
-
-import org.eclipse.ui.texteditor.SimpleMarkerAnnotation;
-
 
 /**
  * Evaluator function to determine if there are any unused import statements in the current document. If any unused import
