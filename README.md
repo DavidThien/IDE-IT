@@ -14,7 +14,23 @@ We plan to provide support for at least the following list of Eclipse features:
 * Correcting indentation
 * Refactor code base by renaming a variable throughout the entire project
 
-This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a front-end service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT front-end plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom front-end framework, see below on how to incorporate our service to your own plugin.
+This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
+
+## Current Status as of 2/18/19
+
+We have completed the following milestones:
+
+* Basic plugin framework created
+* Initial evaluation function written for evaluating block commenting
+* Interface with frontend implemented
+  * Manually tested with success - IDE-IT frontend plugin able to receive notification from feature evaluation
+
+Our next goals are:
+
+* Implement a working build file
+* Integrate with Travis for CI testing on Github
+* Write evaluation function for removing unused imports
+* Write evaluation function for adding imports for unresolved classes
 
 ## Installation
 
@@ -28,19 +44,19 @@ A standalone jar file for the latest version of eclipse is coming soon, as well 
 
 This plugin serves as a backend service for IDE-IT as a whole. What that means is that this plugin will not function as a standalone plugin. If you install this plugin as is in your version of Eclipse, It will do nothing on its own.
 
-In order to use this service, you must have a front-end plugin that designates the IDE-IT back-end plugin as a dependency. See installation instructions above for how to get either the jar file or the source code downloaded into your own project. Take the following steps to to integrate our service with your front-end plugin:
+In order to use this service, you must have a frontend plugin that designates the IDE-IT backend plugin as a dependency. See installation instructions above for how to get either the jar file or the source code downloaded into your own project. Take the following steps to to integrate our service with your frontend plugin:
 
-1. Within your own plugin, you must create a new instance of FeatureSuggestion (the class can be found within our downloaded jar file or source code) and then call the start() method within that object.
+1. Create a class that extends the FeatureSuggestionObserver class. In your class, provide an implementation of the notify(String featureID) method. Your implementation of the notify(String) method will determine what your plugin will do with the information collected by the IDE-IT backend plugin (see the list of featureID Strings below for possible inputs to this function).
 
-2. Create your own FeatureSuggestionObserver class that extends the FeatureSuggestionObserver abstract class provided through the IDE-IT back-end plugin.
+2. In your own plugin's code, create a new instance of FeatureSuggestion, as well as an instance of your class that extends FeatureSuggestionObserver.
 
-3. Instantiate your new Observer object and register it with the FeatureSuggestion instance created earlier by using the FeatureSuggestion’s registerObserver(FeatureSuggestionObserver) method.
+3. In your plugin's code, register the instantiated FeatureSuggestionObserver object with the instantiated FeatureSuggestion object, using the FeatureSuggestion's registerObserver(FeatureSuggestionObserver obs) method.
 
-4. Now, your Observer object will be notified whenever the IDE-IT back-end plugin detects that the user could benefit from knowing about a feature. The implementation of your Observer object’s notify(String) method will determine what your plugin will do with the information collected by the IDE-IT back-end plugin.
+4. In your plugin's code, call the start() method of the instantiated FeatureSuggestion object. This will begin evaluation of user input. Your FeatureSuggestionObserver object will now be notified whenever the IDE-IT backend plugin detects that the user could benefit from knowing about a feature.
 
 Observers are notified with a string that uniquely identifies an Eclipse feature. The current list of supported featureID strings can be found [in this repository](https://github.com/DavidThien/IDE-IT/blob/master/featureIDStrings.txt).
 
-The following is a list of the featureID strings and detailed descriptions of what Eclipse IDE features they represent:
+The following is a list of the featureID strings and descriptions of what Eclipse IDE features they represent:
 
 * blockCommentSuggestion
   * Comment out multiple selected lines of code at once
@@ -71,16 +87,16 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
   * boolean isRunning()
     * Provides a check to see the current running state of the backend service
   * List<String> getAllFeatureIDs()
-    * Provides a list of all featureIDs. This is designed to be used to allow front-end services to check against the list of supported featureID strings for accuracy and verification at runtime.
+    * Provides a list of all featureIDs. This is designed to be used to allow frontend services to check against the list of supported featureID strings for accuracy and verification at runtime.
 
 ## Implementation Details
 
 * FeatureSuggestion
-  * Must be created by the front-end plugin that uses our service. Creating and starting the FeatureSuggestion starts the entire service our plugin provides. This is the only object a front-end plugin should have access to.
+  * Must be created by the frontend plugin that uses our service. Creating and starting the FeatureSuggestion starts the entire service our plugin provides. This is the only object a frontend plugin should have access to.
 * FeatureSuggestionInterface
-  * Details what methods are available to a front-end plugin through the FeatureSuggestion object. See above in usage for more details.
+  * Details what methods are available to a frontend plugin through the FeatureSuggestion object. See above in usage for more details.
 * FeatureSuggestionObserver
-  * Provides an abstract FeatureSuggestionObserver class that a front-end plugin can extend. The front-end plugin will instantiate that extended class and then register the instance with the FeatureSuggestion, as documented through the interface details in usage.
+  * Provides an abstract FeatureSuggestionObserver class that a frontend plugin can extend. The frontend plugin will instantiate that extended class and then register the instance with the FeatureSuggestion, as documented through the interface details in usage.
 * EvaluationManager
   * Created during the construction of the FeatureSuggestion object. The EvaluatorManager assigns Evaluators to document editor windows, keeps track of all active Evaluators that have been assigned to document editor windows, and handles reporting triggered features from each Evaluator to the FeatureSuggestion. This ensures that all triggered feature reports notify the same FeatureSuggestion.
 * EditorWindowListener

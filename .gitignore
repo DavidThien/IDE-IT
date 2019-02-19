@@ -1,1 +1,4 @@
 *.swp
+*.class
+backend_plugin/bin
+
