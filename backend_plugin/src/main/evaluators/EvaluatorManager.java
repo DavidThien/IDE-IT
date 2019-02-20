@@ -11,8 +11,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import interfaces.FeatureSuggestion;
-import listeners.EditorWindowListener;
+import main.interfaces.FeatureSuggestion;
+import main.listeners.EditorWindowListener;
 
 /**
  * This class keeps track of all evaluators that are open across all

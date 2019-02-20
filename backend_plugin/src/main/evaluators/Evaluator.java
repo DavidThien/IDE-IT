@@ -2,10 +2,9 @@ package main.evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import listeners.DocumentChangesTracker;
+import main.listeners.DocumentChangesTracker;
 
 /**
  * The Evaluator is designed to control all of the evaluation classes. The Evaluator creates a TrackerController, which
