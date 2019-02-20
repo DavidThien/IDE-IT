@@ -1,0 +1,66 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------	
+	- Finish setting up maven/travis for testing
+	- Figure out how to do testing for editor inputs
+	- Reoraganize plugin lifetimes currently pretty messy
+	- Finish setting up target for eclipse features installer 
+	- Coordinate w/ front end to figure out how to do integration testing across the interface 
+	- Finalize user manual 
+		- Including list of featureID strings
+	- Re-prepare and give presentation in class 
+	- Implement working evaluation function for:
+		- Adding import statements
+		- Removing unused import statements
+	- Refine evaluation function for block comment
+	- Create unit tests for FeatureSuggestion class
+	- Work with front end team to make sure they can interface with our plugin
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+	- Implemented start/stop functionality for FeatureSuggestion
+	- Researched and shared Eclipse API functionality
+	    - Discovered and utilized IMarkers and IAnnotations
+		- Specifically for usage in the add and remove import evaluation functions
+	- Prepared for and gave in class presentation
+	- Updated manual and report to address feedback
+	- Refactored some functionality for better efficiency
+		- Removed unused code/classes
+		- Adjusted Evaluator to only be able to be created for text editors
+			- No need for an evaluator for a non-text-editor window
+	- Implemented a working evaluation function for removing unused import statements
+		- Still some limitations. It's slow and clunky, we're looking for optimizations
+	- Refined block comment evaluation function
+		- As per suggestions from management; However some limitations were found
+	- Worked with front end team to verify interface between plugins works
+	- Researched and implemented maven build process 
+		- Eclipse plugin dependencies and maven build dependencies do not get along
+	- Integrated Travis CI with maven build and github
+	- Plugin lifetime reorganized
+		
+		
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	Responsible parties are listed after each goal (or subgoal, where applicable)
+	
+	- Tests, tests, tests (All)
+		- Catch up on unit tests where able (All)
+		- Figure out and set up integration tests (David)
+	- Compose list of sequences of actions users can take that will be used to 
+	  evaluate the success of our product(All)
+		- A list of actions that we can evaluate our tool against
+		- Will interview team members and other students to get a full, varied list	
+	- Implement working evaluation function for adding imports (Eric)
+	- Refine evaluation function for removing imports (John)
+		- Add unit tests
+	- Create documentation and data showing our initial results (All)
+		- Using list of sequences of actions users can take, as mentioned above
+
+--------------
+MEETING AGENDA
+--------------
+	- Advice / plan for initial results assignments
+		- We talked about the general evaluation plan, but how do we go about 
+			producing quantative data that can be reproduced by others
