@@ -1,6 +1,8 @@
-package tests;
+package test.java;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -8,7 +10,7 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.junit.Test;
 
-import evaluators.BlockCommentEvaluator;
+import main.evaluators.BlockCommentEvaluator;
 
 /**
  * Unit test for BlockCommentEvaluator

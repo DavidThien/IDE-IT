@@ -1,11 +1,11 @@
-package activation;
+package main.activation;
 
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import interfaces.FeatureSuggestion;
+import main.interfaces.FeatureSuggestion;
 
 public class Startup implements IStartup {
 	

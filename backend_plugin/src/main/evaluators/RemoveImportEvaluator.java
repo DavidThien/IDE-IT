@@ -1,4 +1,4 @@
-package evaluators;
+package main.evaluators;
 
 import java.util.Iterator;
 import org.eclipse.jface.text.source.Annotation;

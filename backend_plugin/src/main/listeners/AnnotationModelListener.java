@@ -1,9 +1,9 @@
-package listeners;
+package main.listeners;
 
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.IAnnotationModelListener;
 
-import evaluators.Evaluator;
+import main.evaluators.Evaluator;
 
 /**
  * Listens for any changes made to the AnnotationModel  with this listener.

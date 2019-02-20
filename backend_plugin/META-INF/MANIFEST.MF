@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Plugin_test
 Bundle-SymbolicName: backend_plugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: activation.Activator
+Bundle-Activator: main.activation.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.workbench,
@@ -17,5 +17,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: Plugin_test
 Import-Package: org.eclipse.jface.text,
  org.eclipse.ui.texteditor
-Export-Package: activation
+Export-Package: main.activation
 Bundle-ActivationPolicy: lazy

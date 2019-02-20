@@ -1,4 +1,4 @@
-# IDE-IT
+﻿# IDE-IT
 
 IDE Intelligent Tutorials
 
@@ -16,7 +16,7 @@ We plan to provide support for at least the following list of Eclipse features:
 
 This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
 
-## Current Status as of 2/18/19
+## Current Status as of 2/19/19
 
 We have completed the following milestones:
 
@@ -24,15 +24,34 @@ We have completed the following milestones:
 * Initial evaluation function written for evaluating block commenting
 * Interface with frontend implemented
   * Manually tested with success - IDE-IT frontend plugin able to receive notification from feature evaluation
+* Implement a working build file
+* Integrate with Travis for CI testing on Github
 
 Our next goals are:
 
-* Implement a working build file
-* Integrate with Travis for CI testing on Github
 * Write evaluation function for removing unused imports
 * Write evaluation function for adding imports for unresolved classes
+* Create a test suite and create unit tests for classes where appropriate
 
 ## Installation
+
+### Required Software
+
+* Java Developement Kit (JDK) 8 or higher
+* Eclipse 2018-12 (we recommend the RCP and RAP release version)
+* Maven 3.6.0
+
+### Building the plugin
+
+Open a terminal on your machine and complete the following steps
+
+* Clone this repo
+* Change directory into IDE-IT/backend_plugin
+* run "mvn clean install"
+
+If any of the above does not work, please inform us through the issue tracker.
+
+### Incorporating the plugin with your own project
 
 To install the project from source, import the git repository into an eclipse workspace. Note that the eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help" -> "Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
 
