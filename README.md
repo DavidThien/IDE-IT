@@ -37,6 +37,7 @@ Our next goals are:
 
 ### Required Software
 
+* Java Developement Kit (JDK) 8 or higher
 * Eclipse 2018-12 (we recommend the RCP and RAP release version)
 * Maven 3.6.0
 
