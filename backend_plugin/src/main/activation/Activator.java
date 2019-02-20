@@ -1,4 +1,4 @@
-package activation;
+package main.activation;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

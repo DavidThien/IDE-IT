@@ -1,4 +1,4 @@
-package evaluators;
+package main.evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;

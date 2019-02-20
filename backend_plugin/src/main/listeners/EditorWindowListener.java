@@ -1,4 +1,4 @@
-package listeners;
+package main.listeners;
 
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPartListener2;
@@ -6,7 +6,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import evaluators.EvaluatorManager;
+import main.evaluators.EvaluatorManager;
 
 /**
  * This listener class detects actions regarding windows in the Eclipse UI,

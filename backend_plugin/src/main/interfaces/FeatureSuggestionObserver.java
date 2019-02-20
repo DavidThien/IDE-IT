@@ -1,4 +1,4 @@
-package interfaces;
+package main.interfaces;
 
 /** An Observer abstract class designed to work with the FeatureSuggestion API. The 
  * observer must be registered with the FeatureSuggestion back end to receive updates.

@@ -1,4 +1,4 @@
-package evaluators;
+package main.evaluators;
 
 import java.util.HashMap;
 import java.util.Map;

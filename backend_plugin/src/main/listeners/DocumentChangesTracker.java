@@ -1,9 +1,9 @@
-package listeners;
+package main.listeners;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 
-import evaluators.Evaluator;
+import main.evaluators.Evaluator;
 
 /**
  * This class is responsible for listening for changes made within an

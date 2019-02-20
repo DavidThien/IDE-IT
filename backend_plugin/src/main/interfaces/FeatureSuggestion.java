@@ -1,9 +1,9 @@
-package interfaces;
+package main.interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import evaluators.EvaluatorManager;
+import main.evaluators.EvaluatorManager;
 
 /** Designed to be used in conjunction with the FeatureSuggestionObserver class. 
  * Observers can register themselves with FeatureSuggestions. FeatureSuggestion will 
