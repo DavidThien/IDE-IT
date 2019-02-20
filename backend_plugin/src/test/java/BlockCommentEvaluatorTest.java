@@ -46,7 +46,6 @@ public class BlockCommentEvaluatorTest {
 		offset++;
 		event = new DocumentEvent(doc, offset, length, textAdded);
 		assertFalse(testEvaluator.evaluate(event));
-		fail("test");
 		
 		// Pull the offset for the start of the second line so we aren't guessing
 		try {
