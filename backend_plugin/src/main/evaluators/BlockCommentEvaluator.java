@@ -42,7 +42,7 @@ public class BlockCommentEvaluator {
 	public boolean evaluate(DocumentEvent event) {
 		// Dev Notes: John
 		// If a user comments out a line with ctrl + /, then the length is 0 and the text is "//"
-	    // A document event can't tell the difference between ctrl + / on two consecutive lines and
+		// A document event can't tell the difference between ctrl + / on two consecutive lines and
 		// commenting out a block of code all at once
 		// ModificationStamp is just a counter that increments. So that's not helpful
 
@@ -52,7 +52,7 @@ public class BlockCommentEvaluator {
 				// Verify that the double slash is at the beginning of the line
 				// grab the position of the start of the line where the document change was
 				int lineOffset = doc.getLineInformationOfOffset(currentOffset).getOffset();
-			    String textBeforeSlashes = doc.get(lineOffset, prevOffset-lineOffset);
+				String textBeforeSlashes = doc.get(lineOffset, prevOffset-lineOffset);
 
 				textBeforeSlashes.trim();
 				if (textBeforeSlashes.isEmpty()) {
@@ -80,8 +80,8 @@ public class BlockCommentEvaluator {
 						prevRegion = event.getDocument().getLineInformationOfOffset(currentOffset);
 					}
 				}
-				// Try Catch needed in case offset passed in doc.get methods doesn't actually exist
-				// We shouldn't actually get here, but since it's all asynchronous, something weird may happen
+			// Try Catch needed in case offset passed in doc.get methods doesn't actually exist
+			// We shouldn't actually get here, but since it's all asynchronous, something weird may happen
 			} catch (BadLocationException e) {
 				firstDoubleBackSlashDetected = false;
 			}
@@ -105,9 +105,9 @@ public class BlockCommentEvaluator {
 
 		// Currently checking for consecutive ctrl + / has limitations with Eclipse API
 		// Check if a "//" was added through copy/paste or ctrl + /
-//		if (event.getText().equals(DOUBLE_SLASH)) {
-//			return true;
-//		}
+		// if (event.getText().equals(DOUBLE_SLASH)) {
+		//	 return true;
+		// }
 
 		// Check if there was a single "/" typed followed by another "/"
 		if (prevOffset == currentOffset - 1) {
