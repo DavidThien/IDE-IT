@@ -2,9 +2,12 @@ package main.evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import main.listeners.DocumentChangesTracker;
+import main.listeners.AnnotationModelListener;
+
 
 /**
  * The Evaluator is designed to control all of the evaluation classes. The Evaluator creates a TrackerController, which
@@ -21,10 +24,15 @@ public class Evaluator {
 	// TODO: Create an interface / abstract class for different evaluation functions
 	// This would allow us to keep a set / list and then just iterate through the list / set
 
-	private BlockCommentEvaluator blockCommentEval; 
 	private EvaluatorManager em;
+	private BlockCommentEvaluator blockCommentEval;
+	private RemoveImportEvaluator removeImportEval;
+
 	private IDocument document;
 	private DocumentChangesTracker documentChangesTracker;
+	
+	private IAnnotationModel annotationModel;
+	private AnnotationModelListener annotationModelListener;
 
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
@@ -38,6 +46,7 @@ public class Evaluator {
 
 		this.em = em;
 		blockCommentEval = new BlockCommentEvaluator();
+		removeImportEval = new RemoveImportEvaluator(textEditor);
 		this.initializeListeners(textEditor);
 	}
 
@@ -57,6 +66,13 @@ public class Evaluator {
 		DocumentChangesTracker docTracker = new DocumentChangesTracker(this);
 		doc.addDocumentListener(docTracker);
 		this.documentChangesTracker = docTracker;
+		
+		// Create a new AnnotationModelListener
+		this.annotationModelListener = new AnnotationModelListener(this);
+		// Get the AnnotationModel associated with the textEditor
+		this.annotationModel = textEditor.getDocumentProvider().getAnnotationModel(textEditor.getEditorInput());
+		// Add a AnnotationModelListener to the AnnotationModel
+		this.annotationModel.addAnnotationModelListener(this.annotationModelListener);	
 	}
 
 	/**
@@ -64,15 +80,24 @@ public class Evaluator {
 	 * @param event
 	 */
 	public void evaluateDocChanges(DocumentEvent event) {
-	
-		// Block comment evaluation
 		if (blockCommentEval.evaluate(event)) {
 			this.em.notifyFeatureSuggestion("Block Comment");
+		}
+	}
+	
+	/**
+	 * Checks all evaluation functions that need IAnnotationModel changes
+	 * @param model
+	 */
+	public void evaluateAnnotationModelChanges(IAnnotationModel model) {
+		if (removeImportEval.evaluate(model)) {
+			this.em.notifyFeatureSuggestion("Unused import");
 		}
 	}
 
 	public void stop() {
 		this.document.removeDocumentListener(this.documentChangesTracker);
+		this.annotationModel.removeAnnotationModelListener(this.annotationModelListener);
 	}
 	
 }
