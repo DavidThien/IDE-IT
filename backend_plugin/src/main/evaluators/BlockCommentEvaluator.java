@@ -11,21 +11,27 @@ import org.eclipse.jface.text.IRegion;
  */
 public class BlockCommentEvaluator {
 		
-	private boolean firstBackSlashDetected;
+	private boolean firstDoubleBackSlashDetected;
 	private IRegion prevRegion;
+
+	// position of the previous document change
 	private int prevOffset;
+	// text of the previous document change
 	private String prevInsert;
+
+	// position of the current document change
 	private int currentOffset;
+	// text of the current document change
 	private String currentInsert;
 
-	private final String SINGLE_SLASH = "/";
-	private final String DOUBLE_SLASH = "//";
+	private static final String SINGLE_SLASH = "/";
+	private static final String DOUBLE_SLASH = "//";
 	
 	/**
 	 * Default constructor
 	 */
 	public BlockCommentEvaluator() {
-		firstBackSlashDetected = false;
+		firstDoubleBackSlashDetected = false;
 	}
 	
 	/**
@@ -44,42 +50,40 @@ public class BlockCommentEvaluator {
 			IDocument doc = event.getDocument();
 			try {
 				// Verify that the double slash is at the beginning of the line
+				// grab the position of the start of the line where the document change was
 				int lineOffset = doc.getLineInformationOfOffset(currentOffset).getOffset();
 			    String textBeforeSlashes = doc.get(lineOffset, prevOffset-lineOffset);
 
-				textBeforeSlashes = textBeforeSlashes.trim();
+				textBeforeSlashes.trim();
 				if (textBeforeSlashes.isEmpty()) {
 
 					// If we have two back slashes, then check if we've found two previously
-					if (firstBackSlashDetected) {
+					if (firstDoubleBackSlashDetected) {
 						IRegion currentRegion = event.getDocument().getLineInformationOfOffset(currentOffset);
 
 						// Check if consecutive lines
 						int prevToCurrentDif = currentRegion.getOffset() - (prevRegion.getOffset() + prevRegion.getLength());
 						int currentToPrevDif = prevRegion.getOffset() - (currentRegion.getOffset() + currentRegion.getLength());
 
+						// update the prevRegion
+						prevRegion = currentRegion;
+
 						// Uses a buffer of 2 characters because sometimes IRegion doesn't count the newly inserted "//"
 						if ((prevToCurrentDif >= 0 && prevToCurrentDif <= 2) ||
 								(currentToPrevDif >= 0 && currentToPrevDif <= 2)) {
-							prevRegion = currentRegion;
 							return true;
 						}
 
-						// If not consecutive, then update prevRegion
-						prevRegion = currentRegion;
-
 						// If we haven't seen a double back slash yet
 					} else {
-						firstBackSlashDetected = true;
+						firstDoubleBackSlashDetected = true;
 						prevRegion = event.getDocument().getLineInformationOfOffset(currentOffset);
 					}
 				}
 				// Try Catch needed in case offset passed in doc.get methods doesn't actually exist
 				// We shouldn't actually get here, but since it's all asynchronous, something weird may happen
 			} catch (BadLocationException e) {
-				// DEBUG
-				System.out.println("Bad offset location in BlockCommentEvaluator"); // shouldn't be able to get here
-				firstBackSlashDetected = false;
+				firstDoubleBackSlashDetected = false;
 			}
 		}
 		// Update the previous event offset and character
