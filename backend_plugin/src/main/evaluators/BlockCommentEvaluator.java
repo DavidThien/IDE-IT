@@ -36,7 +36,7 @@ public class BlockCommentEvaluator {
 	public boolean evaluate(DocumentEvent event) {
 		// Dev Notes: John
 		// If a user comments out a line with ctrl + /, then the length is 0 and the text is "//"
-	    // A document event can't tell the difference between ctrl + / on two consecutive lines and
+		// A document event can't tell the difference between ctrl + / on two consecutive lines and
 		// commenting out a block of code all at once
 		// ModificationStamp is just a counter that increments. So that's not helpful
 
@@ -101,9 +101,9 @@ public class BlockCommentEvaluator {
 
 		// Currently checking for consecutive ctrl + / has limitations with Eclipse API
 		// Check if a "//" was added through copy/paste or ctrl + /
-//		if (event.getText().equals(DOUBLE_SLASH)) {
-//			return true;
-//		}
+		// if (event.getText().equals(DOUBLE_SLASH)) {
+		//	 return true;
+		// }
 
 		// Check if there was a single "/" typed followed by another "/"
 		if (prevOffset == currentOffset - 1) {
