@@ -2,13 +2,11 @@ package main.evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
-
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
-import main.listeners.DocumentChangesTracker;
 
-import main.listeners.AnnotationModelListener;
 import main.listeners.DocumentChangesTracker;
+import main.listeners.AnnotationModelListener;
 
 
 /**
@@ -33,8 +31,8 @@ public class Evaluator {
 	private IDocument document;
 	private DocumentChangesTracker documentChangesTracker;
 	
-	private IAnnotationModel annoModel;
-	private AnnotationModelListener annoChangesTracker;
+	private IAnnotationModel annotationModel;
+	private AnnotationModelListener annotationModelListener;
 
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
@@ -69,11 +67,12 @@ public class Evaluator {
 		doc.addDocumentListener(docTracker);
 		this.documentChangesTracker = docTracker;
 		
+		// Create a new AnnotationModelListener
+		this.annotationModelListener = new AnnotationModelListener(this);
+		// Get the AnnotationModel associated with the textEditor
+		this.annotationModel = textEditor.getDocumentProvider().getAnnotationModel(textEditor.getEditorInput());
 		// Add a AnnotationModelListener to the AnnotationModel
-		AnnotationModelListener annoTracker = new AnnotationModelListener(this);
-		this.annoModel = textEditor.getDocumentProvider().getAnnotationModel(textEditor.getEditorInput());
-		this.annoModel.addAnnotationModelListener(annoTracker);
-		this.annoChangesTracker = annoTracker;
+		this.annotationModel.addAnnotationModelListener(this.annotationModelListener);	
 	}
 
 	/**
@@ -98,7 +97,7 @@ public class Evaluator {
 
 	public void stop() {
 		this.document.removeDocumentListener(this.documentChangesTracker);
-		this.annoModel.removeAnnotationModelListener(this.annoChangesTracker);
+		this.annotationModel.removeAnnotationModelListener(this.annotationModelListener);
 	}
 	
 }
