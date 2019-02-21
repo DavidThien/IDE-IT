@@ -74,8 +74,8 @@ public class BlockCommentEvaluator {
 						prevRegion = event.getDocument().getLineInformationOfOffset(currentOffset);
 					}
 				}
-				// Try Catch needed in case offset passed in doc.get methods doesn't actually exist
-				// We shouldn't actually get here, but since it's all asynchronous, something weird may happen
+			// Try Catch needed in case offset passed in doc.get methods doesn't actually exist
+			// We shouldn't actually get here, but since it's all asynchronous, something weird may happen
 			} catch (BadLocationException e) {
 				// DEBUG
 				System.out.println("Bad offset location in BlockCommentEvaluator"); // shouldn't be able to get here
