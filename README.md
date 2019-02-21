@@ -1,5 +1,7 @@
 ﻿# IDE-IT
 
+[![Build Status](https://travis-ci.org/DavidThien/IDE-IT.svg?branch=master)](https://travis-ci.org/DavidThien/IDE-IT)
+
 IDE Intelligent Tutorials
 
 ## Overview
