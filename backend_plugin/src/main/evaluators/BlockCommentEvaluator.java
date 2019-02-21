@@ -45,7 +45,7 @@ public class BlockCommentEvaluator {
 			try {
 				// Verify that the double slash is at the beginning of the line
 				int lineOffset = doc.getLineInformationOfOffset(currentOffset).getOffset();
-			    String textBeforeSlashes = doc.get(lineOffset, prevOffset-lineOffset);
+				String textBeforeSlashes = doc.get(lineOffset, prevOffset-lineOffset);
 
 				textBeforeSlashes = textBeforeSlashes.trim();
 				if (textBeforeSlashes.isEmpty()) {
