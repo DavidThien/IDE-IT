@@ -5,7 +5,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import main.listeners.DocumentChangesTracker;
+import main.listeners.DocumentChangesListener;
 import main.listeners.AnnotationModelListener;
 
 
@@ -29,7 +29,7 @@ public class Evaluator {
 	private RemoveImportEvaluator removeImportEval;
 
 	private IDocument document;
-	private DocumentChangesTracker documentChangesTracker;
+	private DocumentChangesListener documentChangesTracker;
 	
 	private IAnnotationModel annotationModel;
 	private AnnotationModelListener annotationModelListener;
@@ -63,7 +63,7 @@ public class Evaluator {
 		this.document = doc;
 
 		// Add a DocumentChangesTracker to the document
-		DocumentChangesTracker docTracker = new DocumentChangesTracker(this);
+		DocumentChangesListener docTracker = new DocumentChangesListener(this);
 		doc.addDocumentListener(docTracker);
 		this.documentChangesTracker = docTracker;
 		
