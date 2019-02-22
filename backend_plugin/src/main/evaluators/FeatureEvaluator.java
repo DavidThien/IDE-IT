@@ -3,7 +3,9 @@ package main.evaluators;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.source.IAnnotationModel;
 
-public interface FeatureEvaluator {
+public abstract class FeatureEvaluator {
+
+	protected String featureID;
 
 	/**
 	 * Evaluates changes made to the text within a document
@@ -11,7 +13,9 @@ public interface FeatureEvaluator {
 	 * @return boolean true if the document changes cause the feature to be
 	 *					triggered; false otherwise
 	 */
-	public boolean evaluateDocumentChanges(DocumentEvent docEvent);
+	public boolean evaluateDocumentChanges(DocumentEvent docEvent) {
+		return false;
+	}
 	
 	/**
 	 * Evaluates changes to the annotation model of a document/editor window
@@ -20,10 +24,14 @@ public interface FeatureEvaluator {
 	 * @return boolean true if the annotation model changes cause the feature
 	 * 					to be triggered; false otherwise
 	 */
-	public boolean evaluateAnnotationModelChanges(IAnnotationModel model);
+	public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
+		return false;
+	}
 	
 	/**
 	 * @return The String representing the unique feature ID of this feature
 	 */
-	public String getFeatureID();
+	public String getFeatureID() {
+		return this.featureID;
+	}
 }

@@ -4,15 +4,12 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.source.IAnnotationModel;
 
 /**
  * Evaluates DocumentEvent changes to determine if the user is commenting out multiple sequential lines of code. If so,
  * then the user should be notified of the block comment feature in Eclipse.
  */
-public class BlockCommentEvaluator implements FeatureEvaluator {
-		
-	final String FEATURE_ID = "blockCommentSuggestion";
+public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	private boolean firstBackSlashDetected;
 	private IRegion prevRegion;
@@ -23,6 +20,7 @@ public class BlockCommentEvaluator implements FeatureEvaluator {
 	 * Default constructor
 	 */
 	public BlockCommentEvaluator() {
+		this.featureID = "blockCommentSuggestion";
 		firstBackSlashDetected = false;
 	}
 	
@@ -105,23 +103,5 @@ public class BlockCommentEvaluator implements FeatureEvaluator {
 		prevInsert = currentInsert;
 
 		return false;
-	}
-	
-	/**
-	 * Evaluates changes to the annotation model in regards to the block
-	 * commenting feature
-	 */
-	public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
-		
-		// TODO: Investigate ways to incorporate annotation model changes into the
-		// remove import evaluation if needed
-		return false;
-	}
-
-	/**
-	 * Returns the feature ID for the block commenting feature
-	 */
-	public String getFeatureID() {
-		return this.FEATURE_ID;
 	}
 }
