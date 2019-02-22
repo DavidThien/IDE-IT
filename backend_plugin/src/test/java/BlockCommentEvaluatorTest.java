@@ -41,24 +41,24 @@ public class BlockCommentEvaluatorTest {
 		length = 1;
 		textAdded = "/";
 		event = new DocumentEvent(doc, offset, length, textAdded);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		// Place a second backslash after the first
 		offset++;
 		event = new DocumentEvent(doc, offset, length, textAdded);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		
 		// Pull the offset for the start of the second line so we aren't guessing
 		try {
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
 			event = new DocumentEvent(doc, offset, length, textAdded);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
 			// Place another backslash after the previous one
 			offset++;
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			// fail included as sanity check
@@ -89,23 +89,23 @@ public class BlockCommentEvaluatorTest {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
 			event = new DocumentEvent(doc, offset, length, textAdded);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		
 			// Place a second backslash after the first
 			offset++;
 			event = new DocumentEvent(doc, offset, length, textAdded);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
 			event = new DocumentEvent(doc, offset, length, textAdded);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
 			// Place another backslash after the previous one
 			offset++;
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			// fail included as sanity check

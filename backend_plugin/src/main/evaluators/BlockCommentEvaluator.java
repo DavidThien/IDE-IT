@@ -4,12 +4,13 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.source.IAnnotationModel;
 
 /**
  * Evaluates DocumentEvent changes to determine if the user is commenting out multiple sequential lines of code. If so,
  * then the user should be notified of the block comment feature in Eclipse.
  */
-public class BlockCommentEvaluator {
+public class BlockCommentEvaluator implements FeatureEvaluator {
 		
 	private boolean firstBackSlashDetected;
 	private IRegion prevRegion;
@@ -28,7 +29,7 @@ public class BlockCommentEvaluator {
 	 * @param event the change detected by the DocumentChange Listener
 	 * @return true if the user comments two sequential lines of code, false otherwise
 	 */
-	public boolean evaluate(DocumentEvent event) {
+	public boolean evaluateDocumentChanges(DocumentEvent event) {
 
 		// Took logic Eric created to check for a double back slash
 		// May be a way to optimize this, but it works
@@ -102,5 +103,23 @@ public class BlockCommentEvaluator {
 		prevInsert = currentInsert;
 
 		return false;
+	}
+	
+	/**
+	 * Evaluates changes to the annotation model in regards to the block
+	 * commenting feature
+	 */
+	public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
+		
+		// TODO: Investigate ways to incorporate annotation model changes into the
+		// remove import evaluation if needed
+		return false;
+	}
+	
+	/**
+	 * Returns the feature ID for the block commenting feature
+	 */
+	public String getFeatureID() {
+		return "blockCommentSuggestion";
 	}
 }

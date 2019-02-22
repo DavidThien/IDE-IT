@@ -27,9 +27,6 @@ public class DocumentChangesTracker implements IDocumentListener {
 	 */
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
-		// Not sure if it matters whether we use this method
-		// or documentChanged to track input, we will find out
-		// over time I suppose. For now I'm just keeping it blank
 	}
 
 	/**
@@ -39,11 +36,7 @@ public class DocumentChangesTracker implements IDocumentListener {
 	@Override
 	public void documentChanged(DocumentEvent event) {
 		
-		// event has options like getText() to get the text that was added
-		// or removed from the document, getOffset() to get the offset in
-		// the document where the insertion/removal occured, etc.
-		
-		// send event to the Evaluator
-		evaluator.evaluateDocChanges(event);
+		// Send the document change event information to the Evaluator
+		evaluator.evaluateDocumentChanges(event);
 	}
 }

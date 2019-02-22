@@ -1,12 +1,15 @@
 package main.evaluators;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import main.listeners.DocumentChangesTracker;
 import main.listeners.AnnotationModelListener;
+import main.listeners.DocumentChangesTracker;
 
 
 /**
@@ -21,12 +24,8 @@ import main.listeners.AnnotationModelListener;
  */
 public class Evaluator {
 
-	// TODO: Create an interface / abstract class for different evaluation functions
-	// This would allow us to keep a set / list and then just iterate through the list / set
-
-	private EvaluatorManager em;
-	private BlockCommentEvaluator blockCommentEval;
-	private RemoveImportEvaluator removeImportEval;
+	private EvaluatorManager manager;
+	private List<FeatureEvaluator> featureEvaluators;
 
 	private IDocument document;
 	private DocumentChangesTracker documentChangesTracker;
@@ -44,10 +43,20 @@ public class Evaluator {
 		// DEBUG
 		System.out.println("Evaluator Started");
 
-		this.em = em;
-		blockCommentEval = new BlockCommentEvaluator();
-		removeImportEval = new RemoveImportEvaluator(textEditor);
+		this.manager = em;
+		this.featureEvaluators = new ArrayList<FeatureEvaluator>();
+		this.initializeFeatureEvaluators(textEditor);
 		this.initializeListeners(textEditor);
+	}
+	
+	/**
+	 * Creates the feature evaluators for each feature and adds them to this
+	 * Evaluator's list of feature evaluators
+	 * @param textEditor The text document editor this Evaluator is evaluating
+	 */
+	private void initializeFeatureEvaluators(ITextEditor textEditor) {
+		this.featureEvaluators.add(new BlockCommentEvaluator());
+		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
 	}
 
 	/**
@@ -79,9 +88,11 @@ public class Evaluator {
 	 * Checks all evaluation functions that need DocumentEvent changes
 	 * @param event
 	 */
-	public void evaluateDocChanges(DocumentEvent event) {
-		if (blockCommentEval.evaluate(event)) {
-			this.em.notifyFeatureSuggestion("Block Comment");
+	public void evaluateDocumentChanges(DocumentEvent event) {
+		for (FeatureEvaluator featureEvaluator : this.featureEvaluators) {
+			if (featureEvaluator.evaluateDocumentChanges(event)) {
+				this.manager.notifyFeatureSuggestion(featureEvaluator.getFeatureID());
+			}
 		}
 	}
 	
@@ -90,11 +101,16 @@ public class Evaluator {
 	 * @param model
 	 */
 	public void evaluateAnnotationModelChanges(IAnnotationModel model) {
-		if (removeImportEval.evaluate(model)) {
-			this.em.notifyFeatureSuggestion("Unused import");
+		for (FeatureEvaluator featureEvaluator : this.featureEvaluators) {
+			if (featureEvaluator.evaluateAnnotationModelChanges(model)) {
+				this.manager.notifyFeatureSuggestion(featureEvaluator.getFeatureID());
+			}
 		}
 	}
 
+	/**
+	 * Stops this Evaluator by removing any listeners it created
+	 */
 	public void stop() {
 		this.document.removeDocumentListener(this.documentChangesTracker);
 		this.annotationModel.removeAnnotationModelListener(this.annotationModelListener);
