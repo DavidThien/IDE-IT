@@ -12,6 +12,8 @@ import org.eclipse.jface.text.source.IAnnotationModel;
  */
 public class BlockCommentEvaluator implements FeatureEvaluator {
 		
+	final String FEATURE_ID = "blockCommentSuggestion";
+
 	private boolean firstBackSlashDetected;
 	private IRegion prevRegion;
 	private int prevOffset;
@@ -115,11 +117,11 @@ public class BlockCommentEvaluator implements FeatureEvaluator {
 		// remove import evaluation if needed
 		return false;
 	}
-	
+
 	/**
 	 * Returns the feature ID for the block commenting feature
 	 */
 	public String getFeatureID() {
-		return "blockCommentSuggestion";
+		return this.FEATURE_ID;
 	}
 }

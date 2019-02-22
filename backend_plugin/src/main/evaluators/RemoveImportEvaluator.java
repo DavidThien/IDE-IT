@@ -14,6 +14,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class RemoveImportEvaluator implements FeatureEvaluator {
 	
+	final String FEATURE_ID = "removeUnusedImportStatementsSuggestion";
 	
 	ITextEditor editor;
 	
@@ -62,6 +63,6 @@ public class RemoveImportEvaluator implements FeatureEvaluator {
 	}
 	
 	public String getFeatureID() {
-		return "removeUnusedImportStatementsSuggestion";
+		return this.FEATURE_ID;
 	}
 }
