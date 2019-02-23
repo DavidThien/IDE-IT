@@ -21,6 +21,7 @@ public class BlockCommentFalseNegativeTest {
 	
 	private static final String content = "Line1\n Line2\n Line3\n";
 	private static final String SINGLE_SLASH = "/";
+	private static final String DOUBLE_SLASH = "//";
 	
 	private IDocument doc;
 	private BlockCommentEvaluator testEvaluator;
@@ -44,7 +45,6 @@ public class BlockCommentFalseNegativeTest {
 	 */
 	@Test
 	public void twoConsecutiveLinesDownCommentedOut() {
-
 		// Mock a document event with a single backslash placed at the beginning of the first line
 		offset = 0;
 		event = createDocEvent(offset, SINGLE_SLASH);
@@ -265,6 +265,120 @@ public class BlockCommentFalseNegativeTest {
 
 			// Place another backslash after the previous one
 			offset++;
+			event = createDocEvent(offset, SINGLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluate(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests if a user inserts "//" on one line then "//" on the next line
+	 * This can be accomplished by the user through ctrl + / on each line or if they paste a "//"
+	 */
+	@Test
+	public void doubleSlashConsecutiveDown() {
+		// Mock a document event with a double backslash placed at the beginning of the first line
+		offset = 0;
+		event = createDocEvent(offset, DOUBLE_SLASH);
+		assertFalse(testEvaluator.evaluate(event));
+
+		// Pull the offset for the start of the second line so we aren't guessing
+		try {
+			// Place a single backslash at the start of the second line
+			offset = doc.getLineOffset(1);
+			event = createDocEvent(offset, DOUBLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluate(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests if a user inserts "//" on one line then "//" on the next line
+	 * This can be accomplished by the user through ctrl + / on each line or if they paste a "//"
+	 */
+	@Test
+	public void doubleSlashConsecutiveUp() {
+		try {
+			// Mock a document event with a double backslash placed at the beginning of the third line
+			offset = doc.getLineOffset(2);
+			event = createDocEvent(offset, DOUBLE_SLASH);
+			assertFalse(testEvaluator.evaluate(event));
+
+			// Mock a document event with a double backslash placed at the beginning of the second line
+			offset = doc.getLineOffset(1);
+			event = createDocEvent(offset, DOUBLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluate(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests if a user inserts "/", the places another "/" in front of the first slash on one line, and 
+	 * repeats this behavior on the next line
+	 */
+	@Test
+	public void singleSlashMoveLeftSingleSlashConsecutiveLinesDown() {
+		// Mock a document event with a single backslash placed at the beginning of the first line
+		offset = 0;
+		event = createDocEvent(offset, SINGLE_SLASH);
+		assertFalse(testEvaluator.evaluate(event));
+		// Place a second backslash at the beginning of the line
+		event = createDocEvent(offset, SINGLE_SLASH);
+		assertFalse(testEvaluator.evaluate(event));
+		
+		// Pull the offset for the start of the second line so we aren't guessing
+		try {
+			// Place a single backslash at the start of the second line
+			offset = doc.getLineOffset(1);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluate(event));
+			
+			// Place another backslash at the start of the line
+			event = createDocEvent(offset, SINGLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluate(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests if a user inserts "/", the places another "/" in front of the first slash on one line, and 
+	 * repeats this behavior on the previous line
+	 */
+	@Test
+	public void singleSlashMoveLeftSingleSlashConsecutiveLinesUp() {
+		// Create mock document event changes
+		try {
+			// Mock a document event with a single backslash placed at the beginning of the third line
+			offset = doc.getLineOffset(2);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluate(event));
+		
+			// Place a second backslash at the start of the same line
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluate(event));
+		
+			// Mock a document event with a single backslash placed at the beginning of the second line
+			offset = doc.getLineOffset(1);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluate(event));
+			
+			// Place another backslash at the start of the second line
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluate(event));
