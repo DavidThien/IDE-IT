@@ -9,9 +9,9 @@ Contents:
 1. Overview
 2. Current Status
 3. Installation
-  1. Required Software
-  2. Building the Plugin
-  3. Incorporating the Plugin with Your Own Project
+  * Required Software
+  * Building the Plugin
+  * Incorporating the Plugin with Your Own Project
 4. Usage
 5. Implementation Details
 
