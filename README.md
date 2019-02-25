@@ -47,7 +47,7 @@ Our next goals are:
 
 Open a terminal on your machine and complete the following steps
 
-* Clone this repo
+* Clone this repo: ```git clone https://github.com/DavidThien/IDE-IT.git```
 * Change directory into IDE-IT/backend_plugin
 * run "mvn clean install"
 
@@ -55,7 +55,7 @@ If any of the above does not work, please inform us through the issue tracker.
 
 ### Incorporating the plugin with your own project
 
-To install the project from source, import the git repository into an eclipse workspace. Note that the eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help" -> "Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
+First, clone the IDE-IT backend repository using the command above. Next, import the cloned repository into your eclipse workspace from within Eclipse using the "File"->"Import..."->"General"->"Existing Projects into Workspace" option. Note that your instance of Eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help"->"Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
 
 Once the project has been imported, simply right click on the project and click on "Export". Then click on "Plug-in Development" and "Deployable plug-ins and fragments" continuing through the wizard and selecting an output folder. This will create a file named something like `backend_plugin_1.0.0.201902122015.jar` inside a `plugins` folder. From there, the plugin can be installed by going to "Help" -> "Install New Software". Click "Add" and then "Local", browsing for the `plugins` folder that was created upon export. Select the plugin in the available software options that appear, and then continue through the wizard to install the plugin.
 
