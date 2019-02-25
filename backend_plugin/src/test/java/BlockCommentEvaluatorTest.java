@@ -28,34 +28,45 @@ public class BlockCommentEvaluatorTest {
 		int length;
 		String textAdded;
 		DocumentEvent event;
-		
+
 		// Create a document with four lines
 		// Line count starts at 0
 		IDocument doc = new Document(content);
-		
+
 		BlockCommentEvaluator testEvaluator = new BlockCommentEvaluator();
-		
+
 		// Send mock data
 		// Mock a document event with a single backslash placed at the beginning of the first line
 		offset = 0;
 		length = 1;
 		textAdded = "/";
-		event = new DocumentEvent(doc, offset, length, textAdded);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		// Place a second backslash after the first
-		offset++;
-		event = new DocumentEvent(doc, offset, length, textAdded);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		
-		// Pull the offset for the start of the second line so we aren't guessing
+
+		// Create mock document event changes
 		try {
-			// Place a single backslash at the start of the second line
-			offset = doc.getLineOffset(1);
+			// Mock a document event with a single backslash placed at the beginning of the first line
+			doc.replace(offset, 0, textAdded);
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-			
+
+			// Place a second backslash after the first
+			offset++;
+			doc.replace(offset, 0, textAdded);
+			event = new DocumentEvent(doc, offset, length, textAdded);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
+			long startTime = System.currentTimeMillis();
+			while (System.currentTimeMillis() - startTime <= 100) {}
+
+			// Place a single backslash at the start of the second line
+			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, textAdded);
+			event = new DocumentEvent(doc, offset, length, textAdded);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, textAdded);
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -76,11 +87,11 @@ public class BlockCommentEvaluatorTest {
 		int length;
 		String textAdded;
 		DocumentEvent event;
-		
+
 		// Create a document with four lines
 		// Line count starts at 0
 		IDocument doc = new Document(content);
-		
+
 		BlockCommentEvaluator testEvaluator = new BlockCommentEvaluator();
 		length = 1;
 		textAdded = "/";
@@ -88,21 +99,29 @@ public class BlockCommentEvaluatorTest {
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, textAdded);
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		
+
 			// Place a second backslash after the first
 			offset++;
+			doc.replace(offset, 0, textAdded);
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		
+
+			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
+			long startTime = System.currentTimeMillis();
+			while (System.currentTimeMillis() - startTime <= 100) {}
+
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, textAdded);
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-			
+
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, textAdded);
 			event = new DocumentEvent(doc, offset, length, textAdded);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
