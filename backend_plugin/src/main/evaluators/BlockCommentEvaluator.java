@@ -8,7 +8,10 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	private int lastCommentedLine;
 	private long lastCommentedLineTimeStamp;
-
+		
+	/**
+	 * Default constructor
+	 */
 	public BlockCommentEvaluator() {
 		this.featureID = "blockCommentSuggestion";
 		this.lastCommentedLine = -2;
@@ -39,6 +42,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 				// Since the line has been commented out, update the information about the last commented line
 				this.lastCommentedLine = line;
 				this.lastCommentedLineTimeStamp = System.currentTimeMillis();
+
 			}
 		} catch (BadLocationException e) {
 			// This can happen in certain boundary positions (beginning and end) of the document. In these cases,
