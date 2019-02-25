@@ -12,11 +12,11 @@ import main.evaluators.Evaluator;
  * are detected, evaluation will be run on the changes to see if any Eclipse
  * features were "triggered"
  */
-public class DocumentChangesTracker implements IDocumentListener {
+public class DocumentChangesListener implements IDocumentListener {
 	
 	private Evaluator evaluator;
 	
-	public DocumentChangesTracker(Evaluator evaluator) {
+	public DocumentChangesListener(Evaluator evaluator) {
 		super();
 		this.evaluator = evaluator;
 	}
