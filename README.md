@@ -4,6 +4,17 @@
 
 IDE Intelligent Tutorials
 
+Contents:
+
+1. Overview
+2. Current Status
+3. Installation
+  1. Required Software
+  2. Building the Plugin
+  3. Incorporating the Plugin with Your Own Project
+4. Usage
+5. Implementation Details
+
 ## Overview
 
 The Integrated Development Environment - Intelligent Tutorials (IDE-IT) is a plug in for Eclipse that provides developers suggestions on Eclipse features that they may not be aware of. The number of features available in Eclipse, and IDEs in general, can be overwhelming, and it isn’t always clear to the user that they exist. These include features such as auto complete, block commenting, automatic imports, refactoring code on variable renaming, etc. However, learning that these features exist isn’t an easy process. The discoverability of IDE features is something that is a detriment to current programmers. The goal of IDE-IT is to provide developers with suggestions on how to take advantage of Eclipse’s features in a way that is relevant to what they are currently doing.
@@ -43,17 +54,17 @@ Our next goals are:
 * Eclipse 2018-12 (we recommend the RCP and RAP release version)
 * Maven 3.6.0
 
-### Building the plugin
+### Building the Plugin
 
 Open a terminal on your machine and complete the following steps
 
 * Clone this repo into your Eclipse workspace folder: ```git clone https://github.com/DavidThien/IDE-IT.git```
-* Change directory into IDE-IT/backend_plugin
-* run "mvn clean install"
+* Change directory into IDE-IT/backend_plugin: ```cd IDE-IT```
+* Build the Plugin: ```mvn clean install```
 
 If any of the above does not work, please inform us through the issue tracker.
 
-### Incorporating the plugin with your own project
+### Incorporating the Plugin with Your Own Project
 
 First, clone the IDE-IT backend repository using the instructions above. Next, import the cloned repository into your eclipse workspace from within Eclipse using the "File"->"Import..."->"General"->"Existing Projects into Workspace" option. Note that your instance of Eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help"->"Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
 
