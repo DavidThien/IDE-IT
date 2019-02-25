@@ -46,24 +46,32 @@ public class BlockCommentFalseNegativeTest {
 	@Test
 	public void twoConsecutiveLinesDownCommentedOut() {
 		// Mock a document event with a single backslash placed at the beginning of the first line
-		offset = 0;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		// Place a second backslash after the first
-		offset++;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		
-		// Pull the offset for the start of the second line so we aren't guessing
 		try {
+			// Mock a document event with a single backslash placed at the beginning of the first line
+			offset = 0;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			// Place a second backslash after the first
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
-			// Place another backslash after the previous one
+			// Place a second backslash after the first
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
+
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
@@ -82,21 +90,27 @@ public class BlockCommentFalseNegativeTest {
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		
 			// Place a second backslash after the first
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		
+
+			delayUserInput();
+
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -113,39 +127,48 @@ public class BlockCommentFalseNegativeTest {
 	 */
 	@Test
 	public void threeConsecutiveLinesDownCommented() {
-
-		// Send mock data
-		// Mock a document event with a single backslash placed at the beginning of the first line
-		offset = 0;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		// Place a second backslash after the first
-		
-		offset++;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-
-		// Pull the offset for the start of the second line so we aren't guessing
 		try {
+			// Send mock data
+			// Mock a document event with a single backslash placed at the beginning of the first line
+			offset = 0;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a second backslash after the first
+
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Pull the offset for the start of the second line so we aren't guessing
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 
+			delayUserInput();
+
 			// Comment out the third line
 			// Place a single backslash at the start of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -164,32 +187,42 @@ public class BlockCommentFalseNegativeTest {
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place a second backslash after the first
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
+			delayUserInput();
+
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 
+			delayUserInput();
+
 			// Mock a document event with a single backslash placed at the beginning of the first line
 			offset = doc.getLineOffset(0);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -205,28 +238,35 @@ public class BlockCommentFalseNegativeTest {
 	 */
 	@Test
 	public void threeSlashesConsecutiveLinesDown() {
-		// Mock a document event with a single backslash placed at the beginning of the first line
-		offset = 0;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		// Place a second backslash after the first
-		offset++;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		// Place a third backslash after the second
-		offset++;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-
-		// Pull the offset for the start of the second line so we aren't guessing
 		try {
+			// Mock a document event with a single backslash placed at the beginning of the first line
+			offset = 0;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a second backslash after the first
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a third backslash after the second
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Pull the offset for the start of the second line so we aren't guessing
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -245,26 +285,33 @@ public class BlockCommentFalseNegativeTest {
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place a second backslash after the first
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place a third backslash after the second
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-			
+
+			delayUserInput();
+
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -282,14 +329,18 @@ public class BlockCommentFalseNegativeTest {
 	@Test
 	public void doubleSlashConsecutiveDown() {
 		// Mock a document event with a double backslash placed at the beginning of the first line
-		offset = 0;
-		event = createDocEvent(offset, DOUBLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-
-		// Pull the offset for the start of the second line so we aren't guessing
 		try {
+			offset = 0;
+			doc.replace(offset, 0, DOUBLE_SLASH);
+			event = createDocEvent(offset, DOUBLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Pull the offset for the start of the second line so we aren't guessing
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, DOUBLE_SLASH);
 			event = createDocEvent(offset, DOUBLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -309,11 +360,15 @@ public class BlockCommentFalseNegativeTest {
 		try {
 			// Mock a document event with a double backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, DOUBLE_SLASH);
 			event = createDocEvent(offset, DOUBLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
+			delayUserInput();
+
 			// Mock a document event with a double backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, DOUBLE_SLASH);
 			event = createDocEvent(offset, DOUBLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -331,21 +386,27 @@ public class BlockCommentFalseNegativeTest {
 	@Test
 	public void singleSlashMoveLeftSingleSlashConsecutiveLinesDown() {
 		// Mock a document event with a single backslash placed at the beginning of the first line
-		offset = 0;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		// Place a second backslash at the beginning of the line
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		
-		// Pull the offset for the start of the second line so we aren't guessing
 		try {
+			offset = 0;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a second backslash at the beginning of the line
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Pull the offset for the start of the second line so we aren't guessing
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
 			// Place another backslash at the start of the line
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -366,19 +427,25 @@ public class BlockCommentFalseNegativeTest {
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		
 			// Place a second backslash at the start of the same line
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		
+
+			delayUserInput();
+
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
 			// Place another backslash at the start of the second line
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
@@ -398,4 +465,13 @@ public class BlockCommentFalseNegativeTest {
 	private DocumentEvent createDocEvent(int offset, String text) {
 		return new DocumentEvent(doc, offset, text.length(), text);
 	} 
+
+	/**
+	 * Helper method to delay 100 ms between document changes. This allows us to more realistically mock user input
+	 */
+	private void delayUserInput() {
+		// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
+		long startTime = System.currentTimeMillis();
+		while (System.currentTimeMillis() - startTime <= 100) {}
+	}
 }

@@ -57,9 +57,7 @@ public class BlockCommentEvaluatorTest {
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
-			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
-			long startTime = System.currentTimeMillis();
-			while (System.currentTimeMillis() - startTime <= 100) {}
+			delayUserInput();
 
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
@@ -100,9 +98,7 @@ public class BlockCommentEvaluatorTest {
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
-			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
-			long startTime = System.currentTimeMillis();
-			while (System.currentTimeMillis() - startTime <= 100) {}
+			delayUserInput();
 
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
@@ -143,12 +139,9 @@ public class BlockCommentEvaluatorTest {
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
-			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
-			long startTime = System.currentTimeMillis();
-			while (System.currentTimeMillis() - startTime <= 100) {}
+			delayUserInput();
 
 			// Pull the offset for the start of the second line so we aren't guessing
-		
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
 			doc.replace(offset, 0, SINGLE_SLASH);
@@ -162,9 +155,7 @@ public class BlockCommentEvaluatorTest {
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 			
-			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
-			startTime = System.currentTimeMillis();
-			while (System.currentTimeMillis() - startTime <= 100) {}
+			delayUserInput();
 
 			// Comment out the third line
 			// Place a single backslash at the start of the third line
@@ -204,9 +195,7 @@ public class BlockCommentEvaluatorTest {
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
-			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
-			long startTime = System.currentTimeMillis();
-			while (System.currentTimeMillis() - startTime <= 100) {}
+			delayUserInput();
 
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
@@ -221,9 +210,7 @@ public class BlockCommentEvaluatorTest {
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 			
-			// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
-			startTime = System.currentTimeMillis();
-			while (System.currentTimeMillis() - startTime <= 100) {}
+			delayUserInput();
 
 			// Mock a document event with a single backslash placed at the beginning of the first line
 			offset = doc.getLineOffset(0);
@@ -250,25 +237,31 @@ public class BlockCommentEvaluatorTest {
 	 */
 	@Test
 	public void commentNotAtStartOfLineDown() {
-		// Mock a document event with a single backslash placed at the beginning of the first line
-		offset = 0;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-		// Place a second backslash after the first
-		offset++;
-		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluateDocumentChanges(event));
-
 		try {
+			// Mock a document event with a single backslash placed at the beginning of the first line
+			offset = 0;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a second backslash after the first
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
 			// Pull the offset for the start of the second line so we aren't guessing
 			offset = doc.getLineOffset(1);
 			// Add two to the offset so we're in the middle of the line
 			offset += 2;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should not trigger
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
@@ -288,23 +281,29 @@ public class BlockCommentEvaluatorTest {
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place a second backslash after the first
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
 
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
 			// Add two to get to mid line
 			offset += 2;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
@@ -323,5 +322,14 @@ public class BlockCommentEvaluatorTest {
 	 */
 	private DocumentEvent createDocEvent(int offset, String text) {
 		return new DocumentEvent(doc, offset, text.length(), text);
+	}
+
+	/**
+	 * Helper method to delay 100 ms between document changes. This allows us to more realistically mock user input
+	 */
+	private void delayUserInput() {
+		// Wait for 101 ms to simulate the time it takes the user to manually move to the line above
+		long startTime = System.currentTimeMillis();
+		while (System.currentTimeMillis() - startTime <= 100) {}
 	}
 }
