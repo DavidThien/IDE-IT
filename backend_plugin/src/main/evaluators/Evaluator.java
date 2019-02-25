@@ -57,6 +57,7 @@ public class Evaluator {
 	private void initializeFeatureEvaluators(ITextEditor textEditor) {
 		this.featureEvaluators.add(new BlockCommentEvaluator());
 		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
+		this.featureEvaluators.add(new AddImportEvaluator());
 	}
 
 	/**
