@@ -1,6 +1,7 @@
 package main.evaluators;
 
 import java.util.Iterator;
+
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -10,8 +11,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * statements are found, then evaluate will return true
  *
  */
-public class RemoveImportEvaluator {
-	
+public class RemoveImportEvaluator extends FeatureEvaluator {
 	
 	ITextEditor editor;
 	
@@ -20,6 +20,7 @@ public class RemoveImportEvaluator {
 	 * @param docName the name of the document this evaluator is attached to
 	 */
 	public RemoveImportEvaluator(ITextEditor editor) {
+		this.featureID = "removeUnusedImportStatementsSuggestion";
 		this.editor = editor;
 	}
 	
@@ -29,7 +30,7 @@ public class RemoveImportEvaluator {
 	 * @param event
 	 * @return true if there are unused import statements in the document, false otherwise
 	 */
-	public boolean evaluate(IAnnotationModel model) {
+	public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
 		
 		// Dev notes: John
 		// String matching isn't ideal in this case, but it's the most reliable.
@@ -37,7 +38,7 @@ public class RemoveImportEvaluator {
 		// updated upon saves. The annotation is updated upon document changes.
 		
 		Iterator<Annotation> it = model.getAnnotationIterator();
-		
+
 		while (it.hasNext()) {
 			Annotation current = it.next();
 			// Check if the annotation is an unused import
@@ -47,5 +48,4 @@ public class RemoveImportEvaluator {
 		}
 		return false;
 	}
-	
 }

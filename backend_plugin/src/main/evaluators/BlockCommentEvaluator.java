@@ -9,7 +9,7 @@ import org.eclipse.jface.text.IRegion;
  * Evaluates DocumentEvent changes to determine if the user is commenting out multiple sequential lines of code. If so,
  * then the user should be notified of the block comment feature in Eclipse.
  */
-public class BlockCommentEvaluator {
+public class BlockCommentEvaluator extends FeatureEvaluator {
 		
 	private boolean firstDoubleBackSlashDetected;
 	private IRegion prevRegion;
@@ -31,6 +31,7 @@ public class BlockCommentEvaluator {
 	 * Default constructor
 	 */
 	public BlockCommentEvaluator() {
+		this.featureID = "blockCommentSuggestion";
 		firstDoubleBackSlashDetected = false;
 	}
 	
@@ -39,13 +40,7 @@ public class BlockCommentEvaluator {
 	 * @param event the change detected by the DocumentChange Listener
 	 * @return true if the user comments two sequential lines of code, false otherwise
 	 */
-	public boolean evaluate(DocumentEvent event) {
-		// Dev Notes: John
-		// If a user comments out a line with ctrl + /, then the length is 0 and the text is "//"
-		// A document event can't tell the difference between ctrl + / on two consecutive lines and
-		// commenting out a block of code all at once
-		// ModificationStamp is just a counter that increments. So that's not helpful
-
+	public boolean evaluateDocumentChanges(DocumentEvent event) {
 		if (doubleBackSlash(event)) {
 			IDocument doc = event.getDocument();
 			try {

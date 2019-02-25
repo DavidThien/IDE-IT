@@ -47,24 +47,25 @@ public class BlockCommentEvaluatorTest {
 		// Mock a document event with a single backslash placed at the beginning of the first line
 		offset = 0;
 		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		// Place a second backslash after the first
 		offset++;
 		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
 		
 		// Pull the offset for the start of the second line so we aren't guessing
 		try {
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -83,23 +84,23 @@ public class BlockCommentEvaluatorTest {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		
 			// Place a second backslash after the first
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 			
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -118,37 +119,37 @@ public class BlockCommentEvaluatorTest {
 		// Mock a document event with a single backslash placed at the beginning of the first line
 		offset = 0;
 		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		// Place a second backslash after the first
 
 		offset++;
 		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 		// Pull the offset for the start of the second line so we aren't guessing
 		try {
 			// Place a single backslash at the start of the second line
 			offset = doc.getLineOffset(1);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 
 			// Comment out the third line
 			// Place a single backslash at the start of the third line
 			offset = doc.getLineOffset(2);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -165,34 +166,34 @@ public class BlockCommentEvaluatorTest {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place a second backslash after the first
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 
 			// Mock a document event with a single backslash placed at the beginning of the first line
 			offset = doc.getLineOffset(0);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
-			assertTrue(testEvaluator.evaluate(event));
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -209,11 +210,11 @@ public class BlockCommentEvaluatorTest {
 		// Mock a document event with a single backslash placed at the beginning of the first line
 		offset = 0;
 		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		// Place a second backslash after the first
 		offset++;
 		event = createDocEvent(offset, SINGLE_SLASH);
-		assertFalse(testEvaluator.evaluate(event));
+		assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 		try {
 			// Pull the offset for the start of the second line so we aren't guessing
@@ -221,13 +222,13 @@ public class BlockCommentEvaluatorTest {
 			// Add two to the offset so we're in the middle of the line
 			offset += 2;
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should not trigger
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -245,25 +246,25 @@ public class BlockCommentEvaluatorTest {
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place a second backslash after the first
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Mock a document event with a single backslash placed at the beginning of the second line
 			offset = doc.getLineOffset(1);
 			// Add two to get to mid line
 			offset += 2;
 			event = createDocEvent(offset, SINGLE_SLASH);
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place another backslash after the previous one
 			offset++;
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
-			assertFalse(testEvaluator.evaluate(event));
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
