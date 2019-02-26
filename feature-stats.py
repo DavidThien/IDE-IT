@@ -1,5 +1,6 @@
 from git import Repo
 import time
+import subprocess
 
 repo = Repo('.')
 commits_itr = repo.iter_commits()
@@ -13,6 +14,9 @@ for commit in commits_itr:
         days.append((last_commit, next_date))
     last_date = next_date
     last_commit = commit
+
+subprocess.run(['cp', 'backend_plugin/test/feature-tests' './'])
+subprocess.run(['mvn -Dtest=*FalseNegative surefire-report:report'])
 
 for commit in days:
     print(commit)
