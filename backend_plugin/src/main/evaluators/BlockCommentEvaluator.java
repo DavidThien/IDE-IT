@@ -3,114 +3,131 @@ package main.evaluators;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IRegion;
 
 /**
  * Evaluates DocumentEvent changes to determine if the user is commenting out multiple sequential lines of code. If so,
  * then the user should be notified of the block comment feature in Eclipse.
  */
 public class BlockCommentEvaluator extends FeatureEvaluator {
+
+	private int lastCommentedLine;
+	private long lastCommentedLineTimeStamp;
 		
-	private boolean firstDoubleBackSlashDetected;
-	private IRegion prevRegion;
-
-	// position of the previous document change
-	private int prevOffset;
-	// text of the previous document change
-	private String prevInsert;
-
-	// position of the current document change
-	private int currentOffset;
-	// text of the current document change
-	private String currentInsert;
-
-	private static final String SINGLE_SLASH = "/";
-	private static final String DOUBLE_SLASH = "//";
-	
 	/**
 	 * Default constructor
 	 */
-	public BlockCommentEvaluator() {
+	public BlockCommentEvaluator(IDocument document) {
 		this.featureID = "blockCommentSuggestion";
-		firstDoubleBackSlashDetected = false;
+		this.document = document;
+		this.lastCommentedLine = -2;
+		this.lastCommentedLineTimeStamp = -1;
 	}
-	
+
 	/**
 	 * Keeps track of DocumentEvent changes and determines of the user comments out multiple sequential lines of code. 
 	 * @param event the change detected by the DocumentChange Listener
 	 * @return true if the user comments two sequential lines of code, false otherwise
 	 */
 	public boolean evaluateDocumentChanges(DocumentEvent event) {
-		if (doubleBackSlash(event)) {
-			IDocument doc = event.getDocument();
-			try {
-				// Verify that the double slash is at the beginning of the line
-				// grab the position of the start of the line where the document change was
-				int lineOffset = doc.getLineInformationOfOffset(currentOffset).getOffset();
-				String textBeforeSlashes = doc.get(lineOffset, prevOffset-lineOffset);
+		try {
+			
+			boolean triggered = false;
 
-				textBeforeSlashes.trim();
-				if (textBeforeSlashes.isEmpty()) {
+			// Get the line number of the change
+			int line = document.getLineOfOffset(event.getOffset());
 
-					// If we have two back slashes, then check if we've found two previously
-					if (firstDoubleBackSlashDetected) {
-						IRegion currentRegion = event.getDocument().getLineInformationOfOffset(currentOffset);
+			// Check if the line is newly commented out
+			if (newCommentDetected(document, event, line)) {
 
-						// Check if consecutive lines
-						int prevToCurrentDif = currentRegion.getOffset() - (prevRegion.getOffset() + prevRegion.getLength());
-						int currentToPrevDif = prevRegion.getOffset() - (currentRegion.getOffset() + currentRegion.getLength());
+				// The user commented out the line. Check and see if they previously commented out an adjacent line
+				// manually
+				triggered = adjacentToLastCommentedLine(line);
 
-						// update the prevRegion
-						prevRegion = currentRegion;
-
-						// Uses a buffer of 2 characters because sometimes IRegion doesn't count the newly inserted "//"
-						if ((prevToCurrentDif >= 0 && prevToCurrentDif <= 2) ||
-								(currentToPrevDif >= 0 && currentToPrevDif <= 2)) {
-							return true;
-						}
-
-						// If we haven't seen a double back slash yet
-					} else {
-						firstDoubleBackSlashDetected = true;
-						prevRegion = event.getDocument().getLineInformationOfOffset(currentOffset);
-					}
-				}
-			// Try Catch needed in case offset passed in doc.get methods doesn't actually exist
-			// We shouldn't actually get here, but since it's all asynchronous, something weird may happen
-			} catch (BadLocationException e) {
-				firstDoubleBackSlashDetected = false;
+				// Since the line has been commented out, update the information about the last commented line
+				this.lastCommentedLine = line;
+				this.lastCommentedLineTimeStamp = System.currentTimeMillis();
 			}
+			
+			return triggered;
+		} catch (BadLocationException e) {
+			// This can happen in certain boundary positions (beginning and end) of the document. In these cases,
+			// just do nothing and return false
+			return false;
 		}
-		// Update the previous event offset and character
-		prevOffset = currentOffset;
-		prevInsert = currentInsert;
-
-		return false;
 	}
 
 	/**
-	 * Helper function that determines if the DocumentEvent(s) provided is a double "//" inputted from the user.
-	 * This will catch both manually typing "/" then "/' as well as using ctrl + / to comment out a single line
-	 * @param event DocumentEvent that occurred
-	 * @return true if a double backslash was placed on a single line, false otherwise
+	 * Checks if the given line is commented out in the given document
+	 * @param document The document the user is typing in
+	 * @param line the number of the line to check
+	 * @return true if the given line is commented out; false otherwise
 	 */
-	private boolean doubleBackSlash(DocumentEvent event) {
-		currentOffset = event.getOffset();
-		currentInsert = event.getText();
-
-		// Currently checking for consecutive ctrl + / has limitations with Eclipse API
-		// Check if a "//" was added through copy/paste or ctrl + /
-		// if (event.getText().equals(DOUBLE_SLASH)) {
-		//	 return true;
-		// }
-
-		// Check if there was a single "/" typed followed by another "/"
-		if (prevOffset == currentOffset - 1) {
-			if (currentInsert != null && this.prevInsert != null &&
-					this.prevInsert.equals(SINGLE_SLASH) && currentInsert.equals(SINGLE_SLASH)) {
-				return true;
-			}
+	private boolean lineIsCommentedOut(IDocument document, int line) {
+		try {
+			// Check if the given line minus white space starts with a double slash
+			int lineOffset = document.getLineOffset(line);
+			int lineLength = document.getLineLength(line);
+			String lineText = document.get(lineOffset, lineLength).trim();
+			return lineText.startsWith("//");
+		} catch (BadLocationException e) {
+			return false;
 		}
-		return false;
+	}
+
+	/**
+	 * Checks if the line the addition was made on was already commented out
+	 * @param document The document the user is typing in
+	 * @param event The document change event
+	 * @param line the line number the event occurred on
+	 * @return boolean true if the line was already commented out before the change; false otherwise
+	 */
+	public boolean lineWasPreviouslyCommentedOut(IDocument document, DocumentEvent event, int line) {
+		try {
+			// Calculate the contents of the line that previously existed in front of the new insertion and
+			// the contents of the line that previously existed beyond the new insertion
+			int lineStartOffset = document.getLineOffset(line);
+			int lineEndOffset = lineStartOffset + document.getLineLength(line);
+			int insertOffset = event.getOffset();
+			String lineBeforeNewAddition = document.get(lineStartOffset, insertOffset - lineStartOffset).trim();
+			String lineAfterNewAddition = document.get(insertOffset + event.getText().length(), lineEndOffset - insertOffset - 1).trim();
+
+			// Check all cases (an insertion could come before an existing double slash, after an existing
+			// double slash, or between the slashes of an existing double slash), each indication that
+			// the line was already commented out before
+			return lineBeforeNewAddition.startsWith("//") ||
+					(lineBeforeNewAddition.equals("") && lineAfterNewAddition.startsWith("//")) ||
+					(lineBeforeNewAddition.equals("/") && lineAfterNewAddition.startsWith("/"));
+		} catch (BadLocationException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Checks if the last line that was commented out is adjacent to the given line. Also checks that
+	 * the given line was commented out manually, rather than using the block comment feature
+	 * @param line The line number to check
+	 * @return true of the given line is adjacent to the last commented out line; false otherwise
+	 */
+	public boolean adjacentToLastCommentedLine(int line) {
+
+		// Check that the last line that was commented out is adjacent to the given line
+		boolean adjacentLineWasLastCommented = Math.abs(line - this.lastCommentedLine) == 1;
+
+		// Check that enough time has passed since the last time a line was commented out.
+		// This will prevent triggering when the user actually does use the block comment feature
+		// by using a millisecond threshold
+		boolean lastCommentWasLongEnoughAgo = System.currentTimeMillis() - this.lastCommentedLineTimeStamp > 100;
+		return adjacentLineWasLastCommented && lastCommentWasLongEnoughAgo;
+	}
+	
+	/**
+	 * Checks if the given event caused the given line to be commented out
+	 * @param document The document the user is typing in
+	 * @param event The document change event
+	 * @param line The line number the event occurred on
+	 * @return
+	 */
+	public boolean newCommentDetected(IDocument document, DocumentEvent event, int line) {
+		return lineIsCommentedOut(document, line) && !lineWasPreviouslyCommentedOut(document, event, line);
 	}
 }
