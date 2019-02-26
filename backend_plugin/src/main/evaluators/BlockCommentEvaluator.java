@@ -22,7 +22,6 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	 */
 	public boolean evaluateDocumentChanges(DocumentEvent event) {
 		try {
-
 			// Get the document the user is typing in
 			IDocument document = event.getDocument();
 
@@ -42,7 +41,6 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 				// Since the line has been commented out, update the information about the last commented line
 				this.lastCommentedLine = line;
 				this.lastCommentedLineTimeStamp = System.currentTimeMillis();
-
 			}
 		} catch (BadLocationException e) {
 			// This can happen in certain boundary positions (beginning and end) of the document. In these cases,
@@ -59,7 +57,6 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	 */
 	private boolean lineIsCommentedOut(IDocument document, int line) {
 		try {
-
 			// Check if the given line minus white space starts with a double slash
 			int lineOffset = document.getLineOffset(line);
 			int lineLength = document.getLineLength(line);
@@ -78,9 +75,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	 * @return boolean true if the line was already commented out before the change; false otherwise
 	 */
 	public boolean lineWasPreviouslyCommentedOut(IDocument document, DocumentEvent event, int line) {
-
 		try {
-
 			// Calculate the contents of the line that previously existed in front of the new insertion and
 			// the contents of the line that previously existed beyond the new insertion
 			int lineStartOffset = document.getLineOffset(line);
