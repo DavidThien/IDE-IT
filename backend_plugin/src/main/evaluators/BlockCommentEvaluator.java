@@ -4,6 +4,10 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 
+/**
+ * Evaluates DocumentEvent changes to determine if the user is commenting out multiple sequential lines of code. If so,
+ * then the user should be notified of the block comment feature in Eclipse.
+ */
 public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	private int lastCommentedLine;
@@ -12,41 +16,47 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	/**
 	 * Default constructor
 	 */
-	public BlockCommentEvaluator() {
+	public BlockCommentEvaluator(IDocument document) {
 		this.featureID = "blockCommentSuggestion";
+		this.document = document;
 		this.lastCommentedLine = -2;
+		this.lastCommentedLineTimeStamp = -1;
 	}
 
 	/**
-	 * Evaluates whether a warning should be triggered about the block comment feature
+	 * Keeps track of DocumentEvent changes and determines of the user comments out multiple sequential lines of code. 
+	 * @param event the change detected by the DocumentChange Listener
+	 * @return true if the user comments two sequential lines of code, false otherwise
 	 */
 	public boolean evaluateDocumentChanges(DocumentEvent event) {
 		try {
+			
+			boolean triggered = false;
+			
 			// Get the document the user is typing in
-			IDocument document = event.getDocument();
+//			IDocument document = event.getDocument();
 
 			// Get the line number of the change
 			int line = document.getLineOfOffset(event.getOffset());
 
-			// Check if the line is now commented out after the change, but was not before the change
-			if (lineIsCommentedOut(document, line) && !lineWasPreviouslyCommentedOut(document, event, line)) {
+			// Check if the line is newly commented out
+			if (newCommentDetected(document, event, line)) {
 
-				// The user commented out a line. Check and see if they previously commented out an adjacent line
+				// The user commented out the line. Check and see if they previously commented out an adjacent line
 				// manually
-				if (adjacentLineWasLastCommentedOut(line)) {
-					this.lastCommentedLine = line;
-					return true;
-				}
+				triggered = adjacentToLastCommentedLine(line);
 
 				// Since the line has been commented out, update the information about the last commented line
 				this.lastCommentedLine = line;
 				this.lastCommentedLineTimeStamp = System.currentTimeMillis();
 			}
+			
+			return triggered;
 		} catch (BadLocationException e) {
 			// This can happen in certain boundary positions (beginning and end) of the document. In these cases,
 			// just do nothing and return false
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -98,10 +108,11 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	/**
 	 * Checks if the last line that was commented out is adjacent to the given line. Also checks that
 	 * the given line was commented out manually, rather than using the block comment feature
-	 * @param line
+	 * @param line The line number to check
 	 * @return true of the given line is adjacent to the last commented out line; false otherwise
 	 */
-	public boolean adjacentLineWasLastCommentedOut(int line) {
+	public boolean adjacentToLastCommentedLine(int line) {
+
 		// Check that the last line that was commented out is adjacent to the given line
 		boolean adjacentLineWasLastCommented = Math.abs(line - this.lastCommentedLine) == 1;
 
@@ -110,5 +121,16 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 		// by using a millisecond threshold
 		boolean lastCommentWasLongEnoughAgo = System.currentTimeMillis() - this.lastCommentedLineTimeStamp > 100;
 		return adjacentLineWasLastCommented && lastCommentWasLongEnoughAgo;
+	}
+	
+	/**
+	 * Checks if the given event caused the given line to be commented out
+	 * @param document The document the user is typing in
+	 * @param event The document change event
+	 * @param line The line number the event occurred on
+	 * @return
+	 */
+	public boolean newCommentDetected(IDocument document, DocumentEvent event, int line) {
+		return lineIsCommentedOut(document, line) && !lineWasPreviouslyCommentedOut(document, event, line);
 	}
 }

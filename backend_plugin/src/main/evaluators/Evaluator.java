@@ -44,8 +44,8 @@ public class Evaluator {
 
 		this.manager = em;
 		this.featureEvaluators = new ArrayList<FeatureEvaluator>();
-		this.initializeFeatureEvaluators(textEditor);
 		this.initializeListeners(textEditor);
+		this.initializeFeatureEvaluators(textEditor);
 	}
 	
 	/**
@@ -54,7 +54,7 @@ public class Evaluator {
 	 * @param textEditor The text document editor this Evaluator is evaluating
 	 */
 	private void initializeFeatureEvaluators(ITextEditor textEditor) {
-		this.featureEvaluators.add(new BlockCommentEvaluator());
+		this.featureEvaluators.add(new BlockCommentEvaluator(this.document));
 		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
 	}
 
