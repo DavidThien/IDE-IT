@@ -32,9 +32,6 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 		try {
 			
 			boolean triggered = false;
-			
-			// Get the document the user is typing in
-//			IDocument document = event.getDocument();
 
 			// Get the line number of the change
 			int line = document.getLineOfOffset(event.getOffset());
