@@ -1,4 +1,4 @@
-package test.negatives.evaluators;
+package test.java.negatives.evaluators;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,7 +17,7 @@ import main.evaluators.BlockCommentEvaluator;
  * Tests against all known sequences of actions a user can take to manually attempt to comment out multiple lines
  * of code in their document
  */
-public class BlockCommentNegativeTest {
+public class BlockCommentNegative {
 	
 	private static final String content = "Line1\n Line2\n Line3\n";
 	private static final String SINGLE_SLASH = "/";
@@ -276,7 +276,7 @@ public class BlockCommentNegativeTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests for /// one one line, then // on the previous line
 	 */
@@ -290,6 +290,106 @@ public class BlockCommentNegativeTest {
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
 
 			// Place a second backslash after the first
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			// Place a third backslash after the second
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Mock a document event with a single backslash placed at the beginning of the second line
+			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			// Place another backslash after the previous one
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests for //// one one line, then // on the next line
+	 */
+	@Test
+	public void fourSlashesConsecutiveLinesDown() {
+		try {
+			// Mock a document event with a single backslash placed at the beginning of the first line
+			offset = 0;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a second backslash after the first
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a third backslash after the second
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+			// Place a fourth backslash after the second
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Pull the offset for the start of the second line so we aren't guessing
+			// Place a single backslash at the start of the second line
+			offset = doc.getLineOffset(1);
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			// Place another backslash after the previous one
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests for //// one one line, then // on the previous line
+	 */
+	@Test
+	public void fourSlashesConsecutiveLinesUp() {
+		try {
+			// Mock a document event with a single backslash placed at the beginning of the third line
+			offset = doc.getLineOffset(2);
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			// Place a second backslash after the first
+			offset++;
+			doc.replace(offset, 0, SINGLE_SLASH);
+			event = createDocEvent(offset, SINGLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			// Place a third backslash after the second
 			offset++;
 			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
