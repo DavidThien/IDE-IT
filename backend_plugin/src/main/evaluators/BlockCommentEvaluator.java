@@ -102,7 +102,6 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	 * @return true of the given line is adjacent to the last commented out line; false otherwise
 	 */
 	public boolean adjacentLineWasLastCommentedOut(int line) {
-
 		// Check that the last line that was commented out is adjacent to the given line
 		boolean adjacentLineWasLastCommented = Math.abs(line - this.lastCommentedLine) == 1;
 
