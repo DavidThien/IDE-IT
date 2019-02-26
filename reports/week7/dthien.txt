@@ -1,0 +1,21 @@
+# David Thien Week 7 Status Report
+
+## Goals from previous week
+- Finish setting up Travis
+- Add more tests for all modules
+- Figure out integration testing (front end is using ant instead of maven)
+- More evaluation functions
+
+## Progress this week
+- Travis is set up
+- Maven script set up for testing
+- Front end is working on integration testing
+- Started looking at using the AST for feature evaluators rather than document changes
+- Code reviews
+- Started making a script to generate graphs for testing false positives and negatives on feature evaluators
+
+## Goals for next week
+- Finish setting up graph for false positives and negatives on feature evaluators
+- Implement AST listener and figure out how it will fit into other document changes listeners for the feature evaluators
+- Refactor testing code
+- Write more false positive and negative tests
