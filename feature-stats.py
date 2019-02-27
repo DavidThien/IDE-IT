@@ -68,8 +68,5 @@ git.clean(['-fd'])
 day_results = [0] + day_results
 
 plt.plot(day_results)
-plt.ylabel('total methods supported (out of ' + total_tests + ')')
+plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
 plt.savefig('feature-support.png')
-
-# Delete the tests we copied
-subprocess.call(['rm', '-rf', 'negatives'])
