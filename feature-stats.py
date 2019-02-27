@@ -39,6 +39,7 @@ for (commit, day) in days:
 
     result_line = None
     for line in iter(proc.stdout.readline, b''):
+        print(line)
         if 'Tests run: ' in line:
             result_line = line
             break
