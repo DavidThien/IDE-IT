@@ -3,6 +3,7 @@ import time
 import subprocess
 import os
 import re
+import matplotlib.pyplot as plt
 
 repo = Repo('.')
 commits_itr = repo.iter_commits()
@@ -64,7 +65,11 @@ for (commit, day) in days:
 git.checkout('feature-testing')
 git.clean(['-fd'])
 
-print(day_results)
+day_results = [0] + day_results
+
+plt.plot(day_results)
+plt.ylabel('total methods supported (out of ' + total_tests + ')')
+plt.savefig('feature-support.png')
 
 # Delete the tests we copied
 subprocess.call(['rm', '-rf', 'negatives'])
