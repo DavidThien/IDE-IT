@@ -18,7 +18,8 @@ for commit in commits_itr:
     last_commit = commit
 
 # Copy the tests we want to run for use later
-subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './'])
+# Call it feature-testing-negatives-tmp so git clean exclusion doesn't conflict with negatives
+subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './feature-testing-negatives-tmp'])
 
 git = repo.git
 days.reverse()
@@ -29,7 +30,7 @@ for (commit, day) in days:
     print("Running commit " + commit.hexsha + " for day " + day)
     git.checkout(commit.hexsha)
     subprocess.call(['mkdir', '-p', 'backend_plugin/src/test/java'])
-    subprocess.call(['cp', '-r', 'negatives', 'backend_plugin/src/test/java/'])
+    subprocess.call(['cp', '-r', 'feature-testing-negatives-tmp', 'backend_plugin/src/test/java/negatives'])
 
     # cd into the backend_plugin dir and run the mvn test
     wd = os.getcwd()
