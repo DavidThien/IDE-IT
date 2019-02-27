@@ -45,7 +45,6 @@ for (commit, day) in days:
     success = False
     result_line = None
     for line in iter(proc.stdout.readline, b''):
-        print(line)
         if 'Tests run: ' in line:
             result_line = line
             success = True
@@ -63,6 +62,7 @@ for (commit, day) in days:
 
 # Checkout back to the head of our branch
 git.checkout('feature-testing')
+git.clean(['-fd'])
 
 print(day_results)
 
