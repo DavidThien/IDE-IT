@@ -8,6 +8,7 @@ days = []
 last_commit = None
 last_date = time.strftime("%Y, %j", time.gmtime(repo.iter_commits().next().authored_date))
 
+# Get the last commit of each day
 for commit in commits_itr:
     next_date = time.strftime("%Y, %j", time.gmtime(commit.authored_date))
     if next_date != last_date:
@@ -15,8 +16,18 @@ for commit in commits_itr:
     last_date = next_date
     last_commit = commit
 
-subprocess.run(['cp', 'backend_plugin/test/feature-tests' './'])
-subprocess.run(['mvn -Dtest=*FalseNegative surefire-report:report'])
+# Copy the tests we want to run for use later
+subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './'])
 
-for commit in days:
-    print(commit)
+git = repo.git
+
+for (commit, day) in days:
+    git.checkout(commit.hexsha)
+    print("Checked out " + commit.hexsha + " for day " + day)
+
+git.checkout('HEAD')
+
+#subprocess.call(['mvn', '-Dtest=*Negative', 'surefire-report:report'])
+
+# Delete the tests we copied
+subprocess.call(['rm', '-rf' 'negatives'])
