@@ -43,7 +43,7 @@ for (commit, day) in days:
             result_line = line
             break
 
-    results = [int(s) for s in str.split() if s.isdigit()]
+    results = [int(s) for s in str.split('\n') if s.isdigit()]
     total_tests = results[0]
     failures = results[1]
     errors = results[2]
