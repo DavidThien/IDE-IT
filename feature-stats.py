@@ -37,20 +37,23 @@ for (commit, day) in days:
     proc = subprocess.Popen(['mvn', '-Dtest=*Negative', 'surefire-report:report'], stdout=subprocess.PIPE)
     os.chdir(wd)
 
+    success = False
     result_line = None
     for line in iter(proc.stdout.readline, b''):
         print(line)
         if 'Tests run: ' in line:
             result_line = line
+            success = True
             break
 
-    results = [int(s) for s in str.split('\n') if s.isdigit()]
-    total_tests = results[0]
-    failures = results[1]
-    errors = results[2]
-    skipped = results[3]
-    passed = total_tests - failures
-    day_results.append(passed)
+    if success:
+        results = [int(s) for s in str.split('\n') if s.isdigit()]
+        total_tests = results[0]
+        failures = results[1]
+        errors = results[2]
+        skipped = results[3]
+        passed = total_tests - failures
+        day_results.append(passed)
 
 # Checkout back to the head of our branch
 git.checkout('feature-testing')
