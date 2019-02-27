@@ -56,7 +56,7 @@ for (commit, day) in days:
         passed = total_tests - failures
         day_results.append(passed)
 
-    git.clean(['-fde', 'negatives'])
+    git.clean(['-fde', 'feature-testing-negatives-tmp'])
 
 # Checkout back to the head of our branch
 git.checkout('feature-testing')
