@@ -64,6 +64,22 @@ Open a terminal on your machine and complete the following steps
 
 If any of the above does not work, please inform us through the issue tracker.
 
+### Generating Feature Support Graph
+
+Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how many different methods we support for detecting different features. The current number of supported features can be found by running
+
+```
+mvn -Dtest=*Negative surefire-report:report
+```
+
+from the `backend_plugin` directory, or by running the `backend_plugin/runTestCases.sh` script. You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running
+
+```
+python feature-stats.py
+```
+
+from the main directory. Note that this script requires `Repo` and `matplotlib` to be installed, as well as python 2.7 or greater. This script will output a bar graph `feature-support.png` in the main directory.
+
 ### Incorporating the Plugin with Your Own Project
 
 First, clone the IDE-IT backend repository using the instructions above. Next, import the cloned repository into your eclipse workspace from within Eclipse using the "File"->"Import..."->"General"->"Existing Projects into Workspace" option. Note that your instance of Eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help"->"Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
