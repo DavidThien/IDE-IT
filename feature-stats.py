@@ -30,7 +30,8 @@ for (commit, day) in days:
     print("Running commit " + commit.hexsha + " for day " + day)
     git.checkout(commit.hexsha)
     subprocess.call(['mkdir', '-p', 'backend_plugin/src/test/java'])
-    subprocess.call(['cp', '-r', 'feature-testing-negatives-tmp', 'backend_plugin/src/test/java/negatives'])
+    subprocess.call(['cp', '-r', 'feature-testing-negatives-tmp', 'backend_plugin/src/test/java/'])
+    subprocess.call(['mv', 'backend_plugin/src/test/java/feature-testing-negatives-tmp', 'backend_plugin/src/test/java/negatives'])
 
     # cd into the backend_plugin dir and run the mvn test
     wd = os.getcwd()
