@@ -2,6 +2,7 @@ from git import Repo
 import time
 import subprocess
 import os
+import re
 
 repo = Repo('.')
 commits_itr = repo.iter_commits()
@@ -50,8 +51,7 @@ for (commit, day) in days:
             success = True
 
     if success:
-        results = [int(s) for s in result_line.split(' ') if s.isdigit()]
-        print(results)
+        results = re.findall(r'\b\d+\b', string)
         total_tests = results[0]
         failures = results[1]
         errors = results[2]
