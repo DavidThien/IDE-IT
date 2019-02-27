@@ -23,9 +23,8 @@ subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './featur
 
 git = repo.git
 days.reverse()
-print(len(days))
+days = days[19:]
 
-"""
 day_results = []
 total_tests = 0
 for (commit, day) in days:
@@ -69,4 +68,3 @@ print(day_results)
 
 # Delete the tests we copied
 subprocess.call(['rm', '-rf', 'negatives'])
-"""
