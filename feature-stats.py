@@ -70,4 +70,6 @@ indices = [i + 1 for i in range(len(day_results))]
 
 plt.bar(indices, day_results)
 plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
+ax = plt.gca()
+ax.set_xticks([0, 1, 2, 3])
 plt.savefig('feature-support.png')
