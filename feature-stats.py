@@ -51,7 +51,7 @@ for (commit, day) in days:
             success = True
 
     if success:
-        results = re.findall(r'\b\d+\b', string)
+        results = re.findall(r'\b\d+\b', result_line)
         total_tests = results[0]
         failures = results[1]
         errors = results[2]
