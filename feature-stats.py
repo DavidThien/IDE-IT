@@ -29,7 +29,7 @@ for (commit, day) in days:
     print("Running commit " + commit.hexsha + " for day " + day)
     git.checkout(commit.hexsha)
     subprocess.call(['mkdir', '-p', 'backend_plugin/src/test/java'])
-    subprocess.call(['cp', '-r', 'negatives', 'backend_plugin/src/test/java/negatives'])
+    subprocess.call(['cp', '-r', 'negatives', 'backend_plugin/src/test/java/'])
 
     # cd into the backend_plugin dir and run the mvn test
     wd = os.getcwd()
@@ -54,6 +54,8 @@ for (commit, day) in days:
         skipped = results[3]
         passed = total_tests - failures
         day_results.append(passed)
+
+    git.clean('-fd')
 
 # Checkout back to the head of our branch
 git.checkout('feature-testing')
