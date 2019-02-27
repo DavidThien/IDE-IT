@@ -38,7 +38,7 @@ for (commit, day) in days:
     os.chdir(wd)
 
     result_line = None
-    for line in iter(p.stdout.readline, b''):
+    for line in iter(proc.stdout.readline, b''):
         if 'Tests run: ' in line:
             result_line = line
             break
