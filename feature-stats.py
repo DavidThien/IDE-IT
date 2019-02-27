@@ -26,6 +26,7 @@ days.reverse()
 day_results = []
 total_tests = 0
 for (commit, day) in days:
+    print("Running commit " + commit.hexsha + " for day " + day)
     git.checkout(commit.hexsha)
     subprocess.call(['mkdir', '-p', 'backend_plugin/src/test/java'])
     subprocess.call(['cp', '-r', 'negatives', 'backend_plugin/src/test/java/negatives'])
@@ -33,12 +34,11 @@ for (commit, day) in days:
     # cd into the backend_plugin dir and run the mvn test
     wd = os.getcwd()
     os.chdir("backend_plugin")
-    subprocess.Popen(['mvn', '-Dtest=*Negative', 'surefire-report:report'], stdout=subprocess.PIPE)
+    proc = subprocess.Popen(['mvn', '-Dtest=*Negative', 'surefire-report:report'], stdout=subprocess.PIPE)
     os.chdir(wd)
-    stdout = subprocess.communicate()[0]
 
     result_line = None
-    for line in stdout:
+    for line in iter(p.stdout.readline, b''):
         if 'Tests run: ' in line:
             result_line = line
             break
