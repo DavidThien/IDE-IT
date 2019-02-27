@@ -23,7 +23,7 @@ subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './featur
 
 git = repo.git
 days.reverse()
-days = days[22:]
+days = days[24:]
 
 day_results = []
 total_tests = 0
@@ -50,7 +50,8 @@ for (commit, day) in days:
             success = True
 
     if success:
-        results = [int(s) for s in str.split(' ') if s.isdigit()]
+        results = [int(s) for s in result_line.split(' ') if s.isdigit()]
+        print(results)
         total_tests = results[0]
         failures = results[1]
         errors = results[2]
