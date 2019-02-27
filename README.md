@@ -72,7 +72,7 @@ Part of the IDE-IT testing infrastructure also includes a series of tests which 
 mvn -Dtest=*Negative surefire-report:report
 ```
 
-from the `backend_plugin` directory. You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running
+from the `backend_plugin` directory, or by running the `backend_plugin/runTestCases.sh` script. You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running
 
 ```
 python feature-stats.py
