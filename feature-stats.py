@@ -66,7 +66,8 @@ git.checkout('feature-testing')
 git.clean(['-fd'])
 
 day_results = [0] + day_results
+indices = [i + 1 for i in range(len(day_results))]
 
-plt.plot(day_results)
+plt.bar(indices, day_results)
 plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
 plt.savefig('feature-support.png')
