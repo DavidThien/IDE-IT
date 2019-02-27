@@ -23,7 +23,7 @@ subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './featur
 
 git = repo.git
 days.reverse()
-days = days[19:]
+days = days[22:]
 
 day_results = []
 total_tests = 0
