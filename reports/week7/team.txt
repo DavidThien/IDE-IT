@@ -1,0 +1,64 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------	
+	- Tests, tests, tests 
+		- Catch up on unit tests where able
+		- Figure out and set up integration tests
+	- Compose list of sequences of actions users can take that will be used to 
+	  evaluate the success of our product
+		- A list of actions that we can evaluate our tool against
+		- Will interview team members and other students to get a full, varied list	
+	- Implement working evaluation function for adding imports
+	- Refine evaluation function for removing imports
+		- Add unit tests
+	- Create documentation and data showing our initial results
+		- Using list of sequences of actions users can take, as mentioned above
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+
+	- Implemented evaluation function for adding imports
+	- Implemented an abstract FeatureEvaluator class that each feature evaluation function extends
+	- Updated manual and report to address feedback
+		- Added initial results information
+	- Worked on looking for alternative evaluation function possibilities for block comments
+		- Trying to simplify evaluation/catch more cases with working prototype
+	- Maven script set up for testing
+	- Started looking at using the AST for feature evaluators rather than document changes
+	- Implemented working scirpt to generate graphs for testing false positives and negatives on feature evaluators
+	- Added and refactored unit tests for:
+		- Block Comment Evaluator
+		- Feature Suggestion Interface 
+	- Composed a list of possible actions a user can take 
+		- Including interviewing other students to get a more exhaustive list
+	- Designed and set up framework for testing against possible false negatives
+		- Using the list mentioned previously as the test cases
+		- Created 20+ tests that our block comment evaluator can run against
+		
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	Responsible parties are listed after each goal (or subgoal, where applicable)
+	
+	- Update manual and report based on any feedback (Eric)
+	- Write unit tests for classes of project (All)
+	- Possibly implement feature evaluation for correcting indents (Eric)
+	- Refine add and remove import evaluations (John/Eric)
+	- Finish setting up graph for false positives and negatives on feature evaluators (David)
+	- Research and implement using Eclipse API for AST changes (David/John)
+		- May be helpful in refining our current evaluators and for future ones
+	- Refactor testing code (David)
+	- Write more false positive and negative tests (All)
+	- Finish converting false negative user test cases to runnable tests (John/All)
+ 	- Prepare for in class presentation (David/John)
+	- Work with FE team to make sure BE infrastructure changes will still integrate with Feature (John)
+	
+--------------
+MEETING AGENDA
+--------------
+For manager / high level engineer
+	- Advice / plan for providing public facing documentation regarding false negative test cases
+	- Decide when import evaluation functions should trigger
+		- Project wide or open document only
+		- Consider changing remove unused import hotkey to suggest a configuration to turn on auto removal upon save (this integrates better with some of the FE functionality)
