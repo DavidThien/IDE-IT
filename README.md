@@ -4,6 +4,17 @@
 
 IDE Intelligent Tutorials
 
+Contents:
+
+1. Overview
+2. Current Status
+3. Installation
+  * Required Software
+  * Building the Plugin
+  * Incorporating the Plugin with Your Own Project
+4. Usage
+5. Implementation Details
+
 ## Overview
 
 The Integrated Development Environment - Intelligent Tutorials (IDE-IT) is a plug in for Eclipse that provides developers suggestions on Eclipse features that they may not be aware of. The number of features available in Eclipse, and IDEs in general, can be overwhelming, and it isn’t always clear to the user that they exist. These include features such as auto complete, block commenting, automatic imports, refactoring code on variable renaming, etc. However, learning that these features exist isn’t an easy process. The discoverability of IDE features is something that is a detriment to current programmers. The goal of IDE-IT is to provide developers with suggestions on how to take advantage of Eclipse’s features in a way that is relevant to what they are currently doing.
@@ -43,19 +54,35 @@ Our next goals are:
 * Eclipse 2018-12 (we recommend the RCP and RAP release version)
 * Maven 3.6.0
 
-### Building the plugin
+### Building the Plugin
 
 Open a terminal on your machine and complete the following steps
 
-* Clone this repo
-* Change directory into IDE-IT/backend_plugin
-* run "mvn clean install"
+* Clone this repo into your Eclipse workspace folder: ```git clone https://github.com/DavidThien/IDE-IT.git```
+* Change directory into IDE-IT/backend_plugin: ```cd IDE-IT```
+* Build the Plugin: ```mvn clean install```
 
 If any of the above does not work, please inform us through the issue tracker.
 
-### Incorporating the plugin with your own project
+### Generating Feature Support Graph
 
-To install the project from source, import the git repository into an eclipse workspace. Note that the eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help" -> "Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
+Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how many different methods we support for detecting different features. The current number of supported features can be found by running
+
+```
+mvn -Dtest=*Negative surefire-report:report
+```
+
+from the `backend_plugin` directory, or by running the `backend_plugin/runTestCases.sh` script. You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running
+
+```
+python feature-stats.py
+```
+
+from the main directory. Note that this script requires `Repo` and `matplotlib` to be installed, as well as python 2.7 or greater. This script will output a bar graph `feature-support.png` in the main directory.
+
+### Incorporating the Plugin with Your Own Project
+
+First, clone the IDE-IT backend repository using the instructions above. Next, import the cloned repository into your eclipse workspace from within Eclipse using the "File"->"Import..."->"General"->"Existing Projects into Workspace" option. Note that your instance of Eclipse must have the Plug-in Development Package installed. If this is not installed, you can install it by going to "Help"->"Install new Software" selecting the "The Eclipse Project Updates" repository to work with. Then check the option for "Eclipse Plugin Development Tools" and continue through the wizard.
 
 Once the project has been imported, simply right click on the project and click on "Export". Then click on "Plug-in Development" and "Deployable plug-ins and fragments" continuing through the wizard and selecting an output folder. This will create a file named something like `backend_plugin_1.0.0.201902122015.jar` inside a `plugins` folder. From there, the plugin can be installed by going to "Help" -> "Install New Software". Click "Add" and then "Local", browsing for the `plugins` folder that was created upon export. Select the plugin in the available software options that appear, and then continue through the wizard to install the plugin.
 

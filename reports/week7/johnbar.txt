@@ -1,0 +1,44 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------
+	- Implement working evaluation function for adding import statements
+	- Compose list comprising of sequences of actions users can take
+		- A list of actions that we can evaluate our tool against
+		- Will interview team members and other students to get a full, varied list
+	- Create and/or update tests for the following classes:
+		- FeatureSuggestion
+		- BlockCommentEvaluator
+		- RemoveImportEvaluator
+	- Create documentation and data showing our initial results
+		- Using list of sequences of actions users can take, as mentioned above
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+	- Added and refactored unit tests for:
+		- Block Comment Evaluator
+		- Feature Suggestion Interface
+	- Composed a list of possible actions a user can take 
+		- Including interviewing other students to get a more exhaustive list
+	- Designed and set up framework for testing against possible false negatives
+		- Using the list mentioned previously as the test cases
+		- Converted half a dozen test cases from the list into unit tests
+	- Researched maven functionality to run specific tests outside of the build/test tasks
+		- Shared functionality with team
+		- Moving foward with this procedure to produce our "initial results" data
+
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	- Finish converting false negative list to unit tests
+	- Research and implement Eclipse API for AST changes
+		- May be helpful in refining our current evaluators and for future ones
+	- Design and implement working evaluator functions for:
+		- auto correct indentations
+		- variable rename
+		- auto getters / setters
+	- Research and design evaluation functions for:
+		- content assist autoactivation
+		- compiler warnings
+		- auto insert semicolons
+	- Prepare for in class presentation	

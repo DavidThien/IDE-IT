@@ -1,11 +1,13 @@
 package main.evaluators;
 
 import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.IAnnotationModel;
 
 public abstract class FeatureEvaluator {
 
 	protected String featureID;
+	protected IDocument document;
 
 	/**
 	 * Evaluates changes made to the text within a document

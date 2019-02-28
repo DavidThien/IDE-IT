@@ -1,0 +1,23 @@
+-Goals for this week (from last week's status report):
+
+	-Implement evaluation function for adding imports
+		-John working on evaluation function for removing imports
+	-Work on manual/report
+	-Work with John and David to get build file working
+	-Write some unit tests
+
+-Progress made this week:
+
+	-Implemented evaluation function for adding imports
+	-Implemented an abstract FeatureEvaluator class that each feature evaluation function extends
+	-Updated manual and report to address feedback
+	-Worked on looking for alternative evaluation function possibilities for block comments
+		-Trying to simplify evaluation/catch more cases
+		-Created a working prototype, team will review this week
+
+-Plan/Goals for the following week:
+
+	-Update manual and report based on any feedback
+	-Write unit tests for classes of project
+	-Possibly implement feature evaluation for correcting indents
+		-Time permitted, may instead choose to focus more on testing/refining what we already have
