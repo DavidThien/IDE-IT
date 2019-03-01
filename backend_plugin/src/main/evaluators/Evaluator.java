@@ -14,10 +14,10 @@ import main.listeners.AnnotationModelListener;
 /**
  * The Evaluator is designed to control all of the evaluation classes. The Evaluator creates a TrackerController, which
  * it uses to create different Listeners.
- * 
+ *
  * The listeners created through the TrackerController callback to the Evaluator, which calls the appropriate evaluation
  * functions depending on what changes were detected.
- * 
+ *
  * If any evaluation functions return true, then the FeatureSuggestion is notified of which feature should be suggested
  *
  */
@@ -28,7 +28,7 @@ public class Evaluator {
 
 	private IDocument document;
 	private DocumentChangesListener documentChangesListener;
-	
+
 	private IAnnotationModel annotationModel;
 	private AnnotationModelListener annotationModelListener;
 
@@ -47,7 +47,7 @@ public class Evaluator {
 		this.initializeListeners(textEditor);
 		this.initializeFeatureEvaluators(textEditor);
 	}
-	
+
 	/**
 	 * Creates the feature evaluators for each feature and adds them to this
 	 * Evaluator's list of feature evaluators
@@ -56,6 +56,7 @@ public class Evaluator {
 	private void initializeFeatureEvaluators(ITextEditor textEditor) {
 		this.featureEvaluators.add(new BlockCommentEvaluator(this.document));
 		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
+		this.featureEvaluators.add(new AddImportEvaluator(this.document));
 	}
 
 	/**
@@ -74,13 +75,13 @@ public class Evaluator {
 		DocumentChangesListener docListener = new DocumentChangesListener(this);
 		doc.addDocumentListener(docListener);
 		this.documentChangesListener = docListener;
-		
+
 		// Create a new AnnotationModelListener
 		this.annotationModelListener = new AnnotationModelListener(this);
 		// Get the AnnotationModel associated with the textEditor
 		this.annotationModel = textEditor.getDocumentProvider().getAnnotationModel(textEditor.getEditorInput());
 		// Add a AnnotationModelListener to the AnnotationModel
-		this.annotationModel.addAnnotationModelListener(this.annotationModelListener);	
+		this.annotationModel.addAnnotationModelListener(this.annotationModelListener);
 	}
 
 	/**
@@ -94,7 +95,7 @@ public class Evaluator {
 			}
 		}
 	}
-	
+
 	/**
 	 * Checks all evaluation functions that need IAnnotationModel changes
 	 * @param model
@@ -114,5 +115,5 @@ public class Evaluator {
 		this.document.removeDocumentListener(this.documentChangesListener);
 		this.annotationModel.removeAnnotationModelListener(this.annotationModelListener);
 	}
-	
+
 }
