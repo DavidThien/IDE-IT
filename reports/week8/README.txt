@@ -1,1 +1,1 @@
-Total hours worked thus far on assignment: ~7 hours
+Total hours worked thus far on presentation preparation: ~7 hours
