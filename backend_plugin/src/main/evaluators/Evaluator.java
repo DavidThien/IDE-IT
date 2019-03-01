@@ -97,9 +97,9 @@ public class Evaluator {
 		}
 	}
 
-	public void evaluateDocumentAboutToBeChanged(DocumentEvent event) {
+	public void evaluateDocumentBeforeChange(DocumentEvent event) {
 	    for (FeatureEvaluator featureEvaluator : this.featureEvaluators) {
-		if (featureEvaluator.evaluateDocumentAboutToBeChanged(event)) {
+		if (featureEvaluator.evaluateDocumentBeforeChange(event)) {
 			this.manager.notifyFeatureSuggestion(featureEvaluator.getFeatureID());
 		}
 	    }

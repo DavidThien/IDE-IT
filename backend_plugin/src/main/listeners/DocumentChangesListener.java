@@ -27,7 +27,7 @@ public class DocumentChangesListener implements IDocumentListener {
 	 */
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
-	    evaluator.evaluateDocumentAboutToBeChanged(event);
+	    evaluator.evaluateDocumentBeforeChange(event);
 	}
 
 	/**

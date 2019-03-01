@@ -25,7 +25,7 @@ public abstract class FeatureEvaluator {
 	 * @return true if the document changes that are about to occur cause the evaluation function to trigger,
 	 * 		false otherwise.
 	 */
-	public boolean evaluateDocumentAboutToBeChanged(DocumentEvent docEvent) {
+	public boolean evaluateDocumentBeforeChange(DocumentEvent docEvent) {
 	    return false;
 	}
 

@@ -12,7 +12,7 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
     private String lineBeforeChange;
     private boolean whiteSpaceAddedOrRemoved;
     private int lastIndentChangedLine;
-    private long lastCommentedLineTimeStamp;
+    private long lastIndentChangedLineTimeStamp;
 
     /**
      * Constructor
@@ -25,7 +25,7 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
 	lineBeforeChange = "";
 	lastIndentChangedLine = -2;  // can't be -1 because we may change indent in line 0
 	whiteSpaceAddedOrRemoved = false;
-	this.lastCommentedLineTimeStamp = -1;
+	this.lastIndentChangedLineTimeStamp = -1;
     }
 
     /**
@@ -33,7 +33,7 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
      * of code in a string to reference later
      */
     @Override
-    public boolean evaluateDocumentAboutToBeChanged(DocumentEvent event) {
+    public boolean evaluateDocumentBeforeChange(DocumentEvent event) {
 	// We only care about adding white space or removing characters
 	// Either of those cases will have a length of 0 once the string is trimmed
 	if (event.getText().trim().length() == 0) {
@@ -119,11 +119,11 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
 	// Check that enough time has passed since the last time a line was commented out.
 	// This will prevent triggering when the user actually does use the block comment feature
 	// by using a millisecond threshold
-	boolean lastCommentWasLongEnoughAgo = System.currentTimeMillis() - this.lastCommentedLineTimeStamp > 100;
+	boolean lastCommentWasLongEnoughAgo = System.currentTimeMillis() - this.lastIndentChangedLineTimeStamp > 100;
 
 	// Update the stored values of the last indent changed line
 	this.lastIndentChangedLine = line;
-	this.lastCommentedLineTimeStamp = System.currentTimeMillis();
+	this.lastIndentChangedLineTimeStamp = System.currentTimeMillis();
 
 	return adjacentLineWasLastCommented && lastCommentWasLongEnoughAgo;
     }
