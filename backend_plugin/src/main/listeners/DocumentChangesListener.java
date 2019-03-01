@@ -13,9 +13,9 @@ import main.evaluators.Evaluator;
  * features were "triggered"
  */
 public class DocumentChangesListener implements IDocumentListener {
-	
+
 	private Evaluator evaluator;
-	
+
 	public DocumentChangesListener(Evaluator evaluator) {
 		super();
 		this.evaluator = evaluator;
@@ -27,15 +27,16 @@ public class DocumentChangesListener implements IDocumentListener {
 	 */
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
+	    evaluator.evaluateDocumentAboutToBeChanged(event);
 	}
 
 	/**
-	 * Fires after a user's change to a document inside a document editor 
+	 * Fires after a user's change to a document inside a document editor
 	 * is actually entered into the document
 	 */
 	@Override
 	public void documentChanged(DocumentEvent event) {
-		
+
 		// Send the document change event information to the Evaluator
 		evaluator.evaluateDocumentChanges(event);
 	}
