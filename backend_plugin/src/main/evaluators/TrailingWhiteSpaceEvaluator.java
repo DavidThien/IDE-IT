@@ -38,12 +38,14 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 			// Need to check up to length - 1 instead of length due to line feed char at end
 			String lineAfterChange = document.get(startOffset, length - 1);
 			
-			// Check that only the line's whitespace has changed, and that the line no longer
-			// ends with whitespace
-			boolean nonWhiteSpaceCharactersUnchanged = lineBeforeChange.trim().equals(lineAfterChange.trim());
-			boolean trailingWhiteSpaceBefore = lineBeforeChange.endsWith(" ") || lineBeforeChange.endsWith("\t");
-			boolean trailingWhiteSpaceAfter = lineAfterChange.endsWith(" ") || lineAfterChange.endsWith("\t");		
-			return nonWhiteSpaceCharactersUnchanged && trailingWhiteSpaceBefore && !trailingWhiteSpaceAfter;	
+			// If the change event is a deletion, check whether only the line's whitespace has
+			// changed, and that the line no longer ends with whitespace
+			if (event.getText().length() == 0) {
+				boolean nonWhiteSpaceCharactersUnchanged = lineBeforeChange.trim().equals(lineAfterChange.trim());
+				boolean trailingWhiteSpaceBefore = lineBeforeChange.endsWith(" ") || lineBeforeChange.endsWith("\t");
+				boolean trailingWhiteSpaceAfter = lineAfterChange.endsWith(" ") || lineAfterChange.endsWith("\t");
+				return nonWhiteSpaceCharactersUnchanged && trailingWhiteSpaceBefore && !trailingWhiteSpaceAfter;
+			}
 		} catch (BadLocationException e) {
 		}
 		return false;
