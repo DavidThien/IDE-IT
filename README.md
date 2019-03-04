@@ -29,22 +29,28 @@ We plan to provide support for at least the following list of Eclipse features:
 
 This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
 
-## Current Status as of 2/19/19
+## Current Status as of 3/4/19
 
 We have completed the following milestones:
 
-* Basic plugin framework created
-* Initial evaluation function written for evaluating block commenting
-* Interface with frontend implemented
+* Created basic plugin framework
+* Wrote working evaluation functions for the following features:
+  * Block commenting
+  * Adding imports
+  * Removing unused imports
+  * Correcting indentation
+* Interfaced with frontend implemented
   * Manually tested with success - IDE-IT frontend plugin able to receive notification from feature evaluation
-* Implement a working build file
-* Integrate with Travis for CI testing on Github
+* Implemented a working build file
+* Implemented an initial test suite
+* Integrated with Travis for CI testing on Github
 
 Our next goals are:
 
-* Write evaluation function for removing unused imports
-* Write evaluation function for adding imports for unresolved classes
-* Create a test suite and create unit tests for classes where appropriate
+* Write evaluation function for the Refator->Rename feature (one of our original goals)
+* Write evaluation functions for other features (stretch goals):
+  * Add getters/setters
+  * Remove trailing white space automatically on save
 
 ## Installation
 

@@ -59,7 +59,7 @@ public class AddImportEvaluator extends FeatureEvaluator {
 		}
 		return false;
 	}
-
+  
 	/**
 	 * Checks if the given line begins with an import statement
 	 * @param line

@@ -1,0 +1,1 @@
+Total hours worked thus far on presentation preparation: ~7 hours

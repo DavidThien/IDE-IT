@@ -43,10 +43,10 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
 		int lineLength = document.getLineLength(line);
 		lineBeforeChange = document.get(lineOffset, lineLength);
 		whiteSpaceAddedOrRemoved = true;
-		return false;
 	    } catch (BadLocationException e) {}
-	}
+	} else {
 	whiteSpaceAddedOrRemoved = false;
+	}
 	return false;
     }
 
@@ -98,8 +98,7 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
     private int getOffsetOfFirstCharInLine(String text) {
 	// iterate through until we hit something that's not " " or "\t"
 	for (int i = 0; i < text.length(); i++) {
-	    char c = text.charAt(i);
-	    if (c != ' ' && c != '\t') {
+	    if (!Character.isWhitespace(text.charAt(i))) {
 		return i;
 	    }
 	}
