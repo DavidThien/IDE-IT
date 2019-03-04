@@ -97,7 +97,8 @@ public class AddImportEvaluator extends FeatureEvaluator {
 
 			// If the annotation is valid and represents an unresolved variable,
 			// update the flag for unresolved variables existing
-			if (current.getText().endsWith("cannot be resolved to a type") && !current.isMarkedDeleted()) {
+			if (current.getText() != null && current.getText().endsWith("cannot be resolved to a type") &&
+					!current.isMarkedDeleted()) {
 				this.unresolvedVariablesExist = true;
 				return false;
 			}
