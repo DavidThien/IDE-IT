@@ -43,29 +43,17 @@ import main.ASTVisitors.VariableDeclarationFinder;
  * then the user should be notified of the auto indentation feature in Eclipse.
  */
 public class GetterSetterEvaluator extends FeatureEvaluator {
-    private String lineBeforeChange;
-    private boolean whiteSpaceAddedOrRemoved;
-    private int lastIndentChangedLine;
-    private long lastIndentChangedLineTimeStamp;
-    private ITextEditor textEditor;
     private Set<String> varNames;
-
     /**
      * Constructor
      * @param document IDocument that this evaluator is attached to
      */
-    public GetterSetterEvaluator(IDocument document, ITextEditor textEditor) {
+    public GetterSetterEvaluator(IDocument document) {
 	this.featureID = "getterSetterSuggestion";
 	this.document = document;
 	// arbitrary default values to avoid special casing for the first document change
-	lineBeforeChange = "";
-	lastIndentChangedLine = -2;  // can't be -1 because we may change indent in line 0
-	whiteSpaceAddedOrRemoved = false;
-	this.lastIndentChangedLineTimeStamp = -1;
-	this.textEditor = textEditor;
-	varNames = new HashSet<String>();
+	this.varNames = new HashSet<String>();
 	// Need to add all names as lower case
-	varNames.add("x");
     }
 
     /**
@@ -172,7 +160,7 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
     @Override
     public boolean evaluateDocumentChanges(DocumentEvent event) {
 	try {
-	    return checkForGetter(event, this.document.getLineOfOffset(event.getOffset()));
+	    return checkForGetterOrSetter(event, this.document.getLineOfOffset(event.getOffset()));
 	} catch (BadLocationException e) {}
 	return false;
     }
@@ -183,7 +171,7 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
      * @param line the line number where the change occurred
      * @return true if white space was added or removed to the front of the line, false otherwise
      */
-    private boolean checkForGetter(DocumentEvent event, int line) {
+    private boolean checkForGetterOrSetter(DocumentEvent event, int line) {
 	try {
 	    // if both before and after are identical after trim
 	    // and the starting character is different, then we have a changed indentation
@@ -191,12 +179,58 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 	    int lineLength = document.getLineLength(line);
 	    String lineText = document.get(lineOffset, lineLength).trim().toLowerCase();
 
-	    return lineText.startsWith("public") && containsVarName(lineText);
+	    // if the line starts with public, then it can be a getter or setter
+	    // no point in checking for private getter and setters
+	    if (lineText.startsWith("public")) {
+		updateKnownVariableNames();
+		return checkGetterOrSetter(lineText);
+	    }
 
 	} catch (BadLocationException e) {}
 	return false;
     }
 
+    private void updateKnownVariableNames() {
+
+	// clear out all previous var names
+	this.varNames = new HashSet<String>();
+
+	ASTParser parser = ASTParser.newParser(AST.JLS11);
+	parser.setBindingsRecovery(true);
+	parser.setSource(document.get().toCharArray());
+	parser.setResolveBindings(true);
+	CompilationUnit cu = (CompilationUnit)parser.createAST(null);
+	cu.recordModifications();
+
+	VariableDeclarationFinder varFinder = new VariableDeclarationFinder();
+
+	cu.accept(varFinder);
+	for(VariableDeclaration var : varFinder.getVariables()) {
+//	    System.out.println("Var name: " + var.getName());
+//	    System.out.println("Var qualified name: " + var.getName().getFullyQualifiedName());
+//	    System.out.println("Var identifier: " + var.getName().getIdentifier());
+	    // Skip empty strings
+	    if (var.getName().toString().length() > 0) {
+		varNames.add(var.getName().toString().toLowerCase());
+	    }
+//	    System.out.println("Var Type: " + var.getName().getNodeType());
+//	    System.out.println("Var start position: " + var.getName().getStartPosition());
+//	    System.out.println("Node Type: " + var.getNodeType());
+//	    System.out.println("Properties:");
+//	    Map m = var.properties();
+//	    for(Object p : m.keySet()) {
+//		System.out.println((String)p);
+//	    }
+
+//	    IVariableBinding b =  var.resolveBinding();
+//	    if (b != null) {
+//		System.out.println("BinaryName: " + b.getName());
+//	    }
+
+
+	}
+
+    }
     /**
      * Returns the position of the first non-white space character in the provided string
      * @param text the string to find the first non-white space character in
@@ -219,12 +253,24 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
      * @param line number of the currently indent changed line
      * @return true if the lines are adjacent, false otherwise
      */
-    private boolean containsVarName(String lineText) {
+    private boolean checkGetterOrSetter(String lineText) {
 	// first check that it starts with get
+	String prefix = "";
+	boolean found = false;
 	if (lineText.contains("get")) {
+	    prefix = "get";
+	    found = true;
+	}
+
+	if (lineText.contains("set")) {
+	    prefix = "set";
+	    found = true;
+	}
+
+	if (found) {
 	    // check if it contains any of the known variable names
 	    for (String v : varNames) {
-		if (lineText.endsWith(v)) {
+		if (lineText.endsWith(prefix + v) || lineText.endsWith(prefix + "_" + v)) {
 		    return true;
 		}
 	    }
