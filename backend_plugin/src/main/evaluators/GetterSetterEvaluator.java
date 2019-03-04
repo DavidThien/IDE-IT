@@ -39,11 +39,13 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import main.ASTVisitors.VariableDeclarationFinder;
 
 /**
- * Evaluates DocumentEvent changes to determine if the user is changing the indentation of multiple sequential lines of code. If so,
- * then the user should be notified of the auto indentation feature in Eclipse.
+ * Evaluates DocumentEvent changes to determine if the user is manually creating getter and setter methods
+ * for previously declared variables
  */
 public class GetterSetterEvaluator extends FeatureEvaluator {
+
     private Set<String> varNames;
+
     /**
      * Constructor
      * @param document IDocument that this evaluator is attached to
@@ -51,15 +53,11 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
     public GetterSetterEvaluator(IDocument document) {
 	this.featureID = "getterSetterSuggestion";
 	this.document = document;
-	// arbitrary default values to avoid special casing for the first document change
 	this.varNames = new HashSet<String>();
-	// Need to add all names as lower case
     }
 
-    /**
-     * If the text about to be added to the document is either whitespace or nothing, then save the line
-     * of code in a string to reference later
-     */
+    // TODO: Delete this
+    // Left just for reference to grab any of the previous attempts
     @Override
     public boolean evaluateDocumentBeforeChange(DocumentEvent event) {
 
@@ -154,34 +152,32 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
     }
 
     /**
-     * If the change added white space or removed some character then compare the line of code before the change
-     * and after the change to determine if whitespace was added or removed at the start of the line
+     * Checks if the event added a get or set method regarding a previously declared variable
      */
     @Override
     public boolean evaluateDocumentChanges(DocumentEvent event) {
 	try {
-	    return checkForGetterOrSetter(event, this.document.getLineOfOffset(event.getOffset()));
+	    return checkMethodDeclaration(event, this.document.getLineOfOffset(event.getOffset()));
 	} catch (BadLocationException e) {}
 	return false;
     }
 
     /**
-     * Checks that the only change to the document line was the addition or removal of white space
+     * Checks that the document event added get[varName], get_[varName], set[varName], or set_[varName]
      * @param event the DocumentEvent that occurred
      * @param line the line number where the change occurred
-     * @return true if white space was added or removed to the front of the line, false otherwise
+     * @return true if a get or set method was added for a variable, false otherwise
      */
-    private boolean checkForGetterOrSetter(DocumentEvent event, int line) {
+    private boolean checkMethodDeclaration(DocumentEvent event, int line) {
 	try {
-	    // if both before and after are identical after trim
-	    // and the starting character is different, then we have a changed indentation
 	    int lineOffset = document.getLineOffset(line);
 	    int lineLength = document.getLineLength(line);
 	    String lineText = document.get(lineOffset, lineLength).trim().toLowerCase();
 
-	    // if the line starts with public, then it can be a getter or setter
-	    // no point in checking for private getter and setters
-	    if (lineText.startsWith("public")) {
+	    // check for public or protected at the start of the line
+	    if (lineText.startsWith("public") || lineText.startsWith("protected")) {
+		// If so, then update the variable names
+		// This operation is costly, so we limit it to only when it's necessary
 		updateKnownVariableNames();
 		return checkGetterOrSetter(lineText);
 	    }
@@ -190,6 +186,9 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 	return false;
     }
 
+    /**
+     * Creates an AST from the current document values and stores all current variable names in varNames
+     */
     private void updateKnownVariableNames() {
 
 	// clear out all previous var names
@@ -231,27 +230,11 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 	}
 
     }
-    /**
-     * Returns the position of the first non-white space character in the provided string
-     * @param text the string to find the first non-white space character in
-     * @return the position of the first non-white space character, or -2 if no such character was found
-     */
-    private int getOffsetOfFirstCharInLine(String text) {
-	// iterate through until we hit something that's not " " or "\t"
-	for (int i = 0; i < text.length(); i++) {
-	    char c = text.charAt(i);
-	    if (c != ' ' && c != '\t') {
-		return i;
-	    }
-	}
-	return -2;   // can't return -1 since it is adjacent to 0
-    }
 
     /**
-     * Checks if the previously indented line is adjacent to the current indent changed line
-     * Also updates lastIndentChangedLine
-     * @param line number of the currently indent changed line
-     * @return true if the lines are adjacent, false otherwise
+     * Checks if the method declaration contains get, get_, set, set_ and a variable name
+     * @param lineText the text of the current line edited in the document
+     * @return true if the line appears to be a get or set method for a declared variable
      */
     private boolean checkGetterOrSetter(String lineText) {
 	// first check that it starts with get
