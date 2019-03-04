@@ -53,8 +53,8 @@ public class AddImportEvaluator extends FeatureEvaluator {
 			// If the line before the change was not an import statement, but the
 			// line after the change is, and there are unresolved variables, return true
 			int line = document.getLineOfOffset(event.getOffset());
-			return this.unresolvedVariablesExist && lineIsAnImportStatement(line) &&
-					!this.lineHadImportStatementAlready;
+			return this.unresolvedVariablesExist &&
+					!this.lineHadImportStatementAlready && lineIsAnImportStatement(line);
 		} catch (BadLocationException e) {
 		}
 		return false;
@@ -68,11 +68,13 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	public boolean lineIsAnImportStatement(int line) {
 		try {
 
-			// Check if the line with white space trimmed starts with "import"
 			int startOffset = document.getLineOffset(line);
 			int length = document.getLineLength(line);
-			String lineContents = document.get(startOffset, length).trim();
-			return lineContents.startsWith("import");
+
+			// Use regex to remove only the leading white space from the line,
+			// then check if the line starts with "import "
+			String lineContents = document.get(startOffset, length);
+			return lineContents.replaceAll("^\\s+", "").startsWith("import ");
 		} catch (BadLocationException e) {
 		}
 		return false;
