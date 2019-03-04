@@ -65,20 +65,20 @@ Our next goals are:
 Open a terminal on your machine and complete the following steps
 
 * Clone this repo into your Eclipse workspace folder: ```git clone https://github.com/DavidThien/IDE-IT.git```
-* Change directory into IDE-IT/backend_plugin: ```cd IDE-IT```
+* Change directory into IDE-IT/backend_plugin: ```cd IDE-IT/backend_plugin```
 * Build the Plugin: ```mvn clean install```
 
 If any of the above does not work, please inform us through the issue tracker.
 
 ### Generating Feature Support Graph
 
-Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how many different methods we support for detecting different features. The current number of supported features can be found by running
+Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how many different methods we support for detecting different features. The current number of supported features can be found by running the following command from the 'backend_plugin' directory:
 
 ```
 mvn -Dtest=*Negative surefire-report:report
 ```
 
-from the `backend_plugin` directory, or by running the `backend_plugin/runTestCases.sh` script. You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running
+You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running the following command from the 'backend_plugin' directory:
 
 ```
 python feature-stats.py
