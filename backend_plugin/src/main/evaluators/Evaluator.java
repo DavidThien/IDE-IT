@@ -58,6 +58,7 @@ public class Evaluator {
 		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
 		this.featureEvaluators.add(new AddImportEvaluator(this.document));
 		this.featureEvaluators.add(new CorrectIndentationEvaluator(this.document));
+		this.featureEvaluators.add(new TrailingWhiteSpaceEvaluator(this.document));
 	}
 
 	/**
