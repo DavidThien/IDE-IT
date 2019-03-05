@@ -52,13 +52,9 @@ public class AddImportsNegative {
 	public void noUnresolvedTypesAddImportOneCharacterAtATime() {
 		try {
 			int offset = 0;
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
+			for (char c : "import ".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -78,12 +74,9 @@ public class AddImportsNegative {
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
 			int offset = 0;
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
+			for (char c : "import".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 			assertTrue(mockUserInput(" ", offset++));
 		} catch (BadLocationException e) {
 			// Should never get here
@@ -101,21 +94,16 @@ public class AddImportsNegative {
 	public void noUnresolvedTypesAddImportOneCharacterAtATimeCorrectingTypos() {
 		try {
 			int offset = 0;
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
+			for (char c : "imort ".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
+			for (char c : "port ".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -134,20 +122,16 @@ public class AddImportsNegative {
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
 			int offset = 0;
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
+			for (char c : "imort ".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
+			for (char c : "port".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 			assertTrue(mockUserInput(" ", offset++));
 		} catch (BadLocationException e) {
 			// Should never get here
@@ -199,23 +183,9 @@ public class AddImportsNegative {
 	public void noUnresolvedVariablesImportInVariableName() {
 		try {
 			int offset = 0;
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("n", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput("a", offset++));
-			assertFalse(mockUserInput("n", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput("V", offset++));
-			assertFalse(mockUserInput("a", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput(";", offset++));
+			for (char c : "int importantVar;".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -234,30 +204,16 @@ public class AddImportsNegative {
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
 			int offset = 0;
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("n", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput("a", offset++));
-			assertFalse(mockUserInput("n", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput("V", offset++));
-			assertFalse(mockUserInput("a", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput(";", offset++));
+			for (char c : "int importantVar;".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user typing "import " inside a comment line, rather than as
 	 * an import statement at the start of a line, when no unresolved variables
@@ -267,16 +223,9 @@ public class AddImportsNegative {
 	public void noUnresolvedVariablesImportInComment() {
 		try {
 			int offset = 0;
-			String comment = "// This is a test of ";
-			assertFalse(mockUserInput(comment, offset));
-			offset += comment.length();
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
+			for (char c : "//import ".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -295,16 +244,9 @@ public class AddImportsNegative {
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
 			int offset = 0;
-			String comment = "// This is a test of ";
-			assertFalse(mockUserInput(comment, offset));
-			offset += comment.length();
-			assertFalse(mockUserInput("i", offset++));
-			assertFalse(mockUserInput("m", offset++));
-			assertFalse(mockUserInput("p", offset++));
-			assertFalse(mockUserInput("o", offset++));
-			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserInput("t", offset++));
-			assertFalse(mockUserInput(" ", offset++));
+			for (char c : "//import ".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
