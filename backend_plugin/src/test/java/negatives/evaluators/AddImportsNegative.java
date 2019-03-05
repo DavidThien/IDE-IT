@@ -105,8 +105,12 @@ public class AddImportsNegative {
 			assertFalse(mockUserInput("m", offset++));
 			assertFalse(mockUserInput("o", offset++));
 			assertFalse(mockUserInput("r", offset++));
-			assertFalse(mockUserSingleBackspace(--offset));
-			assertFalse(mockUserSingleBackspace(--offset));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput(" ", offset++));
+			assertFalse(mockUserSingleBackspace(offset--));
+			assertFalse(mockUserSingleBackspace(offset--));
+			assertFalse(mockUserSingleBackspace(offset--));
+			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserInput("p", offset++));
 			assertFalse(mockUserInput("o", offset++));
 			assertFalse(mockUserInput("r", offset++));
@@ -134,6 +138,10 @@ public class AddImportsNegative {
 			assertFalse(mockUserInput("m", offset++));
 			assertFalse(mockUserInput("o", offset++));
 			assertFalse(mockUserInput("r", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput(" ", offset++));
+			assertFalse(mockUserSingleBackspace(offset--));
+			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertFalse(mockUserInput("p", offset++));
