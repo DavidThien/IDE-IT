@@ -24,6 +24,7 @@ for commit in commits_itr:
 subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './feature-testing-negatives-tmp'])
 
 git = repo.git
+days = days[22:] # The first ~22 days aren't supported yet
 days.reverse()
 
 day_results = []
@@ -67,8 +68,8 @@ git.clean(['-fd'])
 day_results = [0] + day_results
 indices = [i + 1 for i in range(len(day_results))]
 
-plt.bar(indices, day_results)
+plt.plot(indices, day_results)
 plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
+plt.title('BlockCommentEvaluator Successful Activation Methods')
 ax = plt.gca()
-ax.set_xticks([0, 1, 2, 3])
 plt.savefig('feature-support.png')
