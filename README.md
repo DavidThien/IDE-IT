@@ -11,6 +11,7 @@ Contents:
 3. Installation
   * Required Software
   * Building the Plugin
+  * Generating Feature Support Graph
   * Incorporating the Plugin with Your Own Project
 4. Usage
 5. Implementation Details
@@ -47,10 +48,11 @@ We have completed the following milestones:
 
 Our next goals are:
 
-* Write evaluation function for the Refator->Rename feature (one of our original goals)
 * Write evaluation functions for other features (stretch goals):
+  * Refator->Rename
   * Add getters/setters
   * Remove trailing white space automatically on save
+* Build up test suite for existing evaluation functions
 
 ## Installation
 
