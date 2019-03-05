@@ -26,6 +26,7 @@ We plan to provide support for at least the following list of Eclipse features:
 * Adding import statements using “shift-cmd-o”
 * Removing unnecessary/unused import statements using “shift-cmd-o”
 * Correcting indentation
+* Removing trailing whitespace on save
 * Refactor code base by renaming a variable throughout the entire project
 
 This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
@@ -40,6 +41,7 @@ We have completed the following milestones:
   * Adding imports
   * Removing unused imports
   * Correcting indentation
+  * Removing trailing whitespace
 * Interfaced with frontend implemented
   * Manually tested with success - IDE-IT frontend plugin able to receive notification from feature evaluation
 * Implemented a working build file
@@ -51,7 +53,6 @@ Our next goals are:
 * Write evaluation functions for other features (stretch goals):
   * Refator->Rename
   * Add getters/setters
-  * Remove trailing white space automatically on save
 * Build up test suite for existing evaluation functions
 
 ## Installation
@@ -122,6 +123,8 @@ The following is a list of the featureID strings and descriptions of what Eclips
   * Remove all unused import statements
 * correctIndentationsSuggestion
   * Correct indentation (either for multiple selected lines or for entire document)
+* trailingWhiteSpaceSuggestion
+  * Auto-remove trailing whitespace on document save
 * variableRenameRefactorSuggestion
   * Rename a variable throughout the entire scope of said variable
 
