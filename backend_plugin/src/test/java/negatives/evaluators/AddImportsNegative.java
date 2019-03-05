@@ -25,7 +25,7 @@ public class AddImportsNegative {
 	 */
 	private static final String INITIAL_CONTENT = "\n\nLine1\n Line2\n Line3\n";
 	private static final Annotation ANNOTATION = new Annotation("org.eclipse.jdt.ui.error", 
-			false, "Mock cannot be resolved to a type");
+			false, "MockType cannot be resolved to a type");
 	private static final Position POSITION = new Position(0);
 	private static final String MOCK_IMPORT = "import java.util.*;";
 	
@@ -160,6 +160,7 @@ public class AddImportsNegative {
 	 * Tests the user copy-pasting an import statement into the document
 	 * when there are no unresolved variables
 	 */
+	@Test
 	public void noUnresolvedTypesAddImportStatementWithCopyPaste() {
 		try {
 			int offset = 0;
@@ -175,12 +176,135 @@ public class AddImportsNegative {
 	 * Tests the user copy-pasting an import statement into the document
 	 * when there are unresolved variables
 	 */
+	@Test
 	public void unresolvedTypesAddImportStatementWithCopyPaste() {
 		try {
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
 			int offset = 0;
 			assertTrue(mockUserInput(MOCK_IMPORT, offset));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests the user declaring a variable called "importantVar" to make sure
+	 * that typing "import" does not trigger the evaluator when no unresolved
+	 * variables exist
+	 */
+	@Test
+	public void noUnresolvedVariablesImportInVariableName() {
+		try {
+			int offset = 0;
+			assertFalse(mockUserInput("i", offset++));
+			assertFalse(mockUserInput("n", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput(" ", offset++));
+			assertFalse(mockUserInput("i", offset++));
+			assertFalse(mockUserInput("m", offset++));
+			assertFalse(mockUserInput("p", offset++));
+			assertFalse(mockUserInput("o", offset++));
+			assertFalse(mockUserInput("r", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput("a", offset++));
+			assertFalse(mockUserInput("n", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput("V", offset++));
+			assertFalse(mockUserInput("a", offset++));
+			assertFalse(mockUserInput("r", offset++));
+			assertFalse(mockUserInput(";", offset++));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests the user declaring a variable called "importantVar" to make sure
+	 * that typing "import" does not trigger the evaluator when unresolved
+	 * variables exist
+	 */
+	@Test
+	public void unresolvedVariablesImportInVariableName() {
+		try {
+			am.addAnnotation(ANNOTATION, POSITION);
+			eval.evaluateAnnotationModelChanges(am);
+			int offset = 0;
+			assertFalse(mockUserInput("i", offset++));
+			assertFalse(mockUserInput("n", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput(" ", offset++));
+			assertFalse(mockUserInput("i", offset++));
+			assertFalse(mockUserInput("m", offset++));
+			assertFalse(mockUserInput("p", offset++));
+			assertFalse(mockUserInput("o", offset++));
+			assertFalse(mockUserInput("r", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput("a", offset++));
+			assertFalse(mockUserInput("n", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput("V", offset++));
+			assertFalse(mockUserInput("a", offset++));
+			assertFalse(mockUserInput("r", offset++));
+			assertFalse(mockUserInput(";", offset++));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests the user typing "import " inside a comment line, rather than as
+	 * an import statement at the start of a line, when no unresolved variables
+	 * exist
+	 */
+	@Test
+	public void noUnresolvedVariablesImportInComment() {
+		try {
+			int offset = 0;
+			String comment = "// This is a test of ";
+			assertFalse(mockUserInput(comment, offset));
+			offset += comment.length();
+			assertFalse(mockUserInput("i", offset++));
+			assertFalse(mockUserInput("m", offset++));
+			assertFalse(mockUserInput("p", offset++));
+			assertFalse(mockUserInput("o", offset++));
+			assertFalse(mockUserInput("r", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput(" ", offset++));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tests the user typing "import " inside a comment line, rather than as
+	 * an import statement at the start of a line, when unresolved variables
+	 * exist
+	 */
+	@Test
+	public void unresolvedVariablesImportInComment() {
+		try {
+			am.addAnnotation(ANNOTATION, POSITION);
+			eval.evaluateAnnotationModelChanges(am);
+			int offset = 0;
+			String comment = "// This is a test of ";
+			assertFalse(mockUserInput(comment, offset));
+			offset += comment.length();
+			assertFalse(mockUserInput("i", offset++));
+			assertFalse(mockUserInput("m", offset++));
+			assertFalse(mockUserInput("p", offset++));
+			assertFalse(mockUserInput("o", offset++));
+			assertFalse(mockUserInput("r", offset++));
+			assertFalse(mockUserInput("t", offset++));
+			assertFalse(mockUserInput(" ", offset++));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
