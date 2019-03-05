@@ -74,6 +74,5 @@ indices = [i + 1 for i in range(len(day_results))]
 plt.plot(day_results)
 plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
 plt.title('BlockCommentEvaluator Successful Activation Methods')
-ax = plt.gca()
-ax.set_xticks(indices + [len(day_results)], [''] + day_successes)
+plt.xticks(indices + [len(day_results)], [''] + day_successes)
 plt.savefig('feature-support.png')
