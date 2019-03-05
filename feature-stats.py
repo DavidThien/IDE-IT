@@ -29,6 +29,7 @@ days.reverse()
 days = days[22:]
 
 day_results = []
+day_successes = []
 total_tests = 0
 for (commit, day) in days:
     print("Running commit " + commit.hexsha + " for day " + day)
@@ -59,6 +60,7 @@ for (commit, day) in days:
         skipped = results[3]
         passed = int(total_tests) - int(failures)
         day_results.append(passed)
+        day_successes.append(day)
 
     git.clean(['-fde', 'feature-testing-negatives-tmp'])
 
@@ -69,8 +71,9 @@ git.clean(['-fd'])
 day_results = [0] + day_results
 indices = [i + 1 for i in range(len(day_results))]
 
-plt.bar(indices, day_results)
+plt.plot(day_results)
 plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
+plot.title('BlockCommentEvaluator Successful Activation Methods')
 ax = plt.gca()
-ax.set_xticks([0, 1, 2, 3])
+ax.set_xticks(indices + [len(day_results)], [''] + day_successes)
 plt.savefig('feature-support.png')
