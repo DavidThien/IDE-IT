@@ -1,0 +1,55 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------
+	- Finish converting false negative list to unit tests
+	- Research and implement Eclipse API for AST changes
+		- May be helpful in refining our current evaluators and for future ones
+	- Design and implement working evaluator functions for:
+		- auto correct indentations
+		- variable rename
+		- auto getters / setters
+	- Research and design evaluation functions for:
+		- content assist autoactivation
+		- compiler warnings
+		- auto insert semicolons
+	- Prepare for in class presentation
+
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+	- Finished converting false negative list to mock runnable tests
+		- For Block Comment Evaluator only, so far
+	- Updated report with information on Initial Results and our success metrics
+	- Started converting false negative list to mock runnable tests for CorrectIndentation Evaluator
+		- Found issues with how we mock tests. Doesn't work the same for this evaluator
+		- Looking into mocking a document listener instead of mocking document change events
+	- Researched Eclipse API for AST changes
+		- Oh boy, this was a rabbit hole
+		- Eclipse doesn't have a way to listen for AST changes as we hoped
+		- Eclipse allows us to parse our own AST whenever we want
+			- Wasteful to do on every doc event, and difficult to determine AST changes this way
+	- Designed and implemented working evaluation functions for:
+		- auto correct indentations
+		- auto getters / setters
+	- Prepared for in class presentation and gave said presentation
+	- Investigated and found a fix for FE/BE integration issues
+		- It wasn't working like how we originally thought, but found a new solution
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	- Finish converting false negative list to runnable tests 
+		- This will likely require reworking our mock testing framework
+		- getter/setters
+		- correct indentation
+	- Design and implement clean way to store one list of featureID strings throughout our plugin
+		- easy to reference when needed with evaluators
+		- one location so if we add or change the strings, there is only one location for all of them
+	- Update report to include analysis information regarding our success metrics
+	- Clean up and finalize the getter/setter evaluation function
+	- Find another Eclipse feature we could support and design a working evaluation function for it
+		- Ideally something that uses a config instead of a hotkey
+	- Determine what we're doing with the remove import suggestion 
+		- When exactly should it trigger and what triggers it
+		- Trigger upon manually deleting an unused import will not work 
+			- Doc change to manually delete an entire line and to use the hotkey to remove an import
+				are identical internally
