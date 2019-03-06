@@ -15,6 +15,7 @@ Contents:
   * Incorporating the Plugin with Your Own Project
 4. Usage
 5. Implementation Details
+6. Adding New Evaluation Functions
 
 ## Overview
 
@@ -164,3 +165,14 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
   * Responsible for evaluating document changes detected within a single document editor window. When document changes are detected, the Evaluator will cycle through each feature evaluation function, passing the document change event information. If a feature evaluation function returns true (indicating that the user has neglected to use the respective feature), it will notify the EvaluatorManager with the unique ID string of the feature that was triggered.
 * DocumentChangesTracker
   * An extension of IDocumentListener from the Eclipse Plugin API. Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes made within that document editor window. When changes are detected, the DocumentChangesTracker will pass the change information back to the Evaluator.
+
+## Adding New Evaluation Functions
+
+For developers looking to expand upon this project and add a new evaluation function, the following steps are recommended:
+* Read up on the Eclipse API documentation
+  * https://help.eclipse.org/luna/index.jsp is a good place to start. The topics on the Workbench User Guide, Platform Plug-in Developer Guide, JDT Plug-in Developer Guide, and Plug-in Development Environment Guide are all relevant.
+* Create a new evaluation class under backend_plugin.src.main.evaluators that extends FeatureEvaluator.java.
+* Determine if the new evaluation function will use DocumentChange events, AnnotationModel changes, and/or ResourceChange events. Override the method(s) that corresponds to the event(s) the new evaluation function will use.
+* Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method. 
+
+Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function. 
