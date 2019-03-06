@@ -171,8 +171,8 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
 For developers looking to expand upon this project and add a new evaluation function, the following steps are recommended:
 * Read up on the Eclipse API documentation
   * https://help.eclipse.org/luna/index.jsp is a good place to start. The topics on the Workbench User Guide, Platform Plug-in Developer Guide, JDT Plug-in Developer Guide, and Plug-in Development Environment Guide are all relevant.
-* Create a new evaluation function under backend_plugin.src.main.evaluators that extends FeatureEvaluator.java.
-* Determine if the new evaluation function cares about DocumentChange events, AnnotationModel changes, or ResourceChange events. Override the method(s) that corresponds to the event the new evaluation function will use.
+* Create a new evaluation class under backend_plugin.src.main.evaluators that extends FeatureEvaluator.java.
+* Determine if the new evaluation function will use DocumentChange events, AnnotationModel changes, and/or ResourceChange events. Override the method(s) that corresponds to the event(s) the new evaluation function will use.
 * Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method. 
 
 Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function. 
