@@ -36,7 +36,7 @@ public class BlockCommentEvaluatorTest {
 	public void runBeforeTests() {
 		// Create a document with four lines
 		doc = new Document(content);
-		testEvaluator = new BlockCommentEvaluator(FeatureSuggestion.BLOCK_COMMENT_EVAL, doc);
+		testEvaluator = new BlockCommentEvaluator(doc);
 	}
 
 	/**

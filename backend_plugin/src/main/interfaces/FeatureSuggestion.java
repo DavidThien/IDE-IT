@@ -21,11 +21,11 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	// featureID strings used to communicate between frontend and backend
 	// These must match EXACTLY with the agreed upon strings
 	// A list of these strings can be found in featureIDStrings.txt in the main folder of this repo
-	public static final String BLOCK_COMMENT_EVAL = "blockCommentSuggestion";
-	public static final String ADD_IMPORT_EVAL = "addImportStatementsSuggestion";
-	public static final String CORRECT_INDENTATION_EVAL = "correctIndentationsSuggestion";
-	public static final String REMOVE_IMPORT_EVAL = "removeUnusedImportStatementSuggestion";
-	public static final String TRAILING_WHITE_SPACE_EVAL = "trailingWhiteSpaceSuggestion";
+	public static final String BLOCK_COMMENT_FEATURE_ID = "blockCommentSuggestion";
+	public static final String ADD_IMPORT_FEATURE_ID = "addImportStatementsSuggestion";
+	public static final String CORRECT_INDENTATION_FEATURE_ID = "correctIndentationsSuggestion";
+	public static final String REMOVE_IMPORT_FEATURE_ID = "removeUnusedImportStatementSuggestion";
+	public static final String TRAILING_WHITE_SPACE_FEATURE_ID = "trailingWhiteSpaceSuggestion";
 
 	public FeatureSuggestion() {
 		// debug
@@ -107,11 +107,11 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	 */
 	private List<String> generateFeatureIDs() {
 	    	List<String> feats = new ArrayList<String>();
-	    	feats.add(BLOCK_COMMENT_EVAL);
-	    	feats.add(ADD_IMPORT_EVAL);
-	    	feats.add(CORRECT_INDENTATION_EVAL);
-	    	feats.add(REMOVE_IMPORT_EVAL);
-	    	feats.add(TRAILING_WHITE_SPACE_EVAL);
+	    	feats.add(BLOCK_COMMENT_FEATURE_ID);
+	    	feats.add(ADD_IMPORT_FEATURE_ID);
+	    	feats.add(CORRECT_INDENTATION_FEATURE_ID);
+	    	feats.add(REMOVE_IMPORT_FEATURE_ID);
+	    	feats.add(TRAILING_WHITE_SPACE_FEATURE_ID);
 		return Collections.unmodifiableList(feats);
 	}
 

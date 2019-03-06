@@ -4,6 +4,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 
+import main.interfaces.FeatureSuggestion;
+
 /**
  * Evaluates DocumentEvent changes to determine if the user is commenting out multiple sequential lines of code. If so,
  * then the user should be notified of the block comment feature in Eclipse.
@@ -16,8 +18,8 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	/**
 	 * Default constructor
 	 */
-	public BlockCommentEvaluator(String featureID, IDocument document) {
-		this.featureID = featureID;
+	public BlockCommentEvaluator(IDocument document) {
+		this.featureID = FeatureSuggestion.BLOCK_COMMENT_FEATURE_ID;
 		this.document = document;
 		this.lastCommentedLine = -2;
 		this.lastCommentedLineTimeStamp = -1;

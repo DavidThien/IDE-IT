@@ -55,11 +55,11 @@ public class Evaluator {
 	 * @param textEditor The text document editor this Evaluator is evaluating
 	 */
 	private void initializeFeatureEvaluators(ITextEditor textEditor) {
-		this.featureEvaluators.add(new BlockCommentEvaluator(FeatureSuggestion.BLOCK_COMMENT_EVAL, this.document));
-		this.featureEvaluators.add(new RemoveImportEvaluator(FeatureSuggestion.REMOVE_IMPORT_EVAL, textEditor));
-		this.featureEvaluators.add(new AddImportEvaluator(FeatureSuggestion.ADD_IMPORT_EVAL, this.document));
-		this.featureEvaluators.add(new CorrectIndentationEvaluator(FeatureSuggestion.CORRECT_INDENTATION_EVAL, this.document));
-		this.featureEvaluators.add(new TrailingWhiteSpaceEvaluator(FeatureSuggestion.TRAILING_WHITE_SPACE_EVAL, this.document));
+		this.featureEvaluators.add(new BlockCommentEvaluator(this.document));
+		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
+		this.featureEvaluators.add(new AddImportEvaluator(this.document));
+		this.featureEvaluators.add(new CorrectIndentationEvaluator(this.document));
+		this.featureEvaluators.add(new TrailingWhiteSpaceEvaluator(this.document));
 	}
 
 	/**

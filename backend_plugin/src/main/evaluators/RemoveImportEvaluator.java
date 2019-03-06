@@ -6,6 +6,8 @@ import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import main.interfaces.FeatureSuggestion;
+
 /**
  * Evaluator function to determine if there are any unused import statements in the current document. If any unused import
  * statements are found, then evaluate will return true
@@ -19,8 +21,8 @@ public class RemoveImportEvaluator extends FeatureEvaluator {
 	 * Constructor
 	 * @param docName the name of the document this evaluator is attached to
 	 */
-	public RemoveImportEvaluator(String featureID, ITextEditor editor) {
-		this.featureID = featureID;
+	public RemoveImportEvaluator(ITextEditor editor) {
+		this.featureID = FeatureSuggestion.REMOVE_IMPORT_FEATURE_ID;
 		this.editor = editor;
 	}
 

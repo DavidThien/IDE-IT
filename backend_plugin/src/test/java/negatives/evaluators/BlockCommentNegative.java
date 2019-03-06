@@ -39,7 +39,7 @@ public class BlockCommentNegative {
 	public void runBeforeTests() {
 		// Create a document with four lines
 		doc = new Document(content);
-		testEvaluator = new BlockCommentEvaluator(FeatureSuggestion.BLOCK_COMMENT_EVAL, doc);
+		testEvaluator = new BlockCommentEvaluator(doc);
 	}
 
 	/**
@@ -671,7 +671,7 @@ public class BlockCommentNegative {
 			// Create a new document that has 6 lines, two being blank
 			// Contrived to make deleting other lines easier
 			doc = new Document("\nLine2\n\nLine3\nLine4");
-			testEvaluator = new BlockCommentEvaluator(FeatureSuggestion.BLOCK_COMMENT_EVAL, doc);
+			testEvaluator = new BlockCommentEvaluator(doc);
 
 			// Mock a document event with a single backslash placed at the beginning of the first line
 			offset = doc.getLineOffset(0);
@@ -716,7 +716,7 @@ public class BlockCommentNegative {
 			// Create a new document that has 6 lines, two being blank
 			// Contrived to make deleting other lines easier
 			doc = new Document("\nLine2\n\nLine3\nLine4");
-			testEvaluator = new BlockCommentEvaluator(FeatureSuggestion.BLOCK_COMMENT_EVAL, doc);
+			testEvaluator = new BlockCommentEvaluator(doc);
 
 			// Mock a document event with a single backslash placed at the beginning of the third line
 			offset = doc.getLineOffset(2);
