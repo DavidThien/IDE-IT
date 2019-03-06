@@ -72,8 +72,9 @@ day_results = [0] + day_results
 indices = [i + 1 for i in range(len(day_results))]
 
 plt.plot(day_results)
+plt.plot([23 for _ in range(len(day_results))], color='red', linestyle='dashed')
 plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
 plt.title('BlockCommentEvaluator Successful Activation Methods')
-plt.xticks([0] + indices, [''] + day_successes, rotation=90)
+plt.xticks([0] + indices, ['2019, 01, 24'] + day_successes, rotation=70)
 plt.tight_layout()
 plt.savefig('feature-support.png')
