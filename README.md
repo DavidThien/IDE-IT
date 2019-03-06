@@ -102,7 +102,7 @@ pip install backports.functools_lru_cache
 pip install matplotlib==2.0.2
 ```
 
-(with sudo if your system is configured to need it) in order to install matplot lib. The other dependencies can be installed normally.
+(with sudo if your system is configured to need it) in order to install matplot lib. The other dependencies can be installed normally. Note that if you have a version of `matplotlib` other than `2.0.2` installed, then you may have to uninstall it and reinstall only the `2.0.2` version.
 
 This script will output a line chart `feature-support.png` in the main directory. Currently this test only shows the number of true positives out of all target activation methods, and only for the BlockCommentEvaluator. However, there are plans to add in the future similar tests for actions that should not trigger evaulators, as well as these tests for all other evaulators.
 
