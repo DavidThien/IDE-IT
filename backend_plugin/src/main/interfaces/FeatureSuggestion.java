@@ -1,32 +1,41 @@
 package main.interfaces;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import main.evaluators.EvaluatorManager;
 
-/** Designed to be used in conjunction with the FeatureSuggestionObserver class. 
- * Observers can register themselves with FeatureSuggestions. FeatureSuggestion will 
- * notify all registered Observers with features it detects the user may want to be 
+/** Designed to be used in conjunction with the FeatureSuggestionObserver class.
+ * Observers can register themselves with FeatureSuggestions. FeatureSuggestion will
+ * notify all registered Observers with features it detects the user may want to be
  * aware of.
  */
 public class FeatureSuggestion implements FeatureSuggestionInterface {
-	
+
 	private EvaluatorManager manager;
 	private List<FeatureSuggestionObserver> observers;
 	private List<String> featureIDs;
 	private boolean isRunning;
-	
+
+	// featureID strings used to communicate between frontend and backend
+	// These must match EXACTLY with the agreed upon strings
+	// A list of these strings can be found in featureIDStrings.txt in the main folder of this repo
+	public static final String BLOCK_COMMENT_EVAL = "blockCommentSuggestion";
+	public static final String ADD_IMPORT_EVAL = "addImportStatementsSuggestion";
+	public static final String CORRECT_INDENTATION_EVAL = "correctIndentationsSuggestion";
+	public static final String REMOVE_IMPORT_EVAL = "removeUnusedImportStatementSuggestion";
+	public static final String TRAILING_WHITE_SPACE_EVAL = "trailingWhiteSpaceSuggestion";
+
 	public FeatureSuggestion() {
 		// debug
 		System.out.println("FS created");
-		
 		manager = new EvaluatorManager(this);
 		observers = new ArrayList<FeatureSuggestionObserver>();
 		featureIDs = generateFeatureIDs();
 		isRunning = false;
 	}
-	
+
 	/**
 	 * Register an Observer to be notified upon FeatureSuggestion updates
 	 * @param obs Observer to be registered
@@ -36,7 +45,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public boolean registerObserver(FeatureSuggestionObserver obs) {
 		return observers.add(obs);
 	}
-	
+
 	/**
 	 * Removes an observer from the FeatureSuggestion observer list. The observer
 	 * will no longer be updated on FeatureSuggestion updates
@@ -47,7 +56,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public boolean removeObserver(FeatureSuggestionObserver obs) {
 		return observers.remove(obs);
 	}
-	
+
 	/**
 	 * Provides a list of all featureIDs used by FeatureSuggestion.
 	 * Recommended to use this list to verify observer featureID list matches
@@ -58,7 +67,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 		List<String> feats = new ArrayList<String>(featureIDs);
 		return feats;
 	}
-	
+
 	/**
 	 * Turns the FeatureSuggestion on. All observers will be updated upon updates.
 	 */
@@ -66,8 +75,8 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public void start() {
 		this.manager.start();
 		isRunning = true;
-		
-		// Debug 
+
+		// Debug
 		System.out.println("Starting fs");
 	}
 
@@ -78,7 +87,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public void stop() {
 		this.manager.stop();
 		isRunning = false;
-		
+
 		// Debug
 		System.out.println("Stopping fs");
 	}
@@ -90,23 +99,25 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public boolean isRunning() {
 		return isRunning;
 	}
-	
+
 	/**
 	 * Generate list of FeatureIDs to be tracked
-	 * 
+	 *
 	 * @return List of FeatureIDs to be tracked
 	 */
 	private List<String> generateFeatureIDs() {
-		// Either read from a file or hard code in
-		// Pros and cons to both
-		List<String> feats = new ArrayList<String>();
-		feats.add("multiline_comment");
-		return feats;
+	    	List<String> feats = new ArrayList<String>();
+	    	feats.add(BLOCK_COMMENT_EVAL);
+	    	feats.add(ADD_IMPORT_EVAL);
+	    	feats.add(CORRECT_INDENTATION_EVAL);
+	    	feats.add(REMOVE_IMPORT_EVAL);
+	    	feats.add(TRAILING_WHITE_SPACE_EVAL);
+		return Collections.unmodifiableList(feats);
 	}
-	
+
 	/**
 	 * Notifies all observers that a feature should be suggested to the user
-	 * 
+	 *
 	 * @param featureID string that represents a featureID
 	 */
 	public void notifyAllObservers(String featureID) {

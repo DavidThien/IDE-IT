@@ -16,8 +16,8 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	/**
 	 * Construct an AddImportEvaluator
 	 */
-	public AddImportEvaluator(IDocument document) {
-		this.featureID = "addImportStatementsSuggestion";
+	public AddImportEvaluator(String featureID, IDocument document) {
+		this.featureID = featureID;
 		this.lineHadImportStatementAlready = false;
 		this.unresolvedVariablesExist = false;
 		this.document = document;
@@ -29,6 +29,7 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	 * @param event
 	 * @return false
 	 */
+	@Override
 	public boolean evaluateDocumentBeforeChange(DocumentEvent event) {
 		try {
 
@@ -47,6 +48,7 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	 * @param event
 	 * @return false
 	 */
+	@Override
 	public boolean evaluateDocumentChanges(DocumentEvent event) {
 		try {
 
@@ -59,7 +61,7 @@ public class AddImportEvaluator extends FeatureEvaluator {
 		}
 		return false;
 	}
-  
+
 	/**
 	 * Checks if the given line begins with an import statement
 	 * @param line

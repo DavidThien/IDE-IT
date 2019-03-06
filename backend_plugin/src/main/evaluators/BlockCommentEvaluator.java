@@ -12,25 +12,26 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	private int lastCommentedLine;
 	private long lastCommentedLineTimeStamp;
-		
+
 	/**
 	 * Default constructor
 	 */
-	public BlockCommentEvaluator(IDocument document) {
-		this.featureID = "blockCommentSuggestion";
+	public BlockCommentEvaluator(String featureID, IDocument document) {
+		this.featureID = featureID;
 		this.document = document;
 		this.lastCommentedLine = -2;
 		this.lastCommentedLineTimeStamp = -1;
 	}
 
 	/**
-	 * Keeps track of DocumentEvent changes and determines of the user comments out multiple sequential lines of code. 
+	 * Keeps track of DocumentEvent changes and determines of the user comments out multiple sequential lines of code.
 	 * @param event the change detected by the DocumentChange Listener
 	 * @return true if the user comments two sequential lines of code, false otherwise
 	 */
+	@Override
 	public boolean evaluateDocumentChanges(DocumentEvent event) {
 		try {
-			
+
 			boolean triggered = false;
 
 			// Get the line number of the change
@@ -47,7 +48,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 				this.lastCommentedLine = line;
 				this.lastCommentedLineTimeStamp = System.currentTimeMillis();
 			}
-			
+
 			return triggered;
 		} catch (BadLocationException e) {
 			// This can happen in certain boundary positions (beginning and end) of the document. In these cases,
@@ -119,7 +120,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 		boolean lastCommentWasLongEnoughAgo = System.currentTimeMillis() - this.lastCommentedLineTimeStamp > 100;
 		return adjacentLineWasLastCommented && lastCommentWasLongEnoughAgo;
 	}
-	
+
 	/**
 	 * Checks if the given event caused the given line to be commented out
 	 * @param document The document the user is typing in

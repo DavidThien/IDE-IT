@@ -18,8 +18,8 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
      * Constructor
      * @param document IDocument that this evaluator is attached to
      */
-    public CorrectIndentationEvaluator(IDocument document) {
-	this.featureID = "correctIndentationsSuggestion";
+    public CorrectIndentationEvaluator(String featureID, IDocument document) {
+	this.featureID = featureID;
 	this.document = document;
 	// arbitrary default values to avoid special casing for the first document change
 	lineBeforeChange = "";

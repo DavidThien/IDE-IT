@@ -19,8 +19,8 @@ public class RemoveImportEvaluator extends FeatureEvaluator {
 	 * Constructor
 	 * @param docName the name of the document this evaluator is attached to
 	 */
-	public RemoveImportEvaluator(ITextEditor editor) {
-		this.featureID = "removeUnusedImportStatementsSuggestion";
+	public RemoveImportEvaluator(String featureID, ITextEditor editor) {
+		this.featureID = featureID;
 		this.editor = editor;
 	}
 
