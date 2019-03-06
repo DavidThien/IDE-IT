@@ -93,6 +93,16 @@ from the main directory.  This script requires
 * `matplotlib`
 * `python 2.7` or greater (but not `3.x`)
 * `java 8`
+* `git`
+
+If you are on Linux, then just installing the dependencies with your package manager and pip should work fine. On Mac, you may have to run
+
+```
+pip install backports.functools_lru_cache
+pip install matplotlib==2.0.2
+```
+
+(with sudo if your system is configured to need it) in order to install matplot lib. The other dependencies can be installed normally.
 
 This script will output a line chart `feature-support.png` in the main directory. Currently this test only shows the number of true positives out of all target activation methods, and only for the BlockCommentEvaluator. However, there are plans to add in the future similar tests for actions that should not trigger evaulators, as well as these tests for all other evaulators.
 
