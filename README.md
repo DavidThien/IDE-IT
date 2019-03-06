@@ -88,7 +88,26 @@ You can also generate a plot of how the number of supported features has evolved
 python feature-stats.py
 ```
 
-from the main directory. Note that this script requires `Repo` and `matplotlib` to be installed, as well as python 2.7 or greater. This script will output a bar graph `feature-support.png` in the main directory.
+from the main directory.  This script requires
+
+* `gitpython`
+* `matplotlib`
+* `python 2.7` or greater (but not `3.x`)
+* `java 8`
+* `git`
+
+If you are on Linux, then just installing the dependencies with your package manager and pip should work fine. On Mac, you may have to run
+
+```
+pip install backports.functools_lru_cache
+pip install matplotlib==2.0.2
+```
+
+(with sudo if your system is configured to need it) in order to install matplot lib. The other dependencies can be installed normally. Note that if you have a version of `matplotlib` other than `2.0.2` installed, then you may have to uninstall it and reinstall only the `2.0.2` version.
+
+This script will output a line chart `feature-support.png` in the main directory. Currently this test only shows the number of true positives out of all target activation methods, and only for the BlockCommentEvaluator. However, there are plans to add in the future similar tests for actions that should not trigger evaulators, as well as these tests for all other evaulators.
+
+This script will run all current feature support tests on the last commit of every day that it is able to, and will aggregate said results into the graph.
 
 ### Incorporating the Plugin with Your Own Project
 

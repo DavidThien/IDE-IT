@@ -6,6 +6,7 @@ import re
 import matplotlib.pyplot as plt
 
 repo = Repo('.')
+curr_commit = repo.head.commit
 commits_itr = repo.iter_commits()
 days = []
 last_commit = None
@@ -25,8 +26,10 @@ subprocess.call(['cp', '-r', 'backend_plugin/src/test/java/negatives', './featur
 
 git = repo.git
 days.reverse()
+days = days[22:]
 
 day_results = []
+day_successes = []
 total_tests = 0
 for (commit, day) in days:
     print("Running commit " + commit.hexsha + " for day " + day)
@@ -57,18 +60,21 @@ for (commit, day) in days:
         skipped = results[3]
         passed = int(total_tests) - int(failures)
         day_results.append(passed)
+        day_successes.append(day)
 
     git.clean(['-fde', 'feature-testing-negatives-tmp'])
 
 # Checkout back to the head of our branch
-git.checkout('feature-testing')
+git.checkout(curr_commit)
 git.clean(['-fd'])
 
 day_results = [0] + day_results
 indices = [i + 1 for i in range(len(day_results))]
 
-plt.bar(indices, day_results)
+plt.plot(day_results)
+plt.plot([23 for _ in range(len(day_results))], color='red', linestyle='dashed')
 plt.ylabel('total methods supported (out of ' + str(total_tests) + ')')
-ax = plt.gca()
-ax.set_xticks([0, 1, 2, 3])
+plt.title('BlockCommentEvaluator Successful Activation Methods')
+plt.xticks([0] + indices, ['2019, 01, 24'] + day_successes, rotation=70)
+plt.tight_layout()
 plt.savefig('feature-support.png')
