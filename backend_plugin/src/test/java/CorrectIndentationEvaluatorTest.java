@@ -19,7 +19,9 @@ import main.evaluators.CorrectIndentationEvaluator;
 public class CorrectIndentationEvaluatorTest {
 
     private static final String content = " Line1\n Line2\n Line3\n";
+    private static final String extraSpaceContent = "  Line1\n  Line2\n  Line3\n";
     private static final String tabContent = "\tLine1\n\tLine2\n\tLine3\n";
+    private static final String extraTabContent = "\t\tLine1\n\t\tLine2\n\t\tLine3\n";
     private static final String SINGLE_SPACE = " ";
     private static final String SINGLE_TAB = "\t";
 
@@ -129,59 +131,103 @@ public class CorrectIndentationEvaluatorTest {
 	}
     }
 
-//    /**
-//     * Verifies removing multiple spaces one action at a time at the start of two consecutive lines of code triggers the evaluation function
-//     */
-//    @Test
-//    public void twoConsecutiveLinesDownMultipleSpaceSeparatelyRemoved() {
-//	try {
-//	    // Mock a new document with extra spaces in the lines
-//	    doc = new Document("  Line1\n  Line2\n  Line3\n");
-//
-//	    // Mock a document event with a single backspace at the beginning of the first line
-//	    offset = 0;
-//	    assertFalse(mockUserSingleBackspace(offset));
-//	    System.out.println(doc.get());
-//	    delayUserInput();
-//	    assertFalse(mockUserSingleBackspace(offset));
-//	    delayUserInput();
-//	    System.out.println(doc.get());
-//
-//	    // Mock a backspace at the start of the second line
-//	    offset = doc.getLineOffset(1);
-//	    assertTrue(mockUserSingleBackspace(offset));
-//	    System.out.println(doc.get());
-//	} catch (BadLocationException e) {
-//	    // Should never get here
-//	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-//	    e.printStackTrace();
-//	}
-//    }
+    /**
+     * Verifies removing multiple spaces one action at a time at the start of two consecutive lines of code triggers the evaluation function
+     */
+    @Test
+    public void twoConsecutiveLinesDownMultipleSpaceSeparatelyRemoved() {
+	try {
+	    // Mock a new document with extra spaces in the lines
+	    doc = new Document(extraSpaceContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+
+	    // Mock a document event with a single backspace at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies adding space to the start of line 1, then removing a space from line 2 triggers the evaluation function
+     */
+    @Test
+    public void twoConsecutiveLinesDownSpaceAddedSpaceRemoved() {
+	try {
+	    // Mock a document event with a single space placed at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
+	    delayUserInput();
+
+	    // Place a single space at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies removing space line 1, then adding space line 2 triggers
+     */
+    @Test
+    public void twoConsecutiveLinesDownSpaceRemovedSpaceAdded() {
+	try {
+	    // Mock a document event with a single space placed at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+
+	    // Place a single space at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserInput(offset, SINGLE_SPACE));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+
 
     /**
      * Verifies removing multiple spaces in one action at the start of two consecutive lines of code triggers the evaluation function
      */
-//    @Test
-//    public void twoConsecutiveLinesDownMultipleSpaceTogetherRemoved() {
-//	try {
-//	    // Mock a new document with extra spaces in the lines
-//	    doc = new Document("  Line1\n  Line2\n  Line3\n");
-//
-//	    // Mock a document event with a single backspace at the beginning of the first line
-//	    offset = 0;
-//	    System.out.println(doc.get());
-//	    assertFalse(mockUserDoubleBackspace(offset));
-//	    delayUserInput();
-//	    System.out.println(doc.get());
-//	    // Mock a backspace at the start of the second line
-//	    offset = doc.getLineOffset(1);
-//	    assertTrue(mockUserDoubleBackspace(offset));
-//	} catch (BadLocationException e) {
-//	    // Should never get here
-//	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-//	    e.printStackTrace();
-//	}
-//    }
+    @Test
+    public void twoConsecutiveLinesDownMultipleSpaceTogetherRemoved() {
+	try {
+	    // Mock a new document with extra spaces in the lines
+	    doc = new Document(extraSpaceContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+
+	    // Mock a document event with a double backspace at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserDoubleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserDoubleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
 
     /**
      * Verifies evaluation returns true when space is added to the front of line 2, then a space is added to the front
@@ -198,6 +244,130 @@ public class CorrectIndentationEvaluatorTest {
 	    // Place a single space at the start of the first line
 	    offset = doc.getLineOffset(0);
 	    assertTrue(mockUserInput(offset, SINGLE_SPACE));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies evaluation returns true when space is added to the front of line 2, then a space is removed in line 1
+     */
+    @Test
+    public void twoConsecutiveLinesUpSpaceRemovedSpaceAdded() {
+	try {
+	    // Mock a document event with a single space placed at the beginning of the second line
+	    offset = doc.getLineOffset(1);
+	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
+	    delayUserInput();
+
+	    // Place a single space at the start of the first line
+	    offset = doc.getLineOffset(0);
+	    assertTrue(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies evaluation returns true when space is removed at the front of line 2, then a space is added in line 1
+     */
+    @Test
+    public void twoConsecutiveLinesUpSpaceAddedSpaceRemoved() {
+	try {
+	    // Mock a document event with a single space placed at the beginning of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserSingleBackspace(offset));
+	    delayUserInput();
+
+	    // Place a single space at the start of the first line
+	    offset = doc.getLineOffset(0);
+	    assertTrue(mockUserInput(offset, SINGLE_SPACE));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies removing multiple spaces one action at a time at the start of two consecutive lines of code triggers the evaluation function
+     */
+    @Test
+    public void twoConsecutiveLinesUpSpaceRemoved() {
+	try {
+	    // Mock a new document with extra spaces in the lines
+	    doc = new Document(extraSpaceContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+
+	    // Mock a document event with a single backspace at the beginning of the second line
+	    offset = doc.getLineOffset(1);
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the second line
+	    offset = doc.getLineOffset(0);
+	    assertTrue(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies removing multiple spaces one action at a time at the start of two consecutive lines of code triggers the evaluation function
+     */
+    @Test
+    public void twoConsecutiveLinesUpMultipleSpaceSeparatelyRemoved() {
+	try {
+	    // Mock a new document with extra spaces in the lines
+	    doc = new Document(extraSpaceContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+
+	    // Mock a document event with a single backspace at the beginning of the second line
+	    offset = doc.getLineOffset(1);
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+	    // Mock another backspace at the beginning of second line
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the first line
+	    offset = doc.getLineOffset(0);
+	    assertTrue(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+
+    /**
+     * Verifies removing multiple spaces in one action at the start of two consecutive lines of code triggers the evaluation function
+     */
+    @Test
+    public void twoConsecutiveLinesUpMultipleSpaceTogetherRemoved() {
+	try {
+	    // Mock a new document with extra spaces in the lines
+	    doc = new Document(extraSpaceContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+
+	    // Mock a document event with a double backspace at the beginning of the first line
+	    offset = doc.getLineOffset(1);
+	    assertFalse(mockUserDoubleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the second line
+	    offset = doc.getLineOffset(0);
+	    assertTrue(mockUserDoubleBackspace(offset));
 	} catch (BadLocationException e) {
 	    // Should never get here
 	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -453,78 +623,82 @@ public class CorrectIndentationEvaluatorTest {
     /**
      * Verifies removing tabs at the start of two consecutive lines of code triggers the evaluation function
      */
-//    @Test
-//    public void twoConsecutiveLinesDownTabRemoved() {
-//	try {
-//	    doc = new Document(tabContent);
-//	    // Mock a document event with a single backspace at the beginning of the first line
-//	    offset = 0;
-//	    assertFalse(mockUserSingleBackspace(offset));
-//	    delayUserInput();
-//
-//	    // Mock a backspace at the start of the second line
-//	    offset = doc.getLineOffset(1);
-//	    assertTrue(mockUserSingleBackspace(offset));
-//	} catch (BadLocationException e) {
-//	    // Should never get here
-//	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-//	    e.printStackTrace();
-//	}
-//    }
+    @Test
+    public void twoConsecutiveLinesDownTabRemoved() {
+	try {
+	    doc = new Document(tabContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
 
-//    /**
-//     * Verifies removing multiple spaces one action at a time at the start of two consecutive lines of code triggers the evaluation function
-//     */
-//    @Test
-//    public void twoConsecutiveLinesDownMultipleSpaceSeparatelyRemoved() {
-//	try {
-//	    // Mock a new document with extra spaces in the lines
-//	    doc = new Document("  Line1\n  Line2\n  Line3\n");
-//
-//	    // Mock a document event with a single backspace at the beginning of the first line
-//	    offset = 0;
-//	    assertFalse(mockUserSingleBackspace(offset));
-//	    System.out.println(doc.get());
-//	    delayUserInput();
-//	    assertFalse(mockUserSingleBackspace(offset));
-//	    delayUserInput();
-//	    System.out.println(doc.get());
-//
-//	    // Mock a backspace at the start of the second line
-//	    offset = doc.getLineOffset(1);
-//	    assertTrue(mockUserSingleBackspace(offset));
-//	    System.out.println(doc.get());
-//	} catch (BadLocationException e) {
-//	    // Should never get here
-//	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-//	    e.printStackTrace();
-//	}
-//    }
+	    // Mock a document event with a single backspace at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies removing multiple spaces one action at a time at the start of two consecutive lines of code triggers the evaluation function
+     */
+    @Test
+    public void twoConsecutiveLinesDownMultipleTabSeparatelyRemoved() {
+	try {
+	    // Mock a new document with extra spaces in the lines
+	    doc = new Document(tabContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+
+	    // Mock a document event with a single backspace at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+	    // Mock a second backspace in the first line
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
 
     /**
      * Verifies removing multiple spaces in one action at the start of two consecutive lines of code triggers the evaluation function
      */
-//    @Test
-//    public void twoConsecutiveLinesDownMultipleSpaceTogetherRemoved() {
-//	try {
-//	    // Mock a new document with extra spaces in the lines
-//	    doc = new Document("  Line1\n  Line2\n  Line3\n");
-//
-//	    // Mock a document event with a single backspace at the beginning of the first line
-//	    offset = 0;
-//	    System.out.println(doc.get());
-//	    assertFalse(mockUserDoubleBackspace(offset));
-//	    delayUserInput();
-//	    System.out.println(doc.get());
-//	    // Mock a backspace at the start of the second line
-//	    offset = doc.getLineOffset(1);
-//	    assertTrue(mockUserDoubleBackspace(offset));
-//	} catch (BadLocationException e) {
-//	    // Should never get here
-//	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-//	    e.printStackTrace();
-//	}
-//    }
+    @Test
+    public void twoConsecutiveLinesDownMultipleTabsTogetherRemoved() {
+	try {
+	    // Mock a new document with extra tabs in the lines
+	    doc = new Document(extraTabContent);
+	    // set the evaluator to watch this new document
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+
+	    // Mock a document event with a single backspace at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserDoubleBackspace(offset));
+	    delayUserInput();
+
+	    // Mock a backspace at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertTrue(mockUserDoubleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
 
     /**
      * Verifies evaluation returns true when tab is added to the front of line 2, then a tab is added to the front
@@ -758,14 +932,14 @@ public class CorrectIndentationEvaluatorTest {
     }
 
     private boolean mockUserSingleBackspace(int offset) throws BadLocationException {
-	event = createDocEvent(offset, "");
+	event = new DocumentEvent(doc, offset, 1, "");
 	testEvaluator.evaluateDocumentBeforeChange(event);
 	doc.replace(offset, 1, "");
 	return testEvaluator.evaluateDocumentChanges(event);
     }
 
     private boolean mockUserDoubleBackspace(int offset) throws BadLocationException {
-	event = createDocEvent(offset, "");
+	event = new DocumentEvent(doc, offset, 2, "");
 	testEvaluator.evaluateDocumentBeforeChange(event);
 	doc.replace(offset, 2, "");
 	return testEvaluator.evaluateDocumentChanges(event);
