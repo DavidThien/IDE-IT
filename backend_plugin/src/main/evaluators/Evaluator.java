@@ -119,6 +119,20 @@ public class Evaluator {
 	}
 
 	/**
+	 * Checks the RemoveImportEvaluator to see if unused imports exist
+	 * @return true if unused imports exist in the document; false otherwise
+	 */
+	public boolean workspaceResourceSaved() {
+		for (FeatureEvaluator fEval : this.featureEvaluators) {
+			if (fEval instanceof RemoveImportEvaluator) {
+				RemoveImportEvaluator eval = (RemoveImportEvaluator) fEval;
+				return eval.hasActiveUnusedImportStatement();
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Stops this Evaluator by removing any listeners it created
 	 */
 	public void stop() {

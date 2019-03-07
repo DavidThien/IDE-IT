@@ -13,7 +13,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
  */
 public class RemoveImportEvaluator extends FeatureEvaluator {
 
-	ITextEditor editor;
+	private boolean activeUnusedImportStatement;
 
 	/**
 	 * Constructor
@@ -21,7 +21,6 @@ public class RemoveImportEvaluator extends FeatureEvaluator {
 	 */
 	public RemoveImportEvaluator(ITextEditor editor) {
 		this.featureID = "removeUnusedImportStatementsSuggestion";
-		this.editor = editor;
 	}
 
 	/**
@@ -40,13 +39,27 @@ public class RemoveImportEvaluator extends FeatureEvaluator {
 
 		Iterator<Annotation> it = model.getAnnotationIterator();
 
+		// Iterate through the annotations and update the flag indicating whether any active unused import
+		// statements exist in the document window
+		this.activeUnusedImportStatement = false;
 		while (it.hasNext()) {
 			Annotation current = it.next();
-			// Check if the annotation is an unused import
-			if (current.getText() != null && current.getText().startsWith("The import") && current.getText().endsWith("never used")) {
-				return true;
+
+			// Check if the annotation is a valid, non-deleted unused import annotation
+			if (!current.isMarkedDeleted() && current.getText() != null && current.getText().startsWith("The import") && 
+					current.getText().endsWith("never used")) {
+				this.activeUnusedImportStatement = true;
+				break;
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Returns whether the document currently has an active unused import statement
+	 * @return true if there is an active unused import; false otherwise
+	 */
+	public boolean hasActiveUnusedImportStatement() {
+		return this.activeUnusedImportStatement;
 	}
 }

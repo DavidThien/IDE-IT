@@ -3,16 +3,21 @@ package main.evaluators;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 import main.interfaces.FeatureSuggestion;
 import main.listeners.EditorWindowListener;
+import main.listeners.SaveFileListener;
 
 /**
  * This class keeps track of all evaluators that are open across all
@@ -24,6 +29,7 @@ public class EvaluatorManager {
 	private FeatureSuggestion fs;
 	private Map<IEditorPart, Evaluator> openPartEvaluators;
 	private Map<IWorkbenchPage, EditorWindowListener> openWindowListeners;
+	private Map<Command, IExecutionListener> openCommandExecutionListeners;
 	
 	/**
 	 * Creates a new EvaluatorManager
@@ -32,6 +38,7 @@ public class EvaluatorManager {
 		this.fs = fs;
 		this.openPartEvaluators = new HashMap<IEditorPart, Evaluator>();
 		this.openWindowListeners = new HashMap<IWorkbenchPage, EditorWindowListener>();
+		this.openCommandExecutionListeners = new HashMap<Command, IExecutionListener>();
 	}
 	
 	/**
@@ -75,6 +82,13 @@ public class EvaluatorManager {
 	}
 
 	public void start() {
+
+		// Add a save file listener to the workspace
+		ICommandService commandSvc = PlatformUI.getWorkbench().getAdapter(ICommandService.class);
+		Command saveCommand = commandSvc.getCommand(IWorkbenchCommandConstants.FILE_SAVE);
+		SaveFileListener saveListener = new SaveFileListener(this);
+		saveCommand.addExecutionListener(saveListener);
+		this.openCommandExecutionListeners.put(saveCommand, saveListener);
 
 		// For each workbench page in Eclipse
 		for (IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows()) {
@@ -127,5 +141,23 @@ public class EvaluatorManager {
 			this.openPartEvaluators.get(documentEditor).stop();
 		}
 		this.openPartEvaluators.clear();
+
+		// Remove all command execution listeners that this EvaluatorManager created
+		for (Command command : this.openCommandExecutionListeners.keySet()) {
+			command.removeExecutionListener(this.openCommandExecutionListeners.get(command));
+		}
+		this.openCommandExecutionListeners.clear();
+	}
+
+	/**
+	 * Signals the evaluators to check for unused imports
+	 */
+	public void workspaceResourceSaved() {
+		for (Evaluator eval : this.getOpenEvaluators().values()) {
+			if (eval.workspaceResourceSaved()) {
+				this.notifyFeatureSuggestion("removeUnusedImportStatementSuggestion");
+				break;
+			}
+		}
 	}
 }
