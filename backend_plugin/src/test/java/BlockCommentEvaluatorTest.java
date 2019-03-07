@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import main.evaluators.BlockCommentEvaluator;
-import main.interfaces.FeatureSuggestion;
 
 /**
  * Unit test for BlockCommentEvaluator

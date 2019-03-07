@@ -8,7 +8,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 
-import main.interfaces.FeatureSuggestion;
+import main.interfaces.FeatureID;
 
 public class AddImportEvaluator extends FeatureEvaluator {
 
@@ -19,7 +19,7 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	 * Construct an AddImportEvaluator
 	 */
 	public AddImportEvaluator(IDocument document) {
-		this.featureID = FeatureSuggestion.ADD_IMPORT_FEATURE_ID;
+		this.featureID = FeatureID.ADD_IMPORT_FEATURE_ID;
 		this.lineHadImportStatementAlready = false;
 		this.unresolvedVariablesExist = false;
 		this.document = document;

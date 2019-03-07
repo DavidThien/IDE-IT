@@ -1,7 +1,6 @@
 package main.interfaces;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import main.evaluators.EvaluatorManager;
@@ -15,24 +14,13 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 
 	private EvaluatorManager manager;
 	private List<FeatureSuggestionObserver> observers;
-	private List<String> featureIDs;
 	private boolean isRunning;
-
-	// featureID strings used to communicate between frontend and backend
-	// These must match EXACTLY with the agreed upon strings
-	// A list of these strings can be found in featureIDStrings.txt in the main folder of this repo
-	public static final String BLOCK_COMMENT_FEATURE_ID = "blockCommentSuggestion";
-	public static final String ADD_IMPORT_FEATURE_ID = "addImportStatementsSuggestion";
-	public static final String CORRECT_INDENTATION_FEATURE_ID = "correctIndentationsSuggestion";
-	public static final String REMOVE_IMPORT_FEATURE_ID = "removeUnusedImportStatementSuggestion";
-	public static final String TRAILING_WHITE_SPACE_FEATURE_ID = "trailingWhiteSpaceSuggestion";
 
 	public FeatureSuggestion() {
 		// debug
 		System.out.println("FS created");
 		manager = new EvaluatorManager(this);
 		observers = new ArrayList<FeatureSuggestionObserver>();
-		featureIDs = generateFeatureIDs();
 		isRunning = false;
 	}
 
@@ -64,8 +52,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	 */
 	@Override
 	public List<String> getAllFeatureIDs() {
-		List<String> feats = new ArrayList<String>(featureIDs);
-		return feats;
+		return FeatureID.getAllFeatureIDs();
 	}
 
 	/**
@@ -98,21 +85,6 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	@Override
 	public boolean isRunning() {
 		return isRunning;
-	}
-
-	/**
-	 * Generate list of FeatureIDs to be tracked
-	 *
-	 * @return List of FeatureIDs to be tracked
-	 */
-	private List<String> generateFeatureIDs() {
-	    	List<String> feats = new ArrayList<String>();
-	    	feats.add(BLOCK_COMMENT_FEATURE_ID);
-	    	feats.add(ADD_IMPORT_FEATURE_ID);
-	    	feats.add(CORRECT_INDENTATION_FEATURE_ID);
-	    	feats.add(REMOVE_IMPORT_FEATURE_ID);
-	    	feats.add(TRAILING_WHITE_SPACE_FEATURE_ID);
-		return Collections.unmodifiableList(feats);
 	}
 
 	/**

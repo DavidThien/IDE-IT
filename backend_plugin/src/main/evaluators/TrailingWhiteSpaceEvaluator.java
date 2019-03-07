@@ -4,7 +4,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 
-import main.interfaces.FeatureSuggestion;
+import main.interfaces.FeatureID;
 
 /**
  * Evaluates DocumentEvent changes to determine if the user is manually deleting trailing white spaces
@@ -20,7 +20,7 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 	 * @param document
 	 */
 	public TrailingWhiteSpaceEvaluator(IDocument document) {
-		this.featureID = FeatureSuggestion.TRAILING_WHITE_SPACE_FEATURE_ID;
+		this.featureID = FeatureID.TRAILING_WHITE_SPACE_FEATURE_ID;
 		this.document = document;
 	}
 

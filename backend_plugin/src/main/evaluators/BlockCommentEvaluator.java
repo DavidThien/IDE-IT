@@ -4,7 +4,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 
-import main.interfaces.FeatureSuggestion;
+import main.interfaces.FeatureID;
 
 /**
  * Evaluates DocumentEvent changes to determine if the user is commenting out multiple sequential lines of code. If so,
@@ -19,7 +19,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	 * Default constructor
 	 */
 	public BlockCommentEvaluator(IDocument document) {
-		this.featureID = FeatureSuggestion.BLOCK_COMMENT_FEATURE_ID;
+		this.featureID = FeatureID.BLOCK_COMMENT_FEATURE_ID;
 		this.document = document;
 		this.lastCommentedLine = -2;
 		this.lastCommentedLineTimeStamp = -1;

@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import main.evaluators.BlockCommentEvaluator;
-import main.interfaces.FeatureSuggestion;
 
 /**
  * Tests against all known sequences of actions a user can take to manually attempt to comment out multiple lines
