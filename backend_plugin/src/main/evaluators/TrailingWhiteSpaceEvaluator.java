@@ -4,21 +4,23 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 
+import main.interfaces.FeatureID;
+
 /**
  * Evaluates DocumentEvent changes to determine if the user is manually deleting trailing white spaces
  * Eclipse has a setting to automatically remove trailing white spaces on save, so the user could use
  * this instead.
  */
 public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
-	
+
 	private String lineBeforeChange;
-	
+
 	/**
 	 * Constructs a TrailingWhiteSpaceEvaluator
 	 * @param document
 	 */
 	public TrailingWhiteSpaceEvaluator(IDocument document) {
-		this.featureID = "trailingWhiteSpaceSuggestion";
+		this.featureID = FeatureID.TRAILING_WHITE_SPACE_FEATURE_ID;
 		this.document = document;
 	}
 
@@ -29,15 +31,15 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 	 */
 	@Override
 	public boolean evaluateDocumentChanges(DocumentEvent event) {
-		
+
 		try {
 			int line = document.getLineOfOffset(event.getOffset());
 			int startOffset = document.getLineOffset(line);
 			int length = document.getLineLength(line);
-			
+
 			// Need to check up to length - 1 instead of length due to line feed char at end
 			String lineAfterChange = document.get(startOffset, length - 1);
-			
+
 			// If the change event is a deletion, check whether only the line's whitespace has
 			// changed, and that the line no longer ends with whitespace
 			if (event.getText().length() == 0) {
@@ -60,7 +62,7 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 			int line = document.getLineOfOffset(event.getOffset());
 			int startOffset = document.getLineOffset(line);
 			int length = document.getLineLength(line);
-			
+
 			// Need to check up to length - 1 instead of length due to line feed char at end
 			this.lineBeforeChange = document.get(startOffset, length - 1);
 		} catch (BadLocationException e) {

@@ -7,8 +7,9 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
-import main.listeners.DocumentChangesListener;
+
 import main.listeners.AnnotationModelListener;
+import main.listeners.DocumentChangesListener;
 
 
 /**
@@ -55,7 +56,7 @@ public class Evaluator {
 	 */
 	private void initializeFeatureEvaluators(ITextEditor textEditor) {
 		this.featureEvaluators.add(new BlockCommentEvaluator(this.document));
-		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
+		this.featureEvaluators.add(new RemoveImportEvaluator());
 		this.featureEvaluators.add(new AddImportEvaluator(this.document));
 		this.featureEvaluators.add(new CorrectIndentationEvaluator(this.document));
 		this.featureEvaluators.add(new TrailingWhiteSpaceEvaluator(this.document));
