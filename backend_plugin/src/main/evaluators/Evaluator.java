@@ -56,7 +56,7 @@ public class Evaluator {
 	 */
 	private void initializeFeatureEvaluators(ITextEditor textEditor) {
 		this.featureEvaluators.add(new BlockCommentEvaluator(this.document));
-		this.featureEvaluators.add(new RemoveImportEvaluator(textEditor));
+		this.featureEvaluators.add(new RemoveImportEvaluator());
 		this.featureEvaluators.add(new AddImportEvaluator(this.document));
 		this.featureEvaluators.add(new CorrectIndentationEvaluator(this.document));
 		this.featureEvaluators.add(new TrailingWhiteSpaceEvaluator(this.document));
@@ -117,6 +117,20 @@ public class Evaluator {
 				this.manager.notifyFeatureSuggestion(featureEvaluator.getFeatureID());
 			}
 		}
+	}
+
+	/**
+	 * Checks the RemoveImportEvaluator to see if unused imports exist
+	 * @return true if unused imports exist in the document; false otherwise
+	 */
+	public boolean workspaceResourceSaved() {
+		for (FeatureEvaluator fEval : this.featureEvaluators) {
+			if (fEval instanceof RemoveImportEvaluator) {
+				RemoveImportEvaluator eval = (RemoveImportEvaluator) fEval;
+				return eval.hasActiveUnusedImportStatement();
+			}
+		}
+		return false;
 	}
 
 	/**
