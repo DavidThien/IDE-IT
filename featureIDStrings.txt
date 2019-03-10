@@ -3,4 +3,4 @@ addImportStatementsSuggestion
 removeUnusedImportStatementSuggestion
 correctIndentationsSuggestion
 trailingWhiteSpaceSuggestion
-variableRenameRefactorSuggestion
+getterSetterSuggestion

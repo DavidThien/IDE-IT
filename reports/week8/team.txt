@@ -1,0 +1,70 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------	
+
+	- Update manual and report based on any feedback
+	- Write unit tests for classes of project
+	- Possibly implement feature evaluation for correcting indents 
+	- Refine add and remove import evaluations
+	- Finish setting up graph for false positives and negatives on feature evaluators
+	- Research and implement using Eclipse API for AST changes
+		- May be helpful in refining our current evaluators and for future ones
+	- Refactor testing code 
+	- Write more false positive and negative tests
+	- Finish converting false negative user test cases to runnable tests
+ 	- Prepare for in class presentation
+	- Work with FE team to make sure BE infrastructure changes will still integrate with Feature
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+
+	- Finished converting false negative list to mock runnable tests
+		- For Block Comment Evaluator only
+	- Updated report with information on Initial Results analysis
+	- Updated report and user manual based on last week's feedback
+	- Started converting false negative list to mock runnable tests for
+		- Trailing white spaces
+		- Correct Indentation
+	- Researched Eclipse API for AST changes
+		- Eclipse doesn't have a way to listen for AST changes as we hoped
+		- Eclipse allows us to parse our own AST whenever we want instead
+	- Designed and implemented working evaluation functions for:
+		- correct indentations
+		- getters / setters
+		- trailing white spaces
+	- Improved Add Imports evaluator
+		- Simplified code and catches more cases
+	- Prepared for in class presentation and gave said presentation
+	- Met with FE team to verify integration works
+	- Updated success metrics graph script
+		- Now works on mac
+		- Updated user manual with more specific instructions
+		
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	Responsible parties are listed after each goal (or subgoal, where applicable)
+
+	- Finish converting false negative list to runnable tests 
+		- getter/setters (John)
+		- correct indentation (John)
+		- trailing white space (Eric)
+	- Set up false postive tests that we can run (All/David)
+	- Design and implement clean way to store one list of featureID strings throughout our plugin (John)
+	- Update report based on feedback (Eric/All)
+	- Update and implement the following evaluation functions:
+		- getter/setter (John)
+		- remove import (Eric/John)
+	- Write tests for merged/existing feature evaluators (All)
+	- Possibly add more feature evaluators
+		- rename variable refactor (David)
+		- "Generate hashCode() and equals()" feature (Eric)
+		- "Generate toString()" feature (Eric)
+	-Go through and clean/refactor classes as needed in preparation for final release (All)
+--------------
+MEETING AGENDA
+--------------
+For TA
+	- Presentation feedback
+	- What should our goals be for the next 1.5 weeks
