@@ -8,104 +8,109 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.IAnnotationModel;
 
+import main.interfaces.FeatureID;
+
 public class AddImportEvaluator extends FeatureEvaluator {
 
-    private boolean unresolvedVariablesExist;
-    private DocumentEvent lastDocumentEvent;
+	private boolean unresolvedVariablesExist;
+	private boolean lineHadImportStatementAlready;
 
-    /**
-     * Construct an AddImportEvaluator
-     */
-    public AddImportEvaluator(IDocument document) {
-	this.featureID = "addImportStatementsSuggestion";
-	this.lastDocumentEvent = null;
-	this.unresolvedVariablesExist = false;
-	this.document = document;
-    }
-
-    /**
-     * Tracks the user's changes, and determines whether they are fixing an
-     * "unresolved type" issue by manually typing the import statement
-     * @return boolean true if the user is manually adding an import statement
-     * 					when unresolved variables exist; false otherwise
-     */
-    @Override
-    public boolean evaluateDocumentChanges(DocumentEvent docEvent) {
-
-	if (this.lastDocumentEvent == null) {
-
-	    // This is the first DocumentEvent captured by the Evaluator
-	    this.lastDocumentEvent = docEvent;
-	} else if (this.unresolvedVariablesExist) {
-
-	    // Check if the last two DocumentEvents represent the user typing "t"
-	    // followed by " "
-	    String textAdded = this.lastDocumentEvent.getText() + docEvent.getText();
-	    int offsetDifference = docEvent.getOffset() - this.lastDocumentEvent.getOffset();
-	    this.lastDocumentEvent = docEvent;
-	    if (textAdded.equals("t ") && offsetDifference == 1) {
-
-		// If the "t" is the end of an import statement, trigger the feature evaluation
-		return this.checkForTypedImportStatement(docEvent);
-	    }
+	/**
+	 * Construct an AddImportEvaluator
+	 */
+	public AddImportEvaluator(IDocument document) {
+		this.featureID = FeatureID.ADD_IMPORT_FEATURE_ID;
+		this.lineHadImportStatementAlready = false;
+		this.unresolvedVariablesExist = false;
+		this.document = document;
 	}
 
-	// The user did not manually type an import statement
-	return false;
-    }
+	/**
+	 * Checks whether a document change event is occurring on a line that did
+	 * not have an import statement previously
+	 * @param event
+	 * @return false
+	 */
+	@Override
+	public boolean evaluateDocumentBeforeChange(DocumentEvent event) {
+		try {
 
-    /**
-     * Checks the previous 6 characters before the offset of the given DocumentEvent
-     * @param docEvent the DocumentEvent representing the last text insertion
-     * @return boolean true if the previous 6 characters in the document are
-     * 					'i'-'m'-'p'-'o'-'r'-'t'; false otherwise
-     */
-    private boolean checkForTypedImportStatement(DocumentEvent docEvent) {
-	try {
-	    // Check if the six characters before the most recent document change spell "import"
-	    int startOffset = docEvent.getOffset() - 6;
-	    String testing = document.get(startOffset, 6);
-	    if (testing.equals("import")) {
-		// Verify that "import" is at the start of a line
-		int line = document.getLineOfOffset(startOffset);
-		int lineOffset = document.getLineOffset(line);
-		int lineLength = document.getLineLength(line);
-		String lineText = document.get(lineOffset, lineLength).trim();
-		return lineText.startsWith("import");
-	    }
-	} catch (BadLocationException e) {
-	    // The calculated startOffset is negative. This only happens when
-	    // the current offset after the "t " is smaller than 6, meaning
-	    // there is no way the user could have typed "import", so return false
-	}
-	return false;
-    }
-
-    /**
-     * Updates the boolean flag of this AddImportEvaluator that tracks whether
-     * there exist any unresolved types in the document. This returns false
-     * always, as a change to the annotation model should not by itself trigger
-     * a notification to the frontend.
-     * @return boolean false
-     */
-    @Override
-    public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
-	Iterator<Annotation> it = model.getAnnotationIterator();
-
-	// Iterate through all annotations
-	while (it.hasNext()) {
-	    Annotation current = it.next();
-
-	    // If the annotation is valid and represents an unresolved variable,
-	    // update the flag for unresolved variables existing
-	    if (current.getText().endsWith("cannot be resolved to a type") && !current.isMarkedDeleted()) {
-		this.unresolvedVariablesExist = true;
+			// If the line before the change event was an import statement,
+			// update the boolean flag to reflect that
+			int line = document.getLineOfOffset(event.getOffset());
+			this.lineHadImportStatementAlready = lineIsAnImportStatement(line);
+		} catch (BadLocationException e) {
+		}
 		return false;
-	    }
 	}
 
-	// There are no unresolved variables in the document
-	this.unresolvedVariablesExist = false;
-	return false;
-    }
+	/**
+	 * Checks whether a document change event is occurring on a line that did
+	 * not have an import statement previously
+	 * @param event
+	 * @return false
+	 */
+	@Override
+	public boolean evaluateDocumentChanges(DocumentEvent event) {
+		try {
+
+			// If the line before the change was not an import statement, but the
+			// line after the change is, and there are unresolved variables, return true
+			int line = document.getLineOfOffset(event.getOffset());
+			return this.unresolvedVariablesExist &&
+					!this.lineHadImportStatementAlready && lineIsAnImportStatement(line);
+		} catch (BadLocationException e) {
+		}
+		return false;
+	}
+
+	/**
+	 * Checks if the given line begins with an import statement
+	 * @param line
+	 * @return
+	 */
+	public boolean lineIsAnImportStatement(int line) {
+		try {
+
+			int startOffset = document.getLineOffset(line);
+			int length = document.getLineLength(line);
+
+			// Use regex to remove only the leading white space from the line,
+			// then check if the line starts with "import "
+			String lineContents = document.get(startOffset, length);
+			return lineContents.replaceAll("^\\s+", "").startsWith("import ");
+		} catch (BadLocationException e) {
+		}
+		return false;
+	}
+
+	/**
+	 * Updates the boolean flag of this AddImportEvaluator that tracks whether
+	 * there exist any unresolved types in the document. This returns false
+	 * always, as a change to the annotation model should not by itself trigger
+	 * a notification to the frontend.
+	 * @return boolean false
+	 */
+	@Override
+	public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
+		Iterator<Annotation> it = model.getAnnotationIterator();
+
+		// Iterate through all annotations
+		while (it.hasNext()) {
+			Annotation current = it.next();
+
+			// If the annotation is valid and represents an unresolved variable,
+			// update the flag for unresolved variables existing
+			if (current.getText() != null && current.getText().endsWith("cannot be resolved to a type") &&
+					!current.isMarkedDeleted()) {
+				this.unresolvedVariablesExist = true;
+				return false;
+			}
+		}
+
+		// There are no unresolved variables in the document
+		this.unresolvedVariablesExist = false;
+		return false;
+	}
+
 }

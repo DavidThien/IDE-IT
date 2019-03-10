@@ -1,0 +1,24 @@
+-Goals for this week (from last week's status report):
+
+	-Update manual and report based on any feedback
+	-Write unit tests for classes of project
+	-Possibly implement feature evaluation for correcting indents
+		-Time permitted, may instead choose to focus more on testing/refining what we already have
+
+-Progress made this week:
+
+	-Helped to update the user manual and report based on last week's feedback
+	-Added pull request for improved feature evaluation for the add imports feature evaluator
+		-Simplified the code, also catches many more cases
+	-Added pull request for a new feature evaluation for removing trailing whitespaces manually
+		-Frontend can use it, as there is an Eclipse setting to do this automatically on save
+
+-Plan/Goals for the following week:
+
+	-Write tests for merged/existing feature evaluators
+		-In particular, the add imports and remove trailing white spaces feature evaluators
+	-Possibly add more feature evaluators
+		-"Generate hashCode() and equals()" feature
+		-"Generate toString()" feature
+		-Consider Refarctor->Rename feature, but time might not permit
+	-Go through and clean/refactor classes as needed in preparation for final release

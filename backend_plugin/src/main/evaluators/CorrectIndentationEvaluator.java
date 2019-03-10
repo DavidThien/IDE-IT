@@ -4,6 +4,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 
+import main.interfaces.FeatureID;
+
 /**
  * Evaluates DocumentEvent changes to determine if the user is changing the indentation of multiple sequential lines of code. If so,
  * then the user should be notified of the auto indentation feature in Eclipse.
@@ -14,16 +16,18 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
     private int lastIndentChangedLine;
     private long lastIndentChangedLineTimeStamp;
 
+    private final int INVALID_LINE = -2;
+
     /**
      * Constructor
      * @param document IDocument that this evaluator is attached to
      */
     public CorrectIndentationEvaluator(IDocument document) {
-	this.featureID = "correctIndentationsSuggestion";
+	this.featureID = FeatureID.CORRECT_INDENTATION_FEATURE_ID;
 	this.document = document;
 	// arbitrary default values to avoid special casing for the first document change
 	lineBeforeChange = "";
-	lastIndentChangedLine = -2;  // can't be -1 because we may change indent in line 0
+	lastIndentChangedLine = INVALID_LINE;  // can't be -1 because we may change indent in line 0
 	whiteSpaceAddedOrRemoved = false;
 	this.lastIndentChangedLineTimeStamp = -1;
     }
@@ -36,17 +40,17 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
     public boolean evaluateDocumentBeforeChange(DocumentEvent event) {
 	// We only care about adding white space or removing characters
 	// Either of those cases will have a length of 0 once the string is trimmed
-	if (event.getText().trim().length() == 0) {
-	    try {
-		int line = document.getLineOfOffset(event.getOffset());
+	try {
+	    int line = document.getLineOfOffset(event.getOffset());
+	    if (event.getText().trim().length() == 0) {
 		int lineOffset = document.getLineOffset(line);
 		int lineLength = document.getLineLength(line);
 		lineBeforeChange = document.get(lineOffset, lineLength);
 		whiteSpaceAddedOrRemoved = true;
-	    } catch (BadLocationException e) {}
-	} else {
-	whiteSpaceAddedOrRemoved = false;
-	}
+	    } else {
+		whiteSpaceAddedOrRemoved = false;
+	    }
+	} catch (BadLocationException e) {}
 	return false;
     }
 
@@ -58,11 +62,14 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
     public boolean evaluateDocumentChanges(DocumentEvent event) {
 	try {
 	    // Since we already checked that we are only adding whitespace or removing text, we just check the boolean
+	    int line = document.getLineOfOffset(event.getOffset());
 	    if (whiteSpaceAddedOrRemoved) {
-		int line = document.getLineOfOffset(event.getOffset());
 		if (lineIndentationChanged(event, line) && lineAdjacentToPrevious(line)) {
 		    return true;
 		}
+	    } else {
+		// If white space wasn't added or removed in this line, then reset the lastIndentChangedLine if we made non-white spaces to it
+		lastIndentChangedLine = (lastIndentChangedLine == line || lastIndentChangedLine == INVALID_LINE) ? INVALID_LINE : line;
 	    }
 	} catch (BadLocationException e) {}
 	return false;

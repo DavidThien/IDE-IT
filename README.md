@@ -11,9 +11,11 @@ Contents:
 3. Installation
   * Required Software
   * Building the Plugin
+  * Generating Feature Support Graph
   * Incorporating the Plugin with Your Own Project
 4. Usage
 5. Implementation Details
+6. Adding New Evaluation Functions
 
 ## Overview
 
@@ -25,26 +27,34 @@ We plan to provide support for at least the following list of Eclipse features:
 * Adding import statements using “shift-cmd-o”
 * Removing unnecessary/unused import statements using “shift-cmd-o”
 * Correcting indentation
+* Removing trailing whitespace on save
 * Refactor code base by renaming a variable throughout the entire project
 
 This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
 
-## Current Status as of 2/19/19
+## Current Status as of 3/4/19
 
 We have completed the following milestones:
 
-* Basic plugin framework created
-* Initial evaluation function written for evaluating block commenting
-* Interface with frontend implemented
+* Created basic plugin framework
+* Wrote working evaluation functions for the following features:
+  * Block commenting
+  * Adding imports
+  * Removing unused imports
+  * Correcting indentation
+  * Removing trailing whitespace
+* Interfaced with frontend implemented
   * Manually tested with success - IDE-IT frontend plugin able to receive notification from feature evaluation
-* Implement a working build file
-* Integrate with Travis for CI testing on Github
+* Implemented a working build file
+* Implemented an initial test suite
+* Integrated with Travis for CI testing on Github
 
 Our next goals are:
 
-* Write evaluation function for removing unused imports
-* Write evaluation function for adding imports for unresolved classes
-* Create a test suite and create unit tests for classes where appropriate
+* Write evaluation functions for other features (stretch goals):
+  * Refator->Rename
+  * Add getters/setters
+* Build up test suite for existing evaluation functions
 
 ## Installation
 
@@ -59,26 +69,45 @@ Our next goals are:
 Open a terminal on your machine and complete the following steps
 
 * Clone this repo into your Eclipse workspace folder: ```git clone https://github.com/DavidThien/IDE-IT.git```
-* Change directory into IDE-IT/backend_plugin: ```cd IDE-IT```
+* Change directory into IDE-IT/backend_plugin: ```cd IDE-IT/backend_plugin```
 * Build the Plugin: ```mvn clean install```
 
 If any of the above does not work, please inform us through the issue tracker.
 
 ### Generating Feature Support Graph
 
-Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how many different methods we support for detecting different features. The current number of supported features can be found by running
+Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how many different methods we support for detecting different features. The current number of supported features can be found by running the following command from the 'backend_plugin' directory:
 
 ```
 mvn -Dtest=*Negative surefire-report:report
 ```
 
-from the `backend_plugin` directory, or by running the `backend_plugin/runTestCases.sh` script. You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running
+You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running the following command from the 'backend_plugin' directory:
 
 ```
 python feature-stats.py
 ```
 
-from the main directory. Note that this script requires `Repo` and `matplotlib` to be installed, as well as python 2.7 or greater. This script will output a bar graph `feature-support.png` in the main directory.
+from the main directory.  This script requires
+
+* `gitpython`
+* `matplotlib`
+* `python 2.7` or greater (but not `3.x`)
+* `java 8`
+* `git`
+
+If you are on Linux, then just installing the dependencies with your package manager and pip should work fine. On Mac, you may have to run
+
+```
+pip install backports.functools_lru_cache
+pip install matplotlib==2.0.2
+```
+
+(with sudo if your system is configured to need it) in order to install matplot lib. The other dependencies can be installed normally. Note that if you have a version of `matplotlib` other than `2.0.2` installed, then you may have to uninstall it and reinstall only the `2.0.2` version.
+
+This script will output a line chart `feature-support.png` in the main directory. Currently this test only shows the number of true positives out of all target activation methods, and only for the BlockCommentEvaluator. However, there are plans to add in the future similar tests for actions that should not trigger evaulators, as well as these tests for all other evaulators.
+
+This script will run all current feature support tests on the last commit of every day that it is able to, and will aggregate said results into the graph.
 
 ### Incorporating the Plugin with Your Own Project
 
@@ -114,6 +143,8 @@ The following is a list of the featureID strings and descriptions of what Eclips
   * Remove all unused import statements
 * correctIndentationsSuggestion
   * Correct indentation (either for multiple selected lines or for entire document)
+* trailingWhiteSpaceSuggestion
+  * Auto-remove trailing whitespace on document save
 * variableRenameRefactorSuggestion
   * Rename a variable throughout the entire scope of said variable
 
@@ -153,3 +184,14 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
   * Responsible for evaluating document changes detected within a single document editor window. When document changes are detected, the Evaluator will cycle through each feature evaluation function, passing the document change event information. If a feature evaluation function returns true (indicating that the user has neglected to use the respective feature), it will notify the EvaluatorManager with the unique ID string of the feature that was triggered.
 * DocumentChangesTracker
   * An extension of IDocumentListener from the Eclipse Plugin API. Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes made within that document editor window. When changes are detected, the DocumentChangesTracker will pass the change information back to the Evaluator.
+
+## Adding New Evaluation Functions
+
+For developers looking to expand upon this project and add a new evaluation function, the following steps are recommended:
+* Read up on the Eclipse API documentation
+  * https://help.eclipse.org/luna/index.jsp is a good place to start. The topics on the Workbench User Guide, Platform Plug-in Developer Guide, JDT Plug-in Developer Guide, and Plug-in Development Environment Guide are all relevant.
+* Create a new evaluation class under backend_plugin.src.main.evaluators that extends FeatureEvaluator.java.
+* Determine if the new evaluation function will use DocumentChange events, AnnotationModel changes, and/or ResourceChange events. Override the method(s) that corresponds to the event(s) the new evaluation function will use.
+* Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method. 
+
+Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function. 
