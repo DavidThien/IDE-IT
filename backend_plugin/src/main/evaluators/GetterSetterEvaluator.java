@@ -49,7 +49,7 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
      * Checks that the document event added get[varName], get_[varName], set[varName], or set_[varName]
      * @param event the DocumentEvent that occurred
      * @param line the line number where the change occurred
-     * @return true if a get or set method was added for a variable, false otherwise
+     * @return true if a get or set method was added for a previously declared variable, false otherwise
      */
     private boolean checkMethodDeclaration(DocumentEvent event, int line) {
 	try {
@@ -62,6 +62,7 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 		// If so, then update the variable names
 		// This operation is costly, so we limit it to only when it's necessary
 		updateKnownVariableNames();
+		// After variable names are updated, check if the change is a get or set with a variable
 		return checkGetterOrSetter(lineText);
 	    }
 	} catch (BadLocationException e) {}
@@ -78,14 +79,12 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 
 	// Create the AST through the ASTParser and find all variable declarations
 	ASTParser parser = ASTParser.newParser(AST.JLS11);
-//	parser.setBindingsRecovery(true);
 	parser.setSource(document.get().toCharArray());
-//	parser.setResolveBindings(true);
 	CompilationUnit cu = (CompilationUnit)parser.createAST(null);
 	cu.recordModifications();
 
+	// Create a ASTVisitor that will traverse the parsed AST and locate all variable declarations
 	VariableDeclarationFinder varFinder = new VariableDeclarationFinder();
-
 	cu.accept(varFinder);
 	for(VariableDeclaration var : varFinder.getVariables()) {
 	    // Skip empty strings
@@ -93,13 +92,12 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 		varNames.add(var.getName().toString().toLowerCase());
 	    }
 	}
-
     }
 
     /**
      * Checks if the method declaration contains get, get_, set, set_ and a variable name
      * @param lineText the text of the current line edited in the document
-     * @return true if the line appears to be a get or set method for a declared variable
+     * @return true if the line appears to be a get or set method for a declared variable, false otherwise
      */
     private boolean checkGetterOrSetter(String lineText) {
 	// first check that it starts with get
