@@ -35,7 +35,7 @@ public class RemoveImportEvaluator extends FeatureEvaluator {
 		Iterator<Annotation> it = model.getAnnotationIterator();
 
 		// Iterate through the annotations and update the flag indicating whether any active unused import
-		// statements exist in the document window
+		// statements exist in the Eclipse workspace
 		this.activeUnusedImportStatement = false;
 		while (it.hasNext()) {
 			Annotation current = it.next();
@@ -51,7 +51,7 @@ public class RemoveImportEvaluator extends FeatureEvaluator {
 	}
 
 	/**
-	 * Returns whether the document currently has an active unused import statement
+	 * Returns whether the Eclipse workspace currently has an active unused import statement
 	 * @return true if there is an active unused import; false otherwise
 	 */
 	public boolean hasActiveUnusedImportStatement() {
