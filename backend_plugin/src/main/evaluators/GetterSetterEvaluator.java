@@ -22,6 +22,7 @@ import main.interfaces.FeatureID;
 public class GetterSetterEvaluator extends FeatureEvaluator {
 
     private Set<String> varNames;
+    private int lastLineChanged;
 
     /**
      * Constructor
@@ -31,6 +32,7 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 	this.featureID = FeatureID.GETTER_SETTER_FEATURE_ID;
 	this.document = document;
 	this.varNames = new HashSet<String>();
+	this.lastLineChanged = -1; // Set it to an illegal document line number
     }
 
 
@@ -59,10 +61,14 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 
 	    // check for public or protected at the start of the line
 	    if (lineText.startsWith("public ") || lineText.startsWith("protected ")) {
-		// If so, then update the variable names
-		// This operation is costly, so we limit it to only when it's necessary
-		updateKnownVariableNames();
-		// After variable names are updated, check if the change is a get or set with a variable
+		// check if we've already parsed the AST for this line change
+		if (this.lastLineChanged != line) {
+		    // If not, then update the variable names while editing this line
+		    // This operation is costly, so we limit it to only when it's necessary
+		    updateKnownVariableNames();
+		    this.lastLineChanged = line;
+		}
+		// Check if the change is a get or set with a variable
 		return checkGetterOrSetter(lineText);
 	    }
 	} catch (BadLocationException e) {}
