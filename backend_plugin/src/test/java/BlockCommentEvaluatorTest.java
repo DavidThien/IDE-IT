@@ -17,7 +17,7 @@ import main.evaluators.BlockCommentEvaluator;
  * Unit test for BlockCommentEvaluator
  */
 public class BlockCommentEvaluatorTest {
-	
+
 	private static final String content = "Line1\n Line2\n Line3\n";
 	private static final String SINGLE_SLASH = "/";
 
@@ -43,7 +43,7 @@ public class BlockCommentEvaluatorTest {
 	 */
 	@Test
 	public void twoConsecutiveLinesDownCommentedOut() {
-		// Mock a document event with a single backslash placed at the beginning of the first line		
+		// Mock a document event with a single backslash placed at the beginning of the first line
 		try {
 			// Mock a document event with a single backslash placed at the beginning of the first line
 			offset = 0;
@@ -64,7 +64,7 @@ public class BlockCommentEvaluatorTest {
 			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-			
+
 			// Place a second backslash after the first
 			offset++;
 			doc.replace(offset, 0, SINGLE_SLASH);
@@ -154,7 +154,7 @@ public class BlockCommentEvaluatorTest {
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
-			
+
 			delayUserInput();
 
 			// Comment out the third line
@@ -194,7 +194,7 @@ public class BlockCommentEvaluatorTest {
 			doc.replace(offset, 0, SINGLE_SLASH);
 			event = createDocEvent(offset, SINGLE_SLASH);
 			assertFalse(testEvaluator.evaluateDocumentChanges(event));
-			
+
 			delayUserInput();
 
 			// Mock a document event with a single backslash placed at the beginning of the second line
@@ -209,7 +209,7 @@ public class BlockCommentEvaluatorTest {
 			event = createDocEvent(offset, SINGLE_SLASH);
 			// Now the evaluation function should trigger
 			assertTrue(testEvaluator.evaluateDocumentChanges(event));
-			
+
 			delayUserInput();
 
 			// Mock a document event with a single backslash placed at the beginning of the first line

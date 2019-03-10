@@ -1,6 +1,6 @@
 blockCommentSuggestion
 addImportStatementsSuggestion
-removeUnusedImportsStatementSuggestion
+removeUnusedImportStatementSuggestion
 correctIndentationsSuggestion
 trailingWhiteSpaceSuggestion
 getterSetterSuggestion

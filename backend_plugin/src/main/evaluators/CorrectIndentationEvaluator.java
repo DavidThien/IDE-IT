@@ -4,6 +4,8 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 
+import main.interfaces.FeatureID;
+
 /**
  * Evaluates DocumentEvent changes to determine if the user is changing the indentation of multiple sequential lines of code. If so,
  * then the user should be notified of the auto indentation feature in Eclipse.
@@ -21,7 +23,7 @@ public class CorrectIndentationEvaluator extends FeatureEvaluator {
      * @param document IDocument that this evaluator is attached to
      */
     public CorrectIndentationEvaluator(IDocument document) {
-	this.featureID = "correctIndentationsSuggestion";
+	this.featureID = FeatureID.CORRECT_INDENTATION_FEATURE_ID;
 	this.document = document;
 	// arbitrary default values to avoid special casing for the first document change
 	lineBeforeChange = "";

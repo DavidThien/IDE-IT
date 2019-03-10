@@ -7,8 +7,9 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.texteditor.ITextEditor;
-import main.listeners.DocumentChangesListener;
+
 import main.listeners.AnnotationModelListener;
+import main.listeners.DocumentChangesListener;
 
 
 /**
