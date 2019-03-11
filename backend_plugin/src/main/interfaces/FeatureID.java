@@ -25,7 +25,8 @@ import java.util.List;
   									ADD_IMPORT_FEATURE_ID,
   									CORRECT_INDENTATION_FEATURE_ID,
   									REMOVE_IMPORT_FEATURE_ID,
-  									TRAILING_WHITE_SPACE_FEATURE_ID);
+  									TRAILING_WHITE_SPACE_FEATURE_ID,
+  									GETTER_SETTER_FEATURE_ID);
 
   	public static List<String> getAllFeatureIDs() {
   	    return new ArrayList<String>(featureIDs);
