@@ -32,7 +32,7 @@ public class GetterSetterEvaluatorTest {
 
 	private GetterSetterEvaluator eval;
 	private IDocument doc;
-	private final String INT_VAR_NAME = "x";
+	private final String INT_VAR_NAME = "X";
 	private final String STRING_VAR_NAME = "testName";
 
 	/**
@@ -44,6 +44,10 @@ public class GetterSetterEvaluatorTest {
 		this.eval = new GetterSetterEvaluator(doc);
 	}
 
+	/**
+	 * Type "public int getX" with a declared variable named x
+	 * Verify evaluation does trigger
+	 */
 	@Test
 	public void oneCharacterAtATimeGetX() {
 	    try {
@@ -55,6 +59,25 @@ public class GetterSetterEvaluatorTest {
 	    } catch (BadLocationException e) {}
 	}
 
+	/**
+	 * Type "protected int getX" with a declared variable named x
+	 * Verify evaluation does trigger
+	 */
+	@Test
+	public void oneCharacterAtATimeGetXProtected() {
+	    try {
+		int offset = doc.getLineOffset(4);
+		for (char c : "protected int get".toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+		assertTrue(mockUserInput(INT_VAR_NAME, offset++));
+	    } catch (BadLocationException e) {}
+	}
+
+	/**
+	 * Paste "public int getY()", then backspace and change the value of Y to INT_VAR_NAME
+	 * Verify evaluation does trigger
+	 */
 	@Test
 	public void copyPasteGetAndChangeName() {
 	    try {
@@ -71,8 +94,12 @@ public class GetterSetterEvaluatorTest {
 	    } catch (BadLocationException e) {}
 	}
 
+	/**
+	 * Paste "public int getY()", then backspace and change the value of Y to STRING_VAR_NAME
+	 * Verify evaluation does trigger
+	 */
 	@Test
-	public void copyPasteGetAndPastVarName() {
+	public void copyPasteGetAndPasteVarName() {
 	    try {
 		int offset = doc.getLineOffset(4);
 		String meth_dec = "public string getY()";
@@ -87,6 +114,97 @@ public class GetterSetterEvaluatorTest {
 	    } catch (BadLocationException e) {}
 	}
 
+
+	/**
+	 * Type "public int get_testName" with a declared variable named testName
+	 * Verify evaluation does trigger
+	 */
+	@Test
+	public void oneCharacterAtATimeGet_StringVar() {
+	    try {
+		int offset = doc.getLineOffset(4);
+		for (char c : "public int get_".toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+
+		// Iterate through typing out the string except for the last character
+		String truncatedVarName = STRING_VAR_NAME.substring(0, STRING_VAR_NAME.length()-1);
+		for (char c : truncatedVarName.toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+
+		// Complete the variable name and the evaluation should trigger
+		assertTrue(mockUserInput(STRING_VAR_NAME.substring(STRING_VAR_NAME.length()-1), offset));
+
+	    } catch (BadLocationException e) {}
+	}
+
+	/**
+	 * Type "public int setX" with a declared variable named x
+	 * Verify evaluation does trigger
+	 */
+	@Test
+	public void oneCharacterAtATimeSetStringVar() {
+	    try {
+		int offset = doc.getLineOffset(4);
+		for (char c : "public int set".toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+		assertTrue(mockUserInput(INT_VAR_NAME, offset++));
+	    } catch (BadLocationException e) {}
+	}
+
+	/**
+	 * Type "public int set_X" with a declared variable named x
+	 * Verify evaluation does trigger
+	 */
+	@Test
+	public void oneCharacterAtATimeSet_X() {
+	    try {
+		int offset = doc.getLineOffset(4);
+		for (char c : "public int set_".toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+		assertTrue(mockUserInput(INT_VAR_NAME, offset++));
+	    } catch (BadLocationException e) {}
+	}
+
+	/**
+	 * Type "public int getY" with a declared variable named x
+	 * Verify evaluation does NOT trigger
+	 */
+	@Test
+	public void oneCharacterAtATimeGetWithDifferentVarName() {
+	    try {
+		int offset = doc.getLineOffset(4);
+		for (char c : "public int get".toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+		assertFalse(mockUserInput("Y", offset++));
+	    } catch (BadLocationException e) {}
+	}
+
+	/**
+	 * Type "public int setTestNamq" with a declared variable named testName (different spelling)
+	 * Verify evaluation does NOT trigger
+	 */
+	@Test
+	public void oneCharacterAtATimeSetWithDifferentVarName() {
+	    try {
+		int offset = doc.getLineOffset(4);
+		for (char c : "public int set".toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+
+		// Iterate through typing out the string except for the last character
+		String truncatedVarName = STRING_VAR_NAME.substring(0, STRING_VAR_NAME.length()-1);
+		for (char c : truncatedVarName.toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+		// Add any character that does not match our variable name
+		assertFalse(mockUserInput("q", offset++));
+	    } catch (BadLocationException e) {}
+	}
 
 	/**
 	 * Mocks the user typing the given string into the document at
