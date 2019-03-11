@@ -32,7 +32,7 @@ We plan to provide support for at least the following list of Eclipse features:
 
 This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
 
-## Current Status as of 3/4/19
+## Current Status as of 3/11/19
 
 We have completed the following milestones:
 
@@ -43,6 +43,7 @@ We have completed the following milestones:
   * Removing unused imports
   * Correcting indentation
   * Removing trailing whitespace
+  * Generating getter and setter methods
 * Interfaced with frontend implemented
   * Manually tested with success - IDE-IT frontend plugin able to receive notification from feature evaluation
 * Implemented a working build file
@@ -51,9 +52,6 @@ We have completed the following milestones:
 
 Our next goals are:
 
-* Write evaluation functions for other features (stretch goals):
-  * Refator->Rename
-  * Add getters/setters
 * Build up test suite for existing evaluation functions
 
 ## Installation
@@ -192,7 +190,7 @@ For developers looking to expand upon this project and add a new evaluation func
   * https://help.eclipse.org/luna/index.jsp is a good place to start. The topics on the Workbench User Guide, Platform Plug-in Developer Guide, JDT Plug-in Developer Guide, and Plug-in Development Environment Guide are all relevant.
 * Create a new evaluation class under backend_plugin.src.main.evaluators that extends FeatureEvaluator.java.
 * Determine if the new evaluation function will use DocumentChange events, AnnotationModel changes, and/or ResourceChange events. Override the method(s) that corresponds to the event(s) the new evaluation function will use.
-* Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method. 
+* Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method.
 * Add the featureID string to main.interfaces.FeatureID as a constant string. Also make sure to add it to the list of all featureID strings.
 
-Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function. 
+Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function.
