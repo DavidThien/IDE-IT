@@ -193,5 +193,6 @@ For developers looking to expand upon this project and add a new evaluation func
 * Create a new evaluation class under backend_plugin.src.main.evaluators that extends FeatureEvaluator.java.
 * Determine if the new evaluation function will use DocumentChange events, AnnotationModel changes, and/or ResourceChange events. Override the method(s) that corresponds to the event(s) the new evaluation function will use.
 * Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method. 
+* Add the featureID string to main.interfaces.FeatureID as a constant string. Also make sure to add it to the list of all featureID strings.
 
 Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function. 
