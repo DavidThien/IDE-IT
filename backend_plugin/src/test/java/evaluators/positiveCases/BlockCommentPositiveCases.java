@@ -1,4 +1,4 @@
-package test.java.negatives.evaluators;
+package test.java.evaluators.positiveCases;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,7 +17,7 @@ import main.evaluators.BlockCommentEvaluator;
  * Tests against all known sequences of actions a user can take to manually attempt to comment out multiple lines
  * of code in their document
  */
-public class BlockCommentNegative {
+public class BlockCommentPositiveCases {
 
     /** Initial content for the mock Document */
 	private static final String content = "Line1\n Line2\n Line3\n";

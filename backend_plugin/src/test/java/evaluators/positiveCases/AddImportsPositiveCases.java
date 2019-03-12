@@ -1,4 +1,4 @@
-package test.java.negatives.evaluators;
+package test.java.evaluators.positiveCases;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import main.evaluators.AddImportEvaluator;
 
-public class AddImportsNegative {
+public class AddImportsPositiveCases {
 
     /** Initial content that will be included in a document */
 	private static final String INITIAL_CONTENT = "\n\nLine1\n Line2\n Line3\n";
