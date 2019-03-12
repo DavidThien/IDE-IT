@@ -14,26 +14,27 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
-	
+
 	/**
 	 * The constructor
 	 */
 	public Activator() {
 	}
 
+	/**
+	 * Needed to start the backend plugin. Used only for backend development testing
+	 * independent of frontend plugin.
+	 */
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		
-		// Debug
-		// System.out.println("Activator started!!");
-		
-		// Need to determine how we are going to initialize our service. Either FE will create a
-		// FeatureSuggestion() that starts the service, or we will create one and they can
-		// obtain it somehow
 	}
 
+	/**
+	 * Needed to stop the backend plugin. Used only for backend development testing
+	 * independent of frontend plugin
+	 */
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;

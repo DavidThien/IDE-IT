@@ -12,11 +12,16 @@ import main.interfaces.FeatureID;
  * indentation feature in Eclipse.
  */
 public class CorrectIndentationEvaluator extends FeatureEvaluator {
-	private String lineBeforeChange;
-	private boolean whiteSpaceAddedOrRemoved;
-	private int lastIndentChangedLine;
-	private long lastIndentChangedLineTimeStamp;
 
+    	/** Stores the contents of a line in the document before a change is applied */
+	private String lineBeforeChange;
+	/** Flag to keep track of if white space was added or removed through document changes*/
+	private boolean whiteSpaceAddedOrRemoved;
+	/** Keeps track of the last line that had indentation changes */
+	private int lastIndentChangedLine;
+	/** Keeps track of the timestamp of when the last line had indentation changes */
+	private long lastIndentChangedLineTimeStamp;
+	/** Used when an invalid line number is needed */
 	private final int INVALID_LINE = -2;
 
 	/**

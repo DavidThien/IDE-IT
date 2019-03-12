@@ -13,6 +13,7 @@ import main.interfaces.FeatureID;
  */
 public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 
+    	/** Stores the text of a line before the change is applied */
 	private String lineBeforeChange;
 
 	/**

@@ -12,8 +12,11 @@ import main.evaluators.EvaluatorManager;
  */
 public class FeatureSuggestion implements FeatureSuggestionInterface {
 
+    	/** Manages all Listeners and Evaluators */
 	private EvaluatorManager manager;
+	/** List of all observers to be notified */
 	private List<FeatureSuggestionObserver> observers;
+	/** Flag set when the user input monitoring service is currently running */
 	private boolean isRunning;
 
 	/**
@@ -67,6 +70,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 
 	/**
 	 * Turns the FeatureSuggestion off. Observers will not be notified upon updates.
+	 * Cleans up and removes all current listeners in the workspace.
 	 */
 	@Override
 	public void stop() {
@@ -75,7 +79,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	}
 
 	/**
-	 * Returns true if FeatureSuggestion
+	 * Returns true if FeatureSuggestion is currently running in the background
 	 */
 	@Override
 	public boolean isRunning() {

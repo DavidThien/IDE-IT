@@ -21,7 +21,9 @@ import main.interfaces.FeatureID;
  */
 public class GetterSetterEvaluator extends FeatureEvaluator {
 
+    	/** Stores all variable names declared in the document */
 	private Set<String> varNames;
+	/** Stores the line number of the last line that was changed in the document */
 	private int lastLineChanged;
 
 	/**

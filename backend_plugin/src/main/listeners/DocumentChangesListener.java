@@ -14,7 +14,7 @@ import main.evaluators.Evaluator;
  */
 public class DocumentChangesListener implements IDocumentListener {
 
-	// Evaluator that the AnnotationModelListener reports to when an update occurs
+	/** Evaluator that the AnnotationModelListener reports to when an update occurs */
 	private Evaluator evaluator;
 
 	/**

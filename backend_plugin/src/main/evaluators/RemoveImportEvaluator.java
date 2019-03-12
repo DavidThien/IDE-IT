@@ -14,6 +14,7 @@ import main.interfaces.FeatureID;
  */
 public class RemoveImportEvaluator extends FeatureEvaluator {
 
+    	/** Flag that's set when an unused import statement annotation exists in the document */
 	private boolean activeUnusedImportStatement;
 
 	/**

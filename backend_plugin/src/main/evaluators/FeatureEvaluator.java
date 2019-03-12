@@ -12,10 +12,10 @@ import org.eclipse.jface.text.source.IAnnotationModel;
  */
 public abstract class FeatureEvaluator {
 
-	// The unique feature ID String associated with the feature
+	/** The unique feature ID String associated with the feature */
 	protected String featureID;
 
-	// The document in which changes are evaluated
+	/** The document in which changes are evaluated */
 	protected IDocument document;
 
 	/**

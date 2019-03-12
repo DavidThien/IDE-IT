@@ -17,7 +17,9 @@ import main.interfaces.FeatureID;
  */
 public class AddImportEvaluator extends FeatureEvaluator {
 
+    	/** Flag to set if an unresolved variable is found in the document*/
 	private boolean unresolvedVariablesExist;
+	/** Flag to set if the line being edited was not previously an import statement */
 	private boolean lineHadImportStatementAlready;
 
 	/**

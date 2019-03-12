@@ -26,12 +26,14 @@ import main.listeners.SaveFileListener;
  */
 public class EvaluatorManager {
 
-	// FeatureSuggestion to be notified when an Evaluator catches a feature trigger
+	/** FeatureSuggestion that sends notifications to observers */
 	private FeatureSuggestion fs;
 
-	// Keeps track of all open evaluators/listeners to close them later if needed
+	/** Evaluators and the editor window (document) they are attached to */
 	private Map<IEditorPart, Evaluator> openPartEvaluators;
+	/** Listeners for changes in the Eclipse workspace and the workspace page they are attached to */
 	private Map<IWorkbenchPage, EditorWindowListener> openWindowListeners;
+	/** Listeners for commands in the workspace (save, etc) and the commands they are attached to */
 	private Map<Command, IExecutionListener> openCommandExecutionListeners;
 
 	/**

@@ -13,6 +13,7 @@ import main.evaluators.EvaluatorManager;
  */
 public class SaveFileListener implements IExecutionListener {
 
+    	/** EvaluatorManager that this listener reports to when the workspace is saved */
 	private EvaluatorManager em;
 
 	/**

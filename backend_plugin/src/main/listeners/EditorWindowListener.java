@@ -16,6 +16,7 @@ import main.evaluators.EvaluatorManager;
  */
 public class EditorWindowListener implements IPartListener2 {
 
+    	/** EvalutoraManager that this listener reports to when a new Eclipse workspace window is opened */
 	private EvaluatorManager em;
 
 	/**

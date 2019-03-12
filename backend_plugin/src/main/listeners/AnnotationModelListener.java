@@ -13,7 +13,7 @@ import main.evaluators.Evaluator;
  */
 public class AnnotationModelListener implements IAnnotationModelListener {
 
-	// Evaluator that the AnnotationModelListener reports to when an update occurs
+	/** Evaluator that the AnnotationModelListener reports to when an update occurs */
 	private Evaluator evaluator;
 
 	/**

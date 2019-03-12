@@ -12,7 +12,9 @@ import main.interfaces.FeatureID;
  */
 public class BlockCommentEvaluator extends FeatureEvaluator {
 
+    	/** Keeps track of the last line commented out in the document */
 	private int lastCommentedLine;
+	/** Keeps track of the timestamp of when the last line was commented out */
 	private long lastCommentedLineTimeStamp;
 
 	/**
@@ -22,8 +24,8 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 	public BlockCommentEvaluator(IDocument document) {
 		this.featureID = FeatureID.BLOCK_COMMENT_FEATURE_ID;
 		this.document = document;
-		this.lastCommentedLine = -2;
-		this.lastCommentedLineTimeStamp = -1;
+		this.lastCommentedLine = -2;  // Any arbitrary value < -1 would work
+		this.lastCommentedLineTimeStamp = -1;  // Any arbitrary value < 0 will work
 	}
 
 	/**

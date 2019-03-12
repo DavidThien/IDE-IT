@@ -23,16 +23,19 @@ import main.listeners.DocumentChangesListener;
  */
 public class Evaluator {
 
-	// Evaluation objects
+	/** Manages all evaluators */
 	private EvaluatorManager manager;
+	/** List of all featureEvaluators */
 	private List<FeatureEvaluator> featureEvaluators;
 
-	// Window content
+	/** Document this evaluator is attached to */
 	private IDocument document;
+	/** Annotation model this evaluator is attached to */
 	private IAnnotationModel annotationModel;
 
-	// Content change listeners
+	/** Listener for document changes */
 	private DocumentChangesListener documentChangesListener;
+	/** LIstener for annotation model changes */
 	private AnnotationModelListener annotationModelListener;
 
 	/**
