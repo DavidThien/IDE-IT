@@ -12,6 +12,9 @@ import org.junit.Test;
 
 import main.evaluators.GetterSetterEvaluator;
 
+/**
+ * Tests a few basic test cases that the GetterSetter evaluation functions should trigger on and shouldn't trigger on
+ */
 public class GetterSetterEvaluatorTest {
 
 	/**
@@ -29,10 +32,13 @@ public class GetterSetterEvaluatorTest {
 							"\n" +
 							"\n" +
 							"}";
-
+	/** Evaluator being tested */
 	private GetterSetterEvaluator eval;
+	/** Document associated with the Evaluator */
 	private IDocument doc;
+	/** int variable name as a constant for easy reference */
 	private final String INT_VAR_NAME = "X";
+	/** String variable name as a constant for easy reference */
 	private final String STRING_VAR_NAME = "testName";
 
 	/**
