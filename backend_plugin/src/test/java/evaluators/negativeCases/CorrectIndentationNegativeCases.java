@@ -1,4 +1,4 @@
-package test.java.positives.evaluators;
+package test.java.evaluators.negativeCases;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
@@ -15,7 +15,7 @@ import main.evaluators.CorrectIndentationEvaluator;
 /**
  * Test Correct Indentation Evaluator for user actions that our function should NOT trigger on
  */
-public class CorrectIndentationPositive {
+public class CorrectIndentationNegativeCases {
 
     /** Content to generate a Document with */
     private static final String content = " Line1\n Line2\n Line3\n";
