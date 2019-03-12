@@ -143,8 +143,8 @@ The following is a list of the featureID strings and descriptions of what Eclips
   * Correct indentation (either for multiple selected lines or for entire document)
 * trailingWhiteSpaceSuggestion
   * Auto-remove trailing whitespace on document save
-* variableRenameRefactorSuggestion
-  * Rename a variable throughout the entire scope of said variable
+* getterSetterSuggestion
+  * Auto-generate getter and setter methods
 
 The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver are listed below for easy reference:
 
@@ -168,20 +168,24 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
 
 ## Implementation Details
 
-* FeatureSuggestion
-  * Must be created by the frontend plugin that uses our service. Creating and starting the FeatureSuggestion starts the entire service our plugin provides. This is the only object a frontend plugin should have access to.
-* FeatureSuggestionInterface
-  * Details what methods are available to a frontend plugin through the FeatureSuggestion object. See above in usage for more details.
 * FeatureSuggestionObserver
-  * Provides an abstract FeatureSuggestionObserver class that a frontend plugin can extend. The frontend plugin will instantiate that extended class and then register the instance with the FeatureSuggestion, as documented through the interface details in usage.
-* EvaluationManager
-  * Created during the construction of the FeatureSuggestion object. The EvaluatorManager assigns Evaluators to document editor windows, keeps track of all active Evaluators that have been assigned to document editor windows, and handles reporting triggered features from each Evaluator to the FeatureSuggestion. This ensures that all triggered feature reports notify the same FeatureSuggestion.
+  * An abstract class designed to be extended by a frontend client. Contains a notify(String) method, which is called when a feature evaluation has been triggered, where the String parameter contains a unique ID of the given feature.
+* FeatureSuggestion
+  * An implementation of the FeatureSuggestionInterface interface. This is the main object that frontend clients use to manage their interaction with our backend service. Once the client creates a FeatureSuggestion, they can register any number of their own FeatureSuggestionObserver objects with the FeatureSuggestion object to be notified when a feature evaluation has been triggered.
+* EvaluatorManager
+  * Created when a frontend client first calls the start() method of the FeatureSuggestion object. The EvaluatorManager assigns Evaluators to document editor windows, keeps track of all active Evaluators that have been assigned to document editor windows, and handles reporting triggered features from each Evaluator to the FeatureSuggestion. This ensures that all triggered feature evaluations notify the same FeatureSuggestion.
 * EditorWindowListener
-  * An extension of IPartListener2 from the Eclipse Plugin API. Created and added to the list of Eclipse workspace listeners when the EvaluatorManager is constructed. Listens for activation of document editor windows (i.e. when a document editor window or opened, or its tab is switched to). When that occurs, the EditorWindowListener will notify the EvaluatorManager to assign an Evaluator to the given document editor window.
+  * Listener that fires off events based on users’ navigation through the Eclipse workspace. Created and added to the list of Eclipse workspace listeners when the EvaluatorManager is constructed. Listens for activation of document editor windows (i.e. when a document editor window or opened, or its tab is switched to). When that occurs, the EditorWindowListener notifies the EvaluatorManager to assign an Evaluator to the given document editor window.
 * Evaluator
-  * Responsible for evaluating document changes detected within a single document editor window. When document changes are detected, the Evaluator will cycle through each feature evaluation function, passing the document change event information. If a feature evaluation function returns true (indicating that the user has neglected to use the respective feature), it will notify the EvaluatorManager with the unique ID string of the feature that was triggered.
-* DocumentChangesTracker
-  * An extension of IDocumentListener from the Eclipse Plugin API. Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes made within that document editor window. When changes are detected, the DocumentChangesTracker will pass the change information back to the Evaluator.
+  * Responsible for evaluating document changes detected within a single document editor window. When document changes are detected, the Evaluator cycles through each feature evaluation function, passing the document change event information. If a feature evaluation function returns true (indicating that the user has neglected to use the respective feature), the Evaluator notifies the EvaluatorManager with the unique ID string of the feature that was triggered.
+* DocumentChangesListener
+  * Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes made to the document within that document editor window. When changes are detected, the DocumentChangesListener passes the change information back to the Evaluator.
+* AnnotationModelListener
+  * Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes to the annotations within the document editor window (e.g. annotations regarding unused imports). When changes are detected, the AnnotationModelListener passes the change information back to the Evaluator.
+* VariableDeclarationFinder
+  * Parses the AST of a document and stores a list of variable names declared within the document. Designed to provide additional information for feature evaluation.
+* Evaluation Functions
+  * A set of classes extending an EvaluationFunction abstract class. Each feature that IDE-IT evaluates has its own class extending EvaluationFunction, which contains evaluate functions for document change events that are called when an evaluator receives the signal that a document change has occurred.
 
 ## Adding New Evaluation Functions
 

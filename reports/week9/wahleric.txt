@@ -1,0 +1,27 @@
+-Goals for this week (from last week's status report):
+
+	-Write tests for merged/existing feature evaluators
+		-In particular, the add imports and remove trailing white spaces feature evaluators
+	-Possibly add more feature evaluators
+		-"Generate hashCode() and equals()" feature
+		-"Generate toString()" feature
+		-Consider Refarctor->Rename feature, but time might not permit
+	-Go through and clean/refactor classes as needed in preparation for final release
+
+-Progress made this week:
+
+  -Fixed implementation of RemoveImportEvaluator
+	-Wrote tests for AddImportEvaluator and TrailingWhiteSpaceEvaluator
+  -Updated manual and report based on feedback
+  -Gave feedback for Flint/Checkstyle's project
+
+-Plan/Goals for the following week:
+
+  -Update manual and report
+    -Create state machine graphs
+    -Update evaluation section
+    -Review feedback
+  -Add more tests for evaluation functions
+  -Work with team to refactor/refine code
+  -Start working on presentation material for next week
+  -Work with frontend team to resolve any issues with plugin integration
