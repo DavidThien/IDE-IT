@@ -1,4 +1,4 @@
-package test.java.negatives.evaluators;
+package test.java.evaluators;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,9 +14,9 @@ import org.junit.Test;
 import main.evaluators.CorrectIndentationEvaluator;
 
 /**
- * Test Correct Indentation Evaluator for user actions that our function should trigger on
+ * Unit test for CorrectIndentationEvaluator
  */
-public class CorrectIndentationNegative {
+public class CorrectIndentationEvaluatorTest {
 
     /** Content to generate a Document with */
     private static final String content = " Line1\n Line2\n Line3\n";
@@ -465,29 +465,21 @@ public class CorrectIndentationNegative {
     }
 
     /**
-     * Add space line 3, add space line 1, add space line 4, add space line 2
+     * Verifies that the evaluation function will not trigger when the user types " " anywhere but the start
+     * of a line
      */
     @Test
-    public void fourLinesSpaceAddedLines3142() {
+    public void spaceNotAtStartOfLineDown() {
 	try {
-	    // Mock a document event with a single space placed at the beginning of line 3
-	    offset = doc.getLineOffset(2);
+	    // Mock a document event with a single space placed at the beginning of the first line
+	    offset = 0;
 	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
 	    delayUserInput();
 
-	    // Mock a document event with a single space placed at the beginning of line 1
-	    offset = doc.getLineOffset(0);
+	    // Pull the offset for the end of the second line
+	    offset = doc.getLineOffset(2) - 1;
 	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
-	    delayUserInput();
 
-	    // Mock a document event with a single space placed at the beginning of line 4
-	    offset = doc.getLineOffset(3);
-	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
-	    delayUserInput();
-
-	    // Mock a document event with a single space placed at the beginning of line 2
-	    offset = doc.getLineOffset(1);
-	    assertTrue(mockUserInput(offset, SINGLE_SPACE));
 	} catch (BadLocationException e) {
 	    // Should never get here
 	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -496,29 +488,46 @@ public class CorrectIndentationNegative {
     }
 
     /**
-     * Remove space line 3, Remove space line 1, Remove space line 4, Remove space line 2
+     * Verifies that the evaluation function will not trigger when the user types " " anywhere but the start
+     * of a line
      */
     @Test
-    public void fourLinesSpaceRemovedLines3142() {
+    public void spaceNotAtStartOfLineUp() {
 	try {
-	    // Mock a document event with a single space placed at the beginning of line 3
+	    // Mock a document event with a single backslash placed at the beginning of the third line
 	    offset = doc.getLineOffset(2);
-	    assertFalse(mockUserSingleBackspace(offset));
+	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
+
 	    delayUserInput();
 
-	    // Mock a document event with a single space placed at the beginning of line 1
+	    // Mock a document event with a single backslash placed at the end of the second line
+	    offset = doc.getLineOffset(2) - 1;
+	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+
+    /**
+     * Verifies that the evaluation function will not trigger when the user types " " + a character on line 1 and then adds a space at the start
+     * of line 2
+     */
+    @Test
+    public void spaceThenCharacterAtStartOfLine() {
+	try {
+	    // Mock a document event with a single space placed at the beginning of the first line
 	    offset = doc.getLineOffset(0);
-	    assertFalse(mockUserSingleBackspace(offset));
+	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
 	    delayUserInput();
+	    offset++;
+	    assertFalse(mockUserInput(offset, "b"));
 
-	    // Mock a document event with a single space placed at the beginning of line 4
-	    offset = doc.getLineOffset(3);
-	    assertFalse(mockUserSingleBackspace(offset));
-	    delayUserInput();
-
-	    // Mock a document event with a single space placed at the beginning of line 2
+	    // Mock a document event with a single space placed at the start of the second line
 	    offset = doc.getLineOffset(1);
-	    assertTrue(mockUserSingleBackspace(offset));
+	    assertFalse(mockUserInput(offset, SINGLE_SPACE));
 	} catch (BadLocationException e) {
 	    // Should never get here
 	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -527,29 +536,22 @@ public class CorrectIndentationNegative {
     }
 
     /**
-     * Add tab line 3, add tab line 1, add tab line 4, add tab line 2
+     * Verifies that the evaluation function will not trigger when the user removes space at the start then types a character on line 1 and then
+     * removes a space at the start of line 2
      */
     @Test
-    public void fourLinesTabAddedLines3142() {
+    public void spaceRemovedThenCharacterAtStartOfLine() {
 	try {
-	    // Mock a document event with a single space placed at the beginning of line 3
-	    offset = doc.getLineOffset(2);
-	    assertFalse(mockUserInput(offset, SINGLE_TAB));
-	    delayUserInput();
-
-	    // Mock a document event with a single space placed at the beginning of line 1
+	    // Mock a document event with a single space placed at the beginning of the first line
 	    offset = doc.getLineOffset(0);
-	    assertFalse(mockUserInput(offset, SINGLE_TAB));
+	    assertFalse(mockUserSingleBackspace(offset));
 	    delayUserInput();
+	    offset++;
+	    assertFalse(mockUserInput(offset, "b"));
 
-	    // Mock a document event with a single space placed at the beginning of line 4
-	    offset = doc.getLineOffset(3);
-	    assertFalse(mockUserInput(offset, SINGLE_TAB));
-	    delayUserInput();
-
-	    // Mock a document event with a single space placed at the beginning of line 2
+	    // Mock a document event with a single space placed at the start of the second line
 	    offset = doc.getLineOffset(1);
-	    assertTrue(mockUserInput(offset, SINGLE_TAB));
+	    assertFalse(mockUserSingleBackspace(offset));
 	} catch (BadLocationException e) {
 	    // Should never get here
 	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -557,39 +559,6 @@ public class CorrectIndentationNegative {
 	}
     }
 
-    /**
-     * Remove space line 3, Remove space line 1, Remove space line 4, Remove space line 2
-     */
-    @Test
-    public void fourLinesTabRemovedLines3142() {
-	try {
-	    doc = new Document(tabContent);
-	    testEvaluator = new CorrectIndentationEvaluator(doc);
-
-	    // Mock a document event with a single space placed at the beginning of line 3
-	    offset = doc.getLineOffset(2);
-	    assertFalse(mockUserSingleBackspace(offset));
-	    delayUserInput();
-
-	    // Mock a document event with a single space placed at the beginning of line 1
-	    offset = doc.getLineOffset(0);
-	    assertFalse(mockUserSingleBackspace(offset));
-	    delayUserInput();
-
-	    // Mock a document event with a single space placed at the beginning of line 4
-	    offset = doc.getLineOffset(3);
-	    assertFalse(mockUserSingleBackspace(offset));
-	    delayUserInput();
-
-	    // Mock a document event with a single space placed at the beginning of line 2
-	    offset = doc.getLineOffset(1);
-	    assertTrue(mockUserSingleBackspace(offset));
-	} catch (BadLocationException e) {
-	    // Should never get here
-	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-	    e.printStackTrace();
-	}
-    }
 
     ///////////////////////////////////
     // Tests for adding / removing tabs
@@ -925,6 +894,104 @@ public class CorrectIndentationNegative {
 	    e.printStackTrace();
 	}
     }
+
+    /**
+     * Verifies that the evaluation function will not trigger when the user types " " anywhere but the start
+     * of a line
+     */
+    @Test
+    public void tabNotAtStartOfLineDown() {
+	try {
+	    // Mock a document event with a single space placed at the beginning of the first line
+	    offset = 0;
+	    assertFalse(mockUserInput(offset, SINGLE_TAB));
+	    delayUserInput();
+
+	    // Pull the offset for the end of the second line
+	    offset = doc.getLineOffset(2) - 1;
+	    assertFalse(mockUserInput(offset, SINGLE_TAB));
+
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies that the evaluation function will not trigger when the user types " " anywhere but the start
+     * of a line
+     */
+    @Test
+    public void tabNotAtStartOfLineUp() {
+	try {
+	    // Mock a document event with a single backslash placed at the beginning of the third line
+	    offset = doc.getLineOffset(2);
+	    assertFalse(mockUserInput(offset, SINGLE_TAB));
+
+	    delayUserInput();
+
+	    // Mock a document event with a single backslash placed at the end of the second line
+	    offset = doc.getLineOffset(2) - 1;
+	    assertFalse(mockUserInput(offset, SINGLE_TAB));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+
+    /**
+     * Verifies that the evaluation function will not trigger when the user types " " + a character on line 1 and then adds a space at the start
+     * of line 2
+     */
+    @Test
+    public void tabThenCharacterAtStartOfLine() {
+	try {
+	    // Mock a document event with a single space placed at the beginning of the first line
+	    offset = doc.getLineOffset(0);
+	    assertFalse(mockUserInput(offset, SINGLE_TAB));
+	    delayUserInput();
+	    offset++;
+	    assertFalse(mockUserInput(offset, "b"));
+
+	    // Mock a document event with a single space placed at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertFalse(mockUserInput(offset, SINGLE_TAB));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Verifies that the evaluation function will not trigger when the user removes space at the start then types a character on line 1 and then
+     * removes a space at the start of line 2
+     */
+    @Test
+    public void tabRemovedThenCharacterAtStartOfLine() {
+	try {
+	    doc = new Document(tabContent);
+	    testEvaluator = new CorrectIndentationEvaluator(doc);
+	    // Mock a document event with a single space placed at the beginning of the first line
+	    offset = doc.getLineOffset(0);
+	    assertFalse(mockUserSingleBackspace(offset));
+	    delayUserInput();
+	    offset++;
+	    assertFalse(mockUserInput(offset, "b"));
+
+	    // Mock a document event with a single space placed at the start of the second line
+	    offset = doc.getLineOffset(1);
+	    assertFalse(mockUserSingleBackspace(offset));
+	} catch (BadLocationException e) {
+	    // Should never get here
+	    fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+	    e.printStackTrace();
+	}
+    }
+
 
     ////////////////////////////////////////////////
     // Tests for adding / removing spaces with tabs

@@ -1,4 +1,4 @@
-package test.java.negatives.evaluators;
+package test.java.evaluators;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import main.evaluators.TrailingWhiteSpaceEvaluator;
 
-public class TrailingWhiteSpaceNegative {
+public class TrailingWhiteSpaceEvaluatorTest {
 
     	/** A string to populate one line of a mock document */
 	private static final String FIRST_LINE = "One trailing space \n";

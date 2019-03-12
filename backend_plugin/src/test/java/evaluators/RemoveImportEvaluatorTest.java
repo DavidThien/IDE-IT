@@ -1,5 +1,6 @@
-package test.java.negatives.evaluators;
+package test.java.evaluators;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.jface.text.Position;
@@ -10,7 +11,7 @@ import org.junit.Test;
 
 import main.evaluators.RemoveImportEvaluator;
 
-public class RemoveImportNegative {
+public class RemoveImportEvaluatorTest {
 
 	/** Mock unused import annotation */
 	private static final Annotation ANNOTATION = new Annotation("org.eclipse.jdt.ui.warning",
@@ -41,5 +42,14 @@ public class RemoveImportNegative {
 		am.addAnnotation(ANNOTATION, POSITION);
 		eval.evaluateAnnotationModelChanges(am);
 		assertTrue(eval.hasActiveUnusedImportStatement());
+	}
+
+	/**
+	 * Tests that a document being saved in the worspace while this document does not have any
+	 * unused imports does not trigger the feature evaluation
+	 */
+	@Test
+	public void saveEventWithoutUnusedImports() {
+		assertFalse(eval.hasActiveUnusedImportStatement());
 	}
 }
