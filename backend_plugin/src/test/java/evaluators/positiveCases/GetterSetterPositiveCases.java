@@ -1,4 +1,4 @@
-package test.java.negatives.evaluators;
+package test.java.evaluators.positiveCases;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +15,7 @@ import main.evaluators.GetterSetterEvaluator;
 /**
  * Tests Getter Setter Evaluation for user actions that the evaluator should trigger on
  */
-public class GetterSetterEvaluatorTest {
+public class GetterSetterPositiveCases {
 
 	/**
 	 * Constants used as mock data. INITIAL_CONTENT is the content of the document with a declared variable and an empty class header
