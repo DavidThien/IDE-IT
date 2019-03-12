@@ -10,6 +10,11 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 
 import main.interfaces.FeatureID;
 
+/**
+ * Evaluator for determining whether a user has circumvented using the
+ * "Organize Imports" feature by manually adding an import statement
+ * for an unresolved type
+ */
 public class AddImportEvaluator extends FeatureEvaluator {
 
 	private boolean unresolvedVariablesExist;
@@ -71,7 +76,6 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	 */
 	public boolean lineIsAnImportStatement(int line) {
 		try {
-
 			int startOffset = document.getLineOffset(line);
 			int length = document.getLineLength(line);
 
