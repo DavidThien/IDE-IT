@@ -16,7 +16,7 @@ import java.util.List;
   	public static final String BLOCK_COMMENT_FEATURE_ID = "blockCommentSuggestion";
   	public static final String ADD_IMPORT_FEATURE_ID = "addImportStatementsSuggestion";
   	public static final String CORRECT_INDENTATION_FEATURE_ID = "correctIndentationsSuggestion";
-  	public static final String REMOVE_IMPORT_FEATURE_ID = "removeUnusedImportStatementSuggestion";
+  	public static final String REMOVE_IMPORT_FEATURE_ID = "removeUnusedImportStatementsSuggestion";
   	public static final String TRAILING_WHITE_SPACE_FEATURE_ID = "trailingWhiteSpaceSuggestion";
   	public static final String GETTER_SETTER_FEATURE_ID = "getterSetterSuggestion";
 
