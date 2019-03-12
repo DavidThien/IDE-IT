@@ -7,9 +7,9 @@ import org.eclipse.jface.text.IDocument;
 import main.interfaces.FeatureID;
 
 /**
- * Evaluates DocumentEvent changes to determine if the user is manually deleting trailing white spaces
- * Eclipse has a setting to automatically remove trailing white spaces on save, so the user could use
- * this instead.
+ * Evaluates DocumentEvent changes to determine if the user is manually deleting trailing white
+ * spaces. Eclipse has a setting to automatically remove trailing white spaces on save, so the
+ * user could use that instead.
  */
 public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 
@@ -17,7 +17,7 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Constructs a TrailingWhiteSpaceEvaluator
-	 * @param document
+	 * @param document The document to evaluate changes in
 	 */
 	public TrailingWhiteSpaceEvaluator(IDocument document) {
 		this.featureID = FeatureID.TRAILING_WHITE_SPACE_FEATURE_ID;
@@ -27,7 +27,7 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 	/**
 	 * Evaluates document changes to see if the user is manually deleting all trailing white space
 	 * from a line
-	 * @param event
+	 * @param event The document change data
 	 */
 	@Override
 	public boolean evaluateDocumentChanges(DocumentEvent event) {
@@ -43,10 +43,9 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 			// If the change event is a deletion, check whether only the line's whitespace has
 			// changed, and that the line no longer ends with whitespace
 			if (event.getText().length() == 0) {
-				boolean nonWhiteSpaceCharactersUnchanged = lineBeforeChange.trim().equals(lineAfterChange.trim());
-				boolean trailingWhiteSpaceBefore = lineBeforeChange.endsWith(" ") || lineBeforeChange.endsWith("\t");
-				boolean trailingWhiteSpaceAfter = lineAfterChange.endsWith(" ") || lineAfterChange.endsWith("\t");
-				return nonWhiteSpaceCharactersUnchanged && trailingWhiteSpaceBefore && !trailingWhiteSpaceAfter;
+				return lineBeforeChange.trim().equals(lineAfterChange.trim()) &&
+						(lineBeforeChange.endsWith(" ") || lineBeforeChange.endsWith("\t")) &&
+						!(lineAfterChange.endsWith(" ") || lineAfterChange.endsWith("\t"));
 			}
 		} catch (BadLocationException e) {
 		}
@@ -55,6 +54,7 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Stores the contents of the line before document changes are made
+	 * @param event The document change data
 	 */
 	@Override
 	public boolean evaluateDocumentBeforeChange(DocumentEvent event) {
@@ -63,7 +63,7 @@ public class TrailingWhiteSpaceEvaluator extends FeatureEvaluator {
 			int startOffset = document.getLineOffset(line);
 			int length = document.getLineLength(line);
 
-			// Need to check up to length - 1 instead of length due to line feed char at end
+			// Only check up to length - 1 due to hidden line feed char at the end of the line
 			this.lineBeforeChange = document.get(startOffset, length - 1);
 		} catch (BadLocationException e) {
 		}

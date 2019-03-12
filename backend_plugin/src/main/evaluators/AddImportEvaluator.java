@@ -32,8 +32,9 @@ public class AddImportEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Checks whether a document change event is occurring on a line that did
-	 * not have an import statement previously
-	 * @param event
+	 * not have an import statement previously. Should never trigger a feature
+	 * suggestion on its own, so always returns false.
+	 * @param event The document change data
 	 * @return false
 	 */
 	@Override
@@ -52,7 +53,7 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	/**
 	 * Checks whether a document change event is occurring on a line that did
 	 * not have an import statement previously
-	 * @param event
+	 * @param event The document change data
 	 * @return false
 	 */
 	@Override
@@ -71,7 +72,7 @@ public class AddImportEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Checks if the given line begins with an import statement
-	 * @param line
+	 * @param line The line to check
 	 * @return
 	 */
 	public boolean lineIsAnImportStatement(int line) {
@@ -79,8 +80,8 @@ public class AddImportEvaluator extends FeatureEvaluator {
 			int startOffset = document.getLineOffset(line);
 			int length = document.getLineLength(line);
 
-			// Use regex to remove only the leading white space from the line,
-			// then check if the line starts with "import "
+			// Use a regular expression to remove only the leading white space from
+			// the line, then check if the line starts with "import "
 			String lineContents = document.get(startOffset, length);
 			return lineContents.replaceAll("^\\s+", "").startsWith("import ");
 		} catch (BadLocationException e) {
@@ -93,7 +94,8 @@ public class AddImportEvaluator extends FeatureEvaluator {
 	 * there exist any unresolved types in the document. This returns false
 	 * always, as a change to the annotation model should not by itself trigger
 	 * a notification to the frontend.
-	 * @return boolean false
+	 * @param model The annotation model attached to the document window
+	 * @return false
 	 */
 	@Override
 	public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
@@ -116,5 +118,4 @@ public class AddImportEvaluator extends FeatureEvaluator {
 		this.unresolvedVariablesExist = false;
 		return false;
 	}
-
 }

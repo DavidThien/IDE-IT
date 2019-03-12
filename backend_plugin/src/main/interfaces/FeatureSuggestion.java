@@ -16,9 +16,10 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	private List<FeatureSuggestionObserver> observers;
 	private boolean isRunning;
 
+	/**
+	 * Constructs a new FeatureSuggestion
+	 */
 	public FeatureSuggestion() {
-		// debug
-		System.out.println("FS created");
 		manager = new EvaluatorManager(this);
 		observers = new ArrayList<FeatureSuggestionObserver>();
 		isRunning = false;
@@ -27,7 +28,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	/**
 	 * Register an Observer to be notified upon FeatureSuggestion updates
 	 * @param obs Observer to be registered
-	 * @return true upon successful registration, false otherwise
+	 * @return true upon successful registration; false otherwise
 	 */
 	@Override
 	public boolean registerObserver(FeatureSuggestionObserver obs) {
@@ -38,7 +39,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	 * Removes an observer from the FeatureSuggestion observer list. The observer
 	 * will no longer be updated on FeatureSuggestion updates
 	 * @param obs Observer to be removed
-	 * @return true upon successful removal, false otherwise
+	 * @return true upon successful removal; false otherwise
 	 */
 	@Override
 	public boolean removeObserver(FeatureSuggestionObserver obs) {
@@ -62,9 +63,6 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public void start() {
 		this.manager.start();
 		isRunning = true;
-
-		// Debug
-		System.out.println("Starting fs");
 	}
 
 	/**
@@ -74,9 +72,6 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public void stop() {
 		this.manager.stop();
 		isRunning = false;
-
-		// Debug
-		System.out.println("Stopping fs");
 	}
 
 	/**
@@ -96,8 +91,5 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 		for (FeatureSuggestionObserver o : observers) {
 			o.notify(featureID);
 		}
-		// DEBUG
-		System.out.println("Notified observers of " + featureID);
 	}
-
 }

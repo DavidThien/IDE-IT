@@ -17,6 +17,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Default constructor
+	 * @param document The document to evaluate changes in
 	 */
 	public BlockCommentEvaluator(IDocument document) {
 		this.featureID = FeatureID.BLOCK_COMMENT_FEATURE_ID;
@@ -27,7 +28,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Keeps track of DocumentEvent changes and determines of the user comments out multiple sequential lines of code.
-	 * @param event the change detected by the DocumentChange Listener
+	 * @param event The document change data
 	 * @return true if the user comments two sequential lines of code, false otherwise
 	 */
 	@Override
@@ -40,7 +41,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 			int line = document.getLineOfOffset(event.getOffset());
 
 			// Check if the line is newly commented out
-			if (newCommentDetected(document, event, line)) {
+			if (newCommentDetected(event, line)) {
 
 				// The user commented out the line. Check and see if they previously commented out an adjacent line
 				// manually
@@ -53,6 +54,7 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 			return triggered;
 		} catch (BadLocationException e) {
+
 			// This can happen in certain boundary positions (beginning and end) of the document. In these cases,
 			// just do nothing and return false
 			return false;
@@ -61,12 +63,12 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Checks if the given line is commented out in the given document
-	 * @param document The document the user is typing in
-	 * @param line the number of the line to check
+	 * @param line The number of the line to check
 	 * @return true if the given line is commented out; false otherwise
 	 */
-	private boolean lineIsCommentedOut(IDocument document, int line) {
+	private boolean lineIsCommentedOut(int line) {
 		try {
+
 			// Check if the given line minus white space starts with a double slash
 			int lineOffset = document.getLineOffset(line);
 			int lineLength = document.getLineLength(line);
@@ -79,13 +81,13 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Checks if the line the addition was made on was already commented out
-	 * @param document The document the user is typing in
-	 * @param event The document change event
+	 * @param event The document change data
 	 * @param line the line number the event occurred on
 	 * @return boolean true if the line was already commented out before the change; false otherwise
 	 */
-	public boolean lineWasPreviouslyCommentedOut(IDocument document, DocumentEvent event, int line) {
+	public boolean lineWasPreviouslyCommentedOut(DocumentEvent event, int line) {
 		try {
+
 			// Calculate the contents of the line that previously existed in front of the new insertion and
 			// the contents of the line that previously existed beyond the new insertion
 			int lineStartOffset = document.getLineOffset(line);
@@ -125,12 +127,11 @@ public class BlockCommentEvaluator extends FeatureEvaluator {
 
 	/**
 	 * Checks if the given event caused the given line to be commented out
-	 * @param document The document the user is typing in
-	 * @param event The document change event
+	 * @param event The document change data
 	 * @param line The line number the event occurred on
 	 * @return
 	 */
-	public boolean newCommentDetected(IDocument document, DocumentEvent event, int line) {
-		return lineIsCommentedOut(document, line) && !lineWasPreviouslyCommentedOut(document, event, line);
+	public boolean newCommentDetected(DocumentEvent event, int line) {
+		return lineIsCommentedOut(line) && !lineWasPreviouslyCommentedOut(event, line);
 	}
 }

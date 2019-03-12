@@ -14,8 +14,13 @@ import main.evaluators.Evaluator;
  */
 public class DocumentChangesListener implements IDocumentListener {
 
+	// Evaluator that the AnnotationModelListener reports to when an update occurs
 	private Evaluator evaluator;
 
+	/**
+	 * Constructor
+	 * @param evaluator The Evaluator that this reports document changes to
+	 */
 	public DocumentChangesListener(Evaluator evaluator) {
 		super();
 		this.evaluator = evaluator;
@@ -24,15 +29,17 @@ public class DocumentChangesListener implements IDocumentListener {
 	/**
 	 * Fires before a user's change to a document inside a document editor
 	 * is actually entered into the document
+	 * @param event The document change data
 	 */
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
-	    evaluator.evaluateDocumentBeforeChange(event);
+		evaluator.evaluateDocumentBeforeChange(event);
 	}
 
 	/**
 	 * Fires after a user's change to a document inside a document editor
 	 * is actually entered into the document
+	 * @param event The document change data
 	 */
 	@Override
 	public void documentChanged(DocumentEvent event) {

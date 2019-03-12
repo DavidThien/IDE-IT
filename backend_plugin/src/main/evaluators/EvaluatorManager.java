@@ -26,13 +26,17 @@ import main.listeners.SaveFileListener;
  */
 public class EvaluatorManager {
 
+	// FeatureSuggestion to be notified when an Evaluator catches a feature trigger
 	private FeatureSuggestion fs;
+
+	// Keeps track of all open evaluators/listeners to close them later if needed
 	private Map<IEditorPart, Evaluator> openPartEvaluators;
 	private Map<IWorkbenchPage, EditorWindowListener> openWindowListeners;
 	private Map<Command, IExecutionListener> openCommandExecutionListeners;
-	
+
 	/**
 	 * Creates a new EvaluatorManager
+	 * @param fs The FeatureSuggestion object that this EvaluatorManager should report to
 	 */
 	public EvaluatorManager(FeatureSuggestion fs) {
 		this.fs = fs;
@@ -40,47 +44,49 @@ public class EvaluatorManager {
 		this.openWindowListeners = new HashMap<IWorkbenchPage, EditorWindowListener>();
 		this.openCommandExecutionListeners = new HashMap<Command, IExecutionListener>();
 	}
-	
+
 	/**
-	 * Returns the FeatureSuggestion object that all evaluators report to
-	 * @return
+	 * @return FeatureSuggestion The FeatureSuggestion object that all evaluators report to
 	 */
 	public FeatureSuggestion getFeatureSuggestor() {
 		return this.fs;
 	}
-	
+
 	/**
-	 * Returns a map of IEditorParts as keys and their respective
-	 * active evaluator objects as values
-	 * @return
+	 * Returns a map of IEditorParts as keys and their respective active evaluator objects
+	 * as values
+	 * @return Map<IEditorPart, Evaluator> The map of text editor windows to their Evaluators
 	 */
 	public Map<IEditorPart, Evaluator> getOpenEvaluators() {
 		return this.openPartEvaluators;
 	}
-	
+
 	/**
-	 * Takes an IEditorPart and initializes an evaluator for the
-	 * IEditorPart window. Adds the evaluator to the list of open
-	 * evaluators.
-	 * @param editorWindow
+	 * Takes an IEditorPart and initializes an evaluator for the IEditorPart window. Adds the
+	 * evaluator to the list of open evaluators.
+	 * @param textEditor The text editor window to add an evaluator to
 	 */
 	public void addEvaluator(ITextEditor textEditor) {
-		
+
 		// Create an evaluator for the given editor window
 		Evaluator newEvaluator = new Evaluator(this, textEditor);
-		
+
 		// Add this part->evaluator mapping to the list of open evaluators
 		this.openPartEvaluators.put(textEditor, newEvaluator);
 	}
 
 	/**
 	 * Notifies the FeatureSuggestion that a feature evaluation was triggered
-	 * @param featureID
+	 * @param featureID The unique String ID of the feature triggered
 	 */
 	public void notifyFeatureSuggestion(String featureID) {
 		this.fs.notifyAllObservers(featureID);
 	}
 
+	/**
+	 * Creates evaluators for each open document window, as well as listeners for additional
+	 * document windows opening and for file saves across the Eclipse workspace
+	 */
 	public void start() {
 
 		// Add a save file listener to the workspace

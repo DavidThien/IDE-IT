@@ -15,12 +15,12 @@ import main.evaluators.EvaluatorManager;
  * when necessary.
  */
 public class EditorWindowListener implements IPartListener2 {
-	
+
 	private EvaluatorManager em;
-	
+
 	/**
 	 * Creates a new EditorWindowListener
-	 * @param em
+	 * @param em the EvaluatorManager managing workspace-wide listeners
 	 */
 	public EditorWindowListener(EvaluatorManager em) {
 		this.em = em;
@@ -30,6 +30,7 @@ public class EditorWindowListener implements IPartListener2 {
 	 * Adds an evaluator to a window when the user switches to it (i.e. switching tabs).
 	 * Only adds the evaluator if the window is a document editor containing a .java
 	 * file, and the window does not already have an evaluator assigned to it.
+	 * @param partRef The reference to the Eclipse part that was activated
 	 */
 	@Override
 	public void partActivated(IWorkbenchPartReference partRef) {
@@ -50,28 +51,10 @@ public class EditorWindowListener implements IPartListener2 {
 		}
 	}
 
-	@Override
-	public void partBroughtToTop(IWorkbenchPartReference partRef) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void partClosed(IWorkbenchPartReference partRef) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void partDeactivated(IWorkbenchPartReference partRef) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	/**
-	 * Adds an evaluator to a newly opened window in the Eclipse UI.
-	 * Only adds the evaluator if the window is a document editor
-	 * containing a .java file 
+	 * Adds an evaluator to a newly opened window in the Eclipse UI. Only adds the evaluator
+	 * if the window is a document editor containing a .java file.
+	 * @param partRef The reference to the Eclipse part that was activated
 	 */
 	@Override
 	public void partOpened(IWorkbenchPartReference partRef) {
@@ -83,30 +66,53 @@ public class EditorWindowListener implements IPartListener2 {
 			IEditorInput input = editor.getEditorInput();
 			String filename = input.getName();
 
-			// If the document inside the text editor window is a .java file,
-			// assign an evaluator to the text editor window
+			// If the document inside the text editor window is a .java file, assign an evaluator
+			// to the text editor window
 			if (filename.endsWith(".java")) {
 				em.addEvaluator(editor);
 			}
 		}
 	}
 
+	/**
+	 * Unused
+	 */
+	@Override
+	public void partBroughtToTop(IWorkbenchPartReference partRef) {
+	}
+
+	/**
+	 * Unused
+	 */
+	@Override
+	public void partClosed(IWorkbenchPartReference partRef) {
+	}
+
+	/**
+	 * Unused
+	 */
+	@Override
+	public void partDeactivated(IWorkbenchPartReference partRef) {
+	}
+
+	/**
+	 * Unused
+	 */
 	@Override
 	public void partHidden(IWorkbenchPartReference partRef) {
-		// TODO Auto-generated method stub
-		
 	}
 
+	/**
+	 * Unused
+	 */
 	@Override
 	public void partVisible(IWorkbenchPartReference partRef) {
-		// TODO Auto-generated method stub
-		
 	}
 
+	/**
+	 * Unused
+	 */
 	@Override
 	public void partInputChanged(IWorkbenchPartReference partRef) {
-		// TODO Auto-generated method stub
-		
 	}
-
 }
