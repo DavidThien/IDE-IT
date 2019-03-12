@@ -17,20 +17,22 @@ import org.junit.Test;
 import main.evaluators.AddImportEvaluator;
 
 public class AddImportsNegative {
-	
-	/**
-	 * Constants used as mock data. INITIAL_CONTENT is the content of the document,
-	 * ANNOTATION represents an unresolved type annotation, and POSITION is a variable
-	 * necessary for adding the annotation to the annotation model
-	 */
+
+    /** Initial content that will be included in a document */
 	private static final String INITIAL_CONTENT = "\n\nLine1\n Line2\n Line3\n";
-	private static final Annotation ANNOTATION = new Annotation("org.eclipse.jdt.ui.error", 
+	/** Mock Annotation that matches with an unresolved variable type annotation */
+	private static final Annotation ANNOTATION = new Annotation("org.eclipse.jdt.ui.error",
 			false, "MockType cannot be resolved to a type");
+	/** Position used with the mock Annotation */
 	private static final Position POSITION = new Position(0);
+	/** Import statement for quick reference */
 	private static final String MOCK_IMPORT = "import java.util.*;";
-	
+
+	/** Evaluator being tested */
 	private AddImportEvaluator eval;
+	/** Document to be attached to the evaluator */
 	private IDocument doc;
+	/** AnnotationModel to be attached to the evaluator */
 	private AnnotationModel am;
 
 	/**
@@ -52,11 +54,11 @@ public class AddImportsNegative {
 	public void unresolvedTypesAddImportOneCharacterAtATime() {
 		try {
 			int offset = 0;
-			
+
 			// Add the unresolved type annotation to the annotation model
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
-			
+
 			// Type "import ", which should trigger
 			for (char c : "import".toCharArray()) {
 				assertFalse(mockUserInput(String.valueOf(c), offset++));
@@ -68,7 +70,7 @@ public class AddImportsNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user starting a valid import statement by typing
 	 * "import " one character at a time, making and correcting
@@ -78,21 +80,21 @@ public class AddImportsNegative {
 	public void unresolvedTypesAddImportOneCharacterAtATimeCorrectingTypos() {
 		try {
 			int offset = 0;
-			
+
 			// Add the unresolved type annotation to the annotation model
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
-	
+
 			// Type "imort " (forgetting to add the p)
 			for (char c : "imort ".toCharArray()) {
 				assertFalse(mockUserInput(String.valueOf(c), offset++));
 			}
-			
+
 			// Erase the last 4 characters to go back to "im"
 			for (int i = 0; i < 4; i++) {
 				assertFalse(mockUserSingleBackspace(offset--));
 			}
-			
+
 			// Retype the last part "port ", which should trigger
 			for (char c : "port".toCharArray()) {
 				assertFalse(mockUserInput(String.valueOf(c), offset++));
@@ -113,11 +115,11 @@ public class AddImportsNegative {
 	public void unresolvedTypesAddImportStatementWithCopyPaste() {
 		try {
 			int offset = 0;
-			
+
 			// Add the unresolved type annotation to the annotation model
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
-			
+
 			// Mock an import statement being copy-pasted into the document, which should trigger
 			assertTrue(mockUserInput(MOCK_IMPORT, offset));
 		} catch (BadLocationException e) {
@@ -126,7 +128,7 @@ public class AddImportsNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user declaring a variable called "importantVar" to make sure
 	 * that typing "import" does not trigger the evaluator when unresolved
@@ -136,11 +138,11 @@ public class AddImportsNegative {
 	public void unresolvedVariablesImportInVariableName() {
 		try {
 			int offset = 0;
-			
+
 			// Add the unresolved type annotation to the annotation model
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
-			
+
 			// Add a variable declaration named importantVar to the document, which should not trigger
 			for (char c : "int importantVar;".toCharArray()) {
 				assertFalse(mockUserInput(String.valueOf(c), offset++));
@@ -151,7 +153,7 @@ public class AddImportsNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user typing "import " inside a comment line, rather than as
 	 * an import statement at the start of a line, when unresolved variables
@@ -161,11 +163,11 @@ public class AddImportsNegative {
 	public void unresolvedVariablesImportInComment() {
 		try {
 			int offset = 0;
-			
+
 			// Add the unresolved type annotation to the annotation model
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
-			
+
 			// Add comment line "//import ", which should not trigger
 			for (char c : "//import ".toCharArray()) {
 				assertFalse(mockUserInput(String.valueOf(c), offset++));
@@ -176,7 +178,7 @@ public class AddImportsNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Mocks the user typing the given string into the document at
 	 * the given offset. Evaluates the result to see if the feature

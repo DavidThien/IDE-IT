@@ -19,16 +19,23 @@ import main.evaluators.BlockCommentEvaluator;
  */
 public class BlockCommentNegative {
 
+    /** Initial content for the mock Document */
 	private static final String content = "Line1\n Line2\n Line3\n";
+	/** Single slash that can be referenced from a constant */
 	private static final String SINGLE_SLASH = "/";
+	/** Double slash that can be referenced from a constant */
 	private static final String DOUBLE_SLASH = "//";
+	/** Star character that can be referenced from a constant */
 	private static final String STAR = "*";
 
+	/** Document to be attached to the evaluator */
 	private IDocument doc;
+	/** Evaluator being tested */
 	private BlockCommentEvaluator testEvaluator;
 
-	// Used to store mock event data
+	/** Document event to store document changes */
 	private DocumentEvent event;
+	/** Offset of where the document changes occurred in the document */
 	private int offset;
 
 	/**

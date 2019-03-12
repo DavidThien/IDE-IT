@@ -32,7 +32,7 @@ We plan to provide support for at least the following list of Eclipse features:
 
 This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
 
-## Current Status as of 3/4/19
+## Current Status as of 3/11/19
 
 We have completed the following milestones:
 
@@ -43,6 +43,7 @@ We have completed the following milestones:
   * Removing unused imports
   * Correcting indentation
   * Removing trailing whitespace
+  * Generating getter and setter methods
 * Interfaced with frontend implemented
   * Manually tested with success - IDE-IT frontend plugin able to receive notification from feature evaluation
 * Implemented a working build file
@@ -51,9 +52,6 @@ We have completed the following milestones:
 
 Our next goals are:
 
-* Write evaluation functions for other features (stretch goals):
-  * Refator->Rename
-  * Add getters/setters
 * Build up test suite for existing evaluation functions
 
 ## Installation
@@ -145,8 +143,8 @@ The following is a list of the featureID strings and descriptions of what Eclips
   * Correct indentation (either for multiple selected lines or for entire document)
 * trailingWhiteSpaceSuggestion
   * Auto-remove trailing whitespace on document save
-* variableRenameRefactorSuggestion
-  * Rename a variable throughout the entire scope of said variable
+* getterSetterSuggestion
+  * Auto-generate getter and setter methods
 
 The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver are listed below for easy reference:
 
@@ -170,20 +168,24 @@ The documentation for FeatureSuggestionInterface and FeatureSuggestionObserver a
 
 ## Implementation Details
 
-* FeatureSuggestion
-  * Must be created by the frontend plugin that uses our service. Creating and starting the FeatureSuggestion starts the entire service our plugin provides. This is the only object a frontend plugin should have access to.
-* FeatureSuggestionInterface
-  * Details what methods are available to a frontend plugin through the FeatureSuggestion object. See above in usage for more details.
 * FeatureSuggestionObserver
-  * Provides an abstract FeatureSuggestionObserver class that a frontend plugin can extend. The frontend plugin will instantiate that extended class and then register the instance with the FeatureSuggestion, as documented through the interface details in usage.
-* EvaluationManager
-  * Created during the construction of the FeatureSuggestion object. The EvaluatorManager assigns Evaluators to document editor windows, keeps track of all active Evaluators that have been assigned to document editor windows, and handles reporting triggered features from each Evaluator to the FeatureSuggestion. This ensures that all triggered feature reports notify the same FeatureSuggestion.
+  * An abstract class designed to be extended by a frontend client. Contains a notify(String) method, which is called when a feature evaluation has been triggered, where the String parameter contains a unique ID of the given feature.
+* FeatureSuggestion
+  * An implementation of the FeatureSuggestionInterface interface. This is the main object that frontend clients use to manage their interaction with our backend service. Once the client creates a FeatureSuggestion, they can register any number of their own FeatureSuggestionObserver objects with the FeatureSuggestion object to be notified when a feature evaluation has been triggered.
+* EvaluatorManager
+  * Created when a frontend client first calls the start() method of the FeatureSuggestion object. The EvaluatorManager assigns Evaluators to document editor windows, keeps track of all active Evaluators that have been assigned to document editor windows, and handles reporting triggered features from each Evaluator to the FeatureSuggestion. This ensures that all triggered feature evaluations notify the same FeatureSuggestion.
 * EditorWindowListener
-  * An extension of IPartListener2 from the Eclipse Plugin API. Created and added to the list of Eclipse workspace listeners when the EvaluatorManager is constructed. Listens for activation of document editor windows (i.e. when a document editor window or opened, or its tab is switched to). When that occurs, the EditorWindowListener will notify the EvaluatorManager to assign an Evaluator to the given document editor window.
+  * Listener that fires off events based on users’ navigation through the Eclipse workspace. Created and added to the list of Eclipse workspace listeners when the EvaluatorManager is constructed. Listens for activation of document editor windows (i.e. when a document editor window or opened, or its tab is switched to). When that occurs, the EditorWindowListener notifies the EvaluatorManager to assign an Evaluator to the given document editor window.
 * Evaluator
-  * Responsible for evaluating document changes detected within a single document editor window. When document changes are detected, the Evaluator will cycle through each feature evaluation function, passing the document change event information. If a feature evaluation function returns true (indicating that the user has neglected to use the respective feature), it will notify the EvaluatorManager with the unique ID string of the feature that was triggered.
-* DocumentChangesTracker
-  * An extension of IDocumentListener from the Eclipse Plugin API. Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes made within that document editor window. When changes are detected, the DocumentChangesTracker will pass the change information back to the Evaluator.
+  * Responsible for evaluating document changes detected within a single document editor window. When document changes are detected, the Evaluator cycles through each feature evaluation function, passing the document change event information. If a feature evaluation function returns true (indicating that the user has neglected to use the respective feature), the Evaluator notifies the EvaluatorManager with the unique ID string of the feature that was triggered.
+* DocumentChangesListener
+  * Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes made to the document within that document editor window. When changes are detected, the DocumentChangesListener passes the change information back to the Evaluator.
+* AnnotationModelListener
+  * Created when a new Evaluator is assigned to a document editor window. Responsible for listening for changes to the annotations within the document editor window (e.g. annotations regarding unused imports). When changes are detected, the AnnotationModelListener passes the change information back to the Evaluator.
+* VariableDeclarationFinder
+  * Parses the AST of a document and stores a list of variable names declared within the document. Designed to provide additional information for feature evaluation.
+* Evaluation Functions
+  * A set of classes extending an EvaluationFunction abstract class. Each feature that IDE-IT evaluates has its own class extending EvaluationFunction, which contains evaluate functions for document change events that are called when an evaluator receives the signal that a document change has occurred.
 
 ## Adding New Evaluation Functions
 
@@ -192,6 +194,7 @@ For developers looking to expand upon this project and add a new evaluation func
   * https://help.eclipse.org/luna/index.jsp is a good place to start. The topics on the Workbench User Guide, Platform Plug-in Developer Guide, JDT Plug-in Developer Guide, and Plug-in Development Environment Guide are all relevant.
 * Create a new evaluation class under backend_plugin.src.main.evaluators that extends FeatureEvaluator.java.
 * Determine if the new evaluation function will use DocumentChange events, AnnotationModel changes, and/or ResourceChange events. Override the method(s) that corresponds to the event(s) the new evaluation function will use.
-* Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method. 
+* Add the new evaluation function to the featureEvaluators list in the backend_plugin.src.main.evaluators.Evaluator class in the initializeFeatureEvaluators method.
+* Add the featureID string to main.interfaces.FeatureID as a constant string. Also make sure to add it to the list of all featureID strings.
 
-Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function. 
+Once the the new evaluation function works correctly with the backend aspect of this plugin, the frontend must be modified to recognize the featureIDString that will identify the new evaluation function.

@@ -12,13 +12,17 @@ import main.evaluators.EvaluatorManager;
  */
 public class FeatureSuggestion implements FeatureSuggestionInterface {
 
+    	/** Manages all Listeners and Evaluators */
 	private EvaluatorManager manager;
+	/** List of all observers to be notified */
 	private List<FeatureSuggestionObserver> observers;
+	/** Flag set when the user input monitoring service is currently running */
 	private boolean isRunning;
 
+	/**
+	 * Constructs a new FeatureSuggestion
+	 */
 	public FeatureSuggestion() {
-		// debug
-		System.out.println("FS created");
 		manager = new EvaluatorManager(this);
 		observers = new ArrayList<FeatureSuggestionObserver>();
 		isRunning = false;
@@ -27,7 +31,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	/**
 	 * Register an Observer to be notified upon FeatureSuggestion updates
 	 * @param obs Observer to be registered
-	 * @return true upon successful registration, false otherwise
+	 * @return true upon successful registration; false otherwise
 	 */
 	@Override
 	public boolean registerObserver(FeatureSuggestionObserver obs) {
@@ -38,7 +42,7 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	 * Removes an observer from the FeatureSuggestion observer list. The observer
 	 * will no longer be updated on FeatureSuggestion updates
 	 * @param obs Observer to be removed
-	 * @return true upon successful removal, false otherwise
+	 * @return true upon successful removal; false otherwise
 	 */
 	@Override
 	public boolean removeObserver(FeatureSuggestionObserver obs) {
@@ -62,25 +66,20 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 	public void start() {
 		this.manager.start();
 		isRunning = true;
-
-		// Debug
-		System.out.println("Starting fs");
 	}
 
 	/**
 	 * Turns the FeatureSuggestion off. Observers will not be notified upon updates.
+	 * Cleans up and removes all current listeners in the workspace.
 	 */
 	@Override
 	public void stop() {
 		this.manager.stop();
 		isRunning = false;
-
-		// Debug
-		System.out.println("Stopping fs");
 	}
 
 	/**
-	 * Returns true if FeatureSuggestion
+	 * Returns true if FeatureSuggestion is currently running in the background
 	 */
 	@Override
 	public boolean isRunning() {
@@ -96,8 +95,5 @@ public class FeatureSuggestion implements FeatureSuggestionInterface {
 		for (FeatureSuggestionObserver o : observers) {
 			o.notify(featureID);
 		}
-		// DEBUG
-		System.out.println("Notified observers of " + featureID);
 	}
-
 }

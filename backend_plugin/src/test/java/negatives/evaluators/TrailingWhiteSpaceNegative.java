@@ -14,14 +14,21 @@ import org.junit.Test;
 import main.evaluators.TrailingWhiteSpaceEvaluator;
 
 public class TrailingWhiteSpaceNegative {
-	
+
+    	/** A string to populate one line of a mock document */
 	private static final String FIRST_LINE = "One trailing space \n";
+	/** A string to populate one line of a mock document */
 	private static final String SECOND_LINE = " Two trailing spaces  \n";
+	/** A string to populate one line of a mock document */
 	private static final String THIRD_LINE = " One trailing tab\t\n";
+	/** A string to populate one line of a mock document */
 	private static final String FOURTH_LINE = " Two trailing tabs\t\t\n";
+
+	/** Evaluator being tested */
 	private TrailingWhiteSpaceEvaluator eval;
+	/** Document attached to the evaluator */
 	private IDocument doc;
-	
+
 	/**
 	 * Initialize a new document and a new evaluator
 	 */
@@ -30,7 +37,7 @@ public class TrailingWhiteSpaceNegative {
 		this.doc = new Document(FIRST_LINE + SECOND_LINE + THIRD_LINE + FOURTH_LINE);
 		this.eval = new TrailingWhiteSpaceEvaluator(doc);
 	}
-	
+
 	/**
 	 * Tests the user deleting the one trailing white space at the end
 	 * of the first line
@@ -38,10 +45,10 @@ public class TrailingWhiteSpaceNegative {
 	@Test
 	public void removeAllTrailingSpacesOneSpace() {
 		try {
-			
+
 			// Start at the end of the first line
 			int offset = doc.getLineOffset(1) - 1;
-			
+
 			// Remove the single white space
 			assertTrue(mockUserSingleBackspace(offset--));
 		} catch (BadLocationException e) {
@@ -50,7 +57,7 @@ public class TrailingWhiteSpaceNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user deleting the two trailing white spaces at the end
 	 * of the second line with two single backspaces
@@ -58,10 +65,10 @@ public class TrailingWhiteSpaceNegative {
 	@Test
 	public void removeAllTrailingSpacesTwoSpacesTwoBackspaces() {
 		try {
-			
+
 			// Start at the end of the second line
 			int offset = doc.getLineOffset(2) - 1;
-			
+
 			// Remove both white spaces (should trigger on the second)
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertTrue(mockUserSingleBackspace(offset--));
@@ -71,7 +78,7 @@ public class TrailingWhiteSpaceNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user deleting the two trailing white spaces at the end
 	 * of the second line by selecting the two white spaces and hitting
@@ -80,10 +87,10 @@ public class TrailingWhiteSpaceNegative {
 	@Test
 	public void removeAllTrailingSpacesTwoSpacesOneBackspace() {
 		try {
-			
+
 			// Start at the end of the second line
 			int offset = doc.getLineOffset(2) - 1;
-			
+
 			// Remove both white spaces with a single select/backspace combo
 			assertTrue(mockUserSelectingTwoCharactersAndBackspacing(offset));
 		} catch (BadLocationException e) {
@@ -92,17 +99,17 @@ public class TrailingWhiteSpaceNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user deleting the one trailing tab at the end of the third line
 	 */
 	@Test
 	public void removeAllTrailingTabsOneTab() {
 		try {
-			
+
 			// Start at the end of the third line
 			int offset = doc.getLineOffset(3) - 1;
-			
+
 			// Remove the single tab with a backspace
 			assertTrue(mockUserSingleBackspace(offset--));
 		} catch (BadLocationException e) {
@@ -111,7 +118,7 @@ public class TrailingWhiteSpaceNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user deleting the two trailing tabs at the end of the fourth line
 	 * with two single backspaces
@@ -119,10 +126,10 @@ public class TrailingWhiteSpaceNegative {
 	@Test
 	public void removeAllTrailingTabsTwoTabsTwoBackspaces() {
 		try {
-			
+
 			// Start at the end of the third line
 			int offset = doc.getLineOffset(4) - 1;
-			
+
 			// Remove the tabs with two backspaces (should trigger on the second)
 			assertFalse(mockUserSingleBackspace(offset--));
 			assertTrue(mockUserSingleBackspace(offset--));
@@ -132,7 +139,7 @@ public class TrailingWhiteSpaceNegative {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Tests the user deleting the two trailing tabs at the end of the fourth line
 	 * by selecting the two tabs and hitting backspace once
@@ -140,10 +147,10 @@ public class TrailingWhiteSpaceNegative {
 	@Test
 	public void removeAllTrailingTabsTwoTabsOneBackspace() {
 		try {
-			
+
 			// Start at the end of the third line
 			int offset = doc.getLineOffset(4) - 1;
-			
+
 			// Remove the tabs with a single select/backspace combo
 			assertTrue(mockUserSelectingTwoCharactersAndBackspacing(offset));
 		} catch (BadLocationException e) {
@@ -173,7 +180,7 @@ public class TrailingWhiteSpaceNegative {
 		doc.replace(offset-1, 1, "");
 		return eval.evaluateDocumentChanges(event);
 	}
-	
+
 	private boolean mockUserSelectingTwoCharactersAndBackspacing(int offset) throws BadLocationException {
 		DocumentEvent event = new DocumentEvent(doc, offset-2, 2, "");
 		eval.evaluateDocumentBeforeChange(event);
