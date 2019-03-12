@@ -11,7 +11,6 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import main.listeners.AnnotationModelListener;
 import main.listeners.DocumentChangesListener;
 
-
 /**
  * The Evaluator is designed to control all of the evaluation classes. The Evaluator creates a TrackerController, which
  * it uses to create different Listeners.
@@ -24,37 +23,39 @@ import main.listeners.DocumentChangesListener;
  */
 public class Evaluator {
 
+	/** Manages all evaluators */
 	private EvaluatorManager manager;
+	/** List of all featureEvaluators */
 	private List<FeatureEvaluator> featureEvaluators;
 
+	/** Document this evaluator is attached to */
 	private IDocument document;
-	private DocumentChangesListener documentChangesListener;
-
+	/** Annotation model this evaluator is attached to */
 	private IAnnotationModel annotationModel;
+
+	/** Listener for document changes */
+	private DocumentChangesListener documentChangesListener;
+	/** LIstener for annotation model changes */
 	private AnnotationModelListener annotationModelListener;
 
 	/**
 	 * Constructs an Evaluator that evaluates the given IEditorPart window
 	 * under the given EvaluationManager em
-	 * @param em EvaluatorManager object that tracks all Evaluator instances
-	 * @param editorWindow the document editor window to add an evaluator to
+	 * @param em The EvaluatorManager object tracking all Evaluator instances
+	 * @param textEditor The document editor window to add an evaluator to
 	 */
 	public Evaluator(EvaluatorManager em, ITextEditor textEditor) {
-		// DEBUG
-		System.out.println("Evaluator Started");
-
 		this.manager = em;
 		this.featureEvaluators = new ArrayList<FeatureEvaluator>();
 		this.initializeListeners(textEditor);
-		this.initializeFeatureEvaluators(textEditor);
+		this.initializeFeatureEvaluators();
 	}
 
 	/**
 	 * Creates the feature evaluators for each feature and adds them to this
 	 * Evaluator's list of feature evaluators
-	 * @param textEditor The text document editor this Evaluator is evaluating
 	 */
-	private void initializeFeatureEvaluators(ITextEditor textEditor) {
+	private void initializeFeatureEvaluators() {
 		this.featureEvaluators.add(new BlockCommentEvaluator(this.document));
 		this.featureEvaluators.add(new RemoveImportEvaluator());
 		this.featureEvaluators.add(new AddImportEvaluator(this.document));
@@ -64,10 +65,9 @@ public class Evaluator {
 	}
 
 	/**
-	 * Creates the document change listener that this Evaluator will
-	 * use to listen for changes within the given IEditorPart document
-	 * editor window
-	 * @param editorWindow
+	 * Creates the listeners that this Evaluator will use to listen for changes within
+	 * the given IEditorPart document editor window
+	 * @param editorWindow The text editor window part containing the document
 	 */
 	private void initializeListeners(ITextEditor textEditor) {
 
@@ -89,8 +89,8 @@ public class Evaluator {
 	}
 
 	/**
-	 * Checks all evaluation functions that need DocumentEvent changes
-	 * @param event
+	 * Checks all evaluation functions after a document change is applied
+	 * @param event The document change data
 	 */
 	public void evaluateDocumentChanges(DocumentEvent event) {
 		for (FeatureEvaluator featureEvaluator : this.featureEvaluators) {
@@ -100,17 +100,21 @@ public class Evaluator {
 		}
 	}
 
+	/**
+	 * Checks all evaluation functions before a document change is applied
+	 * @param event The document change data
+	 */
 	public void evaluateDocumentBeforeChange(DocumentEvent event) {
-	    for (FeatureEvaluator featureEvaluator : this.featureEvaluators) {
-		if (featureEvaluator.evaluateDocumentBeforeChange(event)) {
-			this.manager.notifyFeatureSuggestion(featureEvaluator.getFeatureID());
+		for (FeatureEvaluator featureEvaluator : this.featureEvaluators) {
+			if (featureEvaluator.evaluateDocumentBeforeChange(event)) {
+				this.manager.notifyFeatureSuggestion(featureEvaluator.getFeatureID());
+			}
 		}
-	    }
 	}
 
 	/**
-	 * Checks all evaluation functions that need IAnnotationModel changes
-	 * @param model
+	 * Checks all evaluation functions when the annotations of a document window change
+	 * @param model The annotation model attached to the document window
 	 */
 	public void evaluateAnnotationModelChanges(IAnnotationModel model) {
 		for (FeatureEvaluator featureEvaluator : this.featureEvaluators) {
@@ -141,5 +145,4 @@ public class Evaluator {
 		this.document.removeDocumentListener(this.documentChangesListener);
 		this.annotationModel.removeAnnotationModelListener(this.annotationModelListener);
 	}
-
 }

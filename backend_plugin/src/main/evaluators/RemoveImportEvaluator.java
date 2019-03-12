@@ -8,12 +8,13 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import main.interfaces.FeatureID;
 
 /**
- * Evaluator function to determine if there are any unused import statements in the entire workspace (any open projects).
- * If any unused import statements are found, then evaluate will return true
- *
+ * Keeps track of the existence of any annotations in the document regarding unused imports.
+ * When a file is saved in the Eclipse workspace, this evaluator should trigger if the document
+ * window currently contains unused import annotations.
  */
 public class RemoveImportEvaluator extends FeatureEvaluator {
 
+    	/** Flag that's set when an unused import statement annotation exists in the document */
 	private boolean activeUnusedImportStatement;
 
 	/**
@@ -24,24 +25,23 @@ public class RemoveImportEvaluator extends FeatureEvaluator {
 	}
 
 	/**
-	 * Checks the document that matches the docName to see if there are any unused import statements
-	 *
-	 * @param event
-	 * @return true if there are unused import statements in the document, false otherwise
+	 * Updates this feature evaluator's boolean flag indicating whether unused imports exist in the
+	 * document. This should never trigger the feature by itself, so always returns false.
+	 * @param model The annotation model attached to the document window
+	 * @return false
 	 */
 	@Override
 	public boolean evaluateAnnotationModelChanges(IAnnotationModel model) {
-
-		Iterator<Annotation> it = model.getAnnotationIterator();
-
-		// Iterate through the annotations and update the flag indicating whether any active unused import
-		// statements exist in the Eclipse workspace
 		this.activeUnusedImportStatement = false;
-		while (it.hasNext()) {
-			Annotation current = it.next();
 
-			// Check if the annotation is a valid, non-deleted unused import annotation
-			if (!current.isMarkedDeleted() && current.getText() != null && current.getText().startsWith("The import") &&
+		// Iterate through the annotations in the document window
+		Iterator<Annotation> it = model.getAnnotationIterator();
+		while (it.hasNext()) {
+
+			// Check if any annotation is a valid, non-deleted unused import annotation
+			Annotation current = it.next();
+			if (!current.isMarkedDeleted() && current.getText() != null &&
+					current.getText().startsWith("The import") &&
 					current.getText().endsWith("never used")) {
 				this.activeUnusedImportStatement = true;
 				break;

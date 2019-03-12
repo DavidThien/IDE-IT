@@ -1,7 +1,6 @@
 package test.java.positives.evaluators;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -18,16 +17,27 @@ import main.evaluators.CorrectIndentationEvaluator;
  */
 public class CorrectIndentationPositive {
 
+    /** Content to generate a Document with */
     private static final String content = " Line1\n Line2\n Line3\n";
+    /** Content to generate a Document with */
+    private static final String extraSpaceContent = "  Line1\n  Line2\n  Line3\n";
+    /** Content to generate a Document with */
     private static final String tabContent = "\tLine1\n\tLine2\n\tLine3\n";
+    /** Content to generate a Document with */
+    private static final String extraTabContent = "\t\tLine1\n\t\tLine2\n\t\tLine3\n";
+    /** Single space character that can be referenced by a constant */
     private static final String SINGLE_SPACE = " ";
+    /** Single tab character that can be referenced by a constant */
     private static final String SINGLE_TAB = "\t";
 
+    /** Document to be attached to the evaluator */
     private IDocument doc;
+    /** Evaluator being tested */
     private CorrectIndentationEvaluator testEvaluator;
 
-    // Used to store mock event data
+    /** DocumentEvent to store document changes */
     private DocumentEvent event;
+    /** Offset of where the document changes occurred in the document */
     private int offset;
 
     /**
