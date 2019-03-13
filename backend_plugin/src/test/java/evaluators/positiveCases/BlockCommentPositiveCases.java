@@ -388,8 +388,58 @@ public class BlockCommentPositiveCases {
 	}
 
 	/**
-	 * Tests if a user inserts "//" on one line then "//" on the next line
-	 * This can be accomplished by the user through ctrl + / on each line or if they paste a "//"
+	 * Tests if a user inserts "//" on one line then "//" on the next line through ctrl + /
+	 */
+	@Test
+	public void doubleSlashHotKeyConsecutiveDown() {
+		// Mock a document event with a double backslash placed at the beginning of the first line
+		try {
+			offset = 0;
+			event = mockUserInput(offset, DOUBLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Pull the offset for the start of the second line so we aren't guessing
+			// Place a single backslash at the start of the second line
+			offset = doc.getLineOffset(1);
+			event = mockUserInput(offset, DOUBLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests if a user inserts "//" on one line then "//" on the previous line through ctrl + /
+	 */
+	@Test
+	public void doubleSlashHotKeyConsecutiveUp() {
+		try {
+			// Mock a document event with a double backslash placed at the beginning of the third line
+			offset = doc.getLineOffset(2);
+			event = mockUserInput(offset, DOUBLE_SLASH);
+			assertFalse(testEvaluator.evaluateDocumentChanges(event));
+
+			delayUserInput();
+
+			// Mock a document event with a double backslash placed at the beginning of the second line
+			offset = doc.getLineOffset(1);
+			event = mockUserInput(offset, DOUBLE_SLASH);
+			// Now the evaluation function should trigger
+			assertTrue(testEvaluator.evaluateDocumentChanges(event));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests if a user inserts "//" on one line then "//" on the next line through pasting "//"
 	 */
 	@Test
 	public void doubleSlashConsecutiveDown() {
@@ -415,8 +465,7 @@ public class BlockCommentPositiveCases {
 	}
 
 	/**
-	 * Tests if a user inserts "//" on one line then "//" on the next line
-	 * This can be accomplished by the user through ctrl + / on each line or if they paste a "//"
+	 * Tests if a user inserts "//" on one line then "//" on the previous line through pasting "//"
 	 */
 	@Test
 	public void doubleSlashConsecutiveUp() {
