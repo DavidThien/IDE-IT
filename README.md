@@ -11,7 +11,7 @@ Contents:
 3. Installation
   * Required Software
   * Building the Plugin
-  * Generating Feature Support Graph
+  * Generating Feature Evaluation Success Results
   * Incorporating the Plugin with Your Own Project
 4. Usage
 5. Implementation Details
@@ -72,40 +72,21 @@ Open a terminal on your machine and complete the following steps
 
 If any of the above does not work, please inform us through the issue tracker.
 
-### Generating Feature Support Graph
+### Generating Feature Evaluation Success Results
 
-Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how many different methods we support for detecting different features. The current number of supported features can be found by running the following command from the 'backend_plugin' directory:
+Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how successful the IDE-IT backend is detecting different features. For each feature we support, we have compiled a list of all the ways (cases) we have determined that a user can circumvent using that feature, which we then translate into unit tests. We quantify the success of a given feature evaluation by comparing the number of cases we successfully cover for the feature to the total number of possible cases for that feature.
 
-```
-mvn -Dtest=*Negative surefire-report:report
-```
-
-You can also generate a plot of how the number of supported features has evolved over the plugin's lifetime by running the following command from the 'backend_plugin' directory:
+To reproduce these results for each feature evaluator, run the following command from the 'backend_plugin' directory:
 
 ```
-python feature-stats.py
+mvn -Dtest=*Cases surefire-report:report
 ```
 
-from the main directory.  This script requires
+This command with place our cases testing results into an HTML file with the relative path 'target/site/surefire-report.html'. Opening this file in a browser, you will be able to see several tables showing the success rates of our tests.
 
-* `gitpython`
-* `matplotlib`
-* `python 2.7` or greater (but not `3.x`)
-* `java 8`
-* `git`
-
-If you are on Linux, then just installing the dependencies with your package manager and pip should work fine. On Mac, you may have to run
-
-```
-pip install backports.functools_lru_cache
-pip install matplotlib==2.0.2
-```
-
-(with sudo if your system is configured to need it) in order to install matplot lib. The other dependencies can be installed normally. Note that if you have a version of `matplotlib` other than `2.0.2` installed, then you may have to uninstall it and reinstall only the `2.0.2` version.
-
-This script will output a line chart `feature-support.png` in the main directory. Currently this test only shows the number of true positives out of all target activation methods, and only for the BlockCommentEvaluator. However, there are plans to add in the future similar tests for actions that should not trigger evaulators, as well as these tests for all other evaulators.
-
-This script will run all current feature support tests on the last commit of every day that it is able to, and will aggregate said results into the graph.
+Interpreting the results:
+  * The table under the 'test.java.evaluators.positiveCases' heading shows the results of our true positive cases. These are cases for which we have determined that a notification about the feature should be triggered and sent to the frontend.
+  * The table under the 'test.java.evaluators.negativeCases' heading shows the results of our true negative cases. These are cases for which we have determined that a notification about the feature should NOT be triggered.
 
 ### Incorporating the Plugin with Your Own Project
 
