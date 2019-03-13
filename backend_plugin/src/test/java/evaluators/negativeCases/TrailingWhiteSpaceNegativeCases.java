@@ -1,7 +1,6 @@
-package test.java.evaluators.positiveCases;
+package test.java.evaluators.negativeCases;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -13,8 +12,7 @@ import org.junit.Test;
 
 import main.evaluators.TrailingWhiteSpaceEvaluator;
 
-public class TrailingWhiteSpacePositiveCases {
-
+public class TrailingWhiteSpaceNegativeCases {
 	/** A string to populate one line of a mock document */
 	private static final String FIRST_LINE = "One trailing space \n";
 	/** A string to populate one line of a mock document */
@@ -23,6 +21,8 @@ public class TrailingWhiteSpacePositiveCases {
 	private static final String THIRD_LINE = " One trailing tab\t\n";
 	/** A string to populate one line of a mock document */
 	private static final String FOURTH_LINE = " Two trailing tabs\t\t\n";
+	/** A string to populate one line of a mock document */
+	private static final String FIFTH_LINE = " No trailing spaces";
 
 	/** Evaluator being tested */
 	private TrailingWhiteSpaceEvaluator eval;
@@ -34,23 +34,25 @@ public class TrailingWhiteSpacePositiveCases {
 	 */
 	@Before
 	public void runBeforeTests() {
-		this.doc = new Document(FIRST_LINE + SECOND_LINE + THIRD_LINE + FOURTH_LINE);
+		this.doc = new Document(FIRST_LINE + SECOND_LINE + THIRD_LINE + FOURTH_LINE + FIFTH_LINE);
 		this.eval = new TrailingWhiteSpaceEvaluator(doc);
 	}
 
 	/**
-	 * Tests the user deleting the one trailing white space at the end
-	 * of the first line
+	 * Tests the user adding a second space to the end of the first line, then deleting it
 	 */
 	@Test
-	public void removeAllTrailingSpacesOneSpace() {
+	public void addExtraTrailingSpaceAfterSpaceThenDeleteOnlyLastOne() {
 		try {
 
 			// Start at the end of the first line
 			int offset = doc.getLineOffset(1) - 1;
 
-			// Remove the single white space
-			assertTrue(mockUserSingleBackspace(offset--));
+			// Add a second space to the end of the line
+			assertFalse(mockUserInput(" ", offset++));
+
+			// Remove only the second added white space (should NOT trigger)
+			assertFalse(mockUserSingleBackspace(offset--));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -59,11 +61,11 @@ public class TrailingWhiteSpacePositiveCases {
 	}
 
 	/**
-	 * Tests the user deleting the two trailing white spaces at the end
-	 * of the second line with two single backspaces
+	 * Tests the user deleting only one of the two trailing white spaces at the end
+	 * of the second line with a single backspace
 	 */
 	@Test
-	public void removeAllTrailingSpacesTwoSpacesTwoBackspaces() {
+	public void removeOneOfTwoTrailingSpacesWithBackspace() {
 		try {
 
 			// Start at the end of the second line
@@ -71,7 +73,6 @@ public class TrailingWhiteSpacePositiveCases {
 
 			// Remove both white spaces (should trigger on the second)
 			assertFalse(mockUserSingleBackspace(offset--));
-			assertTrue(mockUserSingleBackspace(offset--));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -80,59 +81,20 @@ public class TrailingWhiteSpacePositiveCases {
 	}
 
 	/**
-	 * Tests the user deleting the two trailing white spaces at the end
-	 * of the second line by selecting the two white spaces and hitting
-	 * backspace once
+	 * Tests the user adding a space to the end of the third line after the tab, then deleting it
 	 */
 	@Test
-	public void removeAllTrailingSpacesTwoSpacesOneBackspace() {
-		try {
-
-			// Start at the end of the second line
-			int offset = doc.getLineOffset(2) - 1;
-
-			// Remove both white spaces with a single select/backspace combo
-			assertTrue(mockUserSelectingTwoCharactersAndBackspacing(offset));
-		} catch (BadLocationException e) {
-			// Should never get here
-			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Tests the user deleting the one trailing tab at the end of the third line
-	 */
-	@Test
-	public void removeAllTrailingTabsOneTab() {
+	public void addExtraTrailingSpaceAfterTabThenDeleteOnlySpace() {
 		try {
 
 			// Start at the end of the third line
 			int offset = doc.getLineOffset(3) - 1;
 
-			// Remove the single tab with a backspace
-			assertTrue(mockUserSingleBackspace(offset--));
-		} catch (BadLocationException e) {
-			// Should never get here
-			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
-			e.printStackTrace();
-		}
-	}
+			// Add a second space to the end of the line
+			assertFalse(mockUserInput(" ", offset++));
 
-	/**
-	 * Tests the user deleting the two trailing tabs at the end of the fourth line
-	 * with two single backspaces
-	 */
-	@Test
-	public void removeAllTrailingTabsTwoTabsTwoBackspaces() {
-		try {
-
-			// Start at the end of the third line
-			int offset = doc.getLineOffset(4) - 1;
-
-			// Remove the tabs with two backspaces (should trigger on the second)
+			// Remove only the single space with a backspace (should NOT trigger)
 			assertFalse(mockUserSingleBackspace(offset--));
-			assertTrue(mockUserSingleBackspace(offset--));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -141,18 +103,17 @@ public class TrailingWhiteSpacePositiveCases {
 	}
 
 	/**
-	 * Tests the user deleting the two trailing tabs at the end of the fourth line
-	 * by selecting the two tabs and hitting backspace once
+	 * Tests the user deleting the last character of a line that has no trailing white spaces
 	 */
 	@Test
-	public void removeAllTrailingTabsTwoTabsOneBackspace() {
+	public void deleteLastCharacterOfLineWithNoTrailingWhiteSpaces() {
 		try {
 
-			// Start at the end of the third line
-			int offset = doc.getLineOffset(4) - 1;
+			// Start at the end of the fifth line
+			int offset = doc.getLineOffset(4);
 
-			// Remove the tabs with a single select/backspace combo
-			assertTrue(mockUserSelectingTwoCharactersAndBackspacing(offset));
+			// Remove the last character (should NOT trigger, since it is not whitespace)
+			assertFalse(mockUserSingleBackspace(offset--));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -161,17 +122,56 @@ public class TrailingWhiteSpacePositiveCases {
 	}
 
 	/**
-	 * Mocks the user making a single backspace from the given offset.
-	 * Evaluates the result to see if the feature evaluation has been
-	 * triggered.
-	 * @param offset The offset in the document to backspace from
-	 * @return true if the feature evaluation is triggered by the backspace; false otherwise
+	 * Tests the user deleting the last character of a line that has no trailing white spaces
+	 */
+	@Test
+	public void addingWhiteSpaceToEndOfLineWithNoTrailingWhiteSpaces() {
+		try {
+
+			// Start at the end of the fifth line
+			int offset = doc.getLineOffset(4);
+
+			// Add a space to the end of the line (should NOT trigger)
+			assertFalse(mockUserInput(" ", offset++));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests the user deleting all leading white spaces
+	 */
+	@Test
+	public void deleteAllLeadingWhiteSpaces() {
+		try {
+
+			// Start after the leading whitespace of the second line
+			int offset = doc.getLineOffset(1) + 1;
+
+			// Remove the last character (should NOT trigger, since it is leading whitespace)
+			assertFalse(mockUserSingleBackspace(offset--));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Mocks the user typing the given string into the document at
+	 * the given offset. Evaluates the result to see if the feature
+	 * evaluation has been triggered
+	 * @param input The String to enter into the document
+	 * @param offset The offset in the document to enter the String
+	 * @return true if the feature evaluation is triggered by the input; false otherwise
 	 * @throws BadLocationException
 	 */
-	private boolean mockUserSingleBackspace(int offset) throws BadLocationException {
-		DocumentEvent event = new DocumentEvent(doc, offset-1, 1, "");
+	private boolean mockUserInput(String input, int offset) throws BadLocationException {
+		DocumentEvent event = new DocumentEvent(doc, offset, input.length(), input);
 		eval.evaluateDocumentBeforeChange(event);
-		doc.replace(offset-1, 1, "");
+		doc.replace(offset, 0, input);
 		return eval.evaluateDocumentChanges(event);
 	}
 
@@ -179,14 +179,14 @@ public class TrailingWhiteSpacePositiveCases {
 	 * Mocks the user making a single backspace from the given offset.
 	 * Evaluates the result to see if the feature evaluation has been
 	 * triggered.
-	 * @param offset The offset in the document after the selection range
-	 * @return true if the feature evaluation is triggered by the deletion; false otherwise
+	 * @param offset The offset in the document to enter the String
+	 * @return true if the feature evaluation is triggered by the backspace; false otherwise
 	 * @throws BadLocationException
 	 */
-	private boolean mockUserSelectingTwoCharactersAndBackspacing(int offset) throws BadLocationException {
-		DocumentEvent event = new DocumentEvent(doc, offset-2, 2, "");
+	private boolean mockUserSingleBackspace(int offset) throws BadLocationException {
+		DocumentEvent event = new DocumentEvent(doc, offset-1, 1, "");
 		eval.evaluateDocumentBeforeChange(event);
-		doc.replace(offset-2, 2, "");
+		doc.replace(offset-1, 1, "");
 		return eval.evaluateDocumentChanges(event);
 	}
 }
