@@ -21,18 +21,21 @@ Contents:
 
 The Integrated Development Environment - Intelligent Tutorials (IDE-IT) is a plug in for Eclipse that provides developers suggestions on Eclipse features that they may not be aware of. The number of features available in Eclipse, and IDEs in general, can be overwhelming, and it isn’t always clear to the user that they exist. These include features such as auto complete, block commenting, automatic imports, refactoring code on variable renaming, etc. However, learning that these features exist isn’t an easy process. The discoverability of IDE features is something that is a detriment to current programmers. The goal of IDE-IT is to provide developers with suggestions on how to take advantage of Eclipse’s features in a way that is relevant to what they are currently doing.
 
-We plan to provide support for at least the following list of Eclipse features:
+We support the following list of Eclipse features:
 
-* Block Commenting
-* Adding import statements using “shift-cmd-o”
-* Removing unnecessary/unused import statements using “shift-cmd-o”
-* Correcting indentation
+* Block Commenting using hot keys
+* Adding import statements using hot keys
+* Removing unused import statements on save
+* Correcting indentation using hot keys
 * Removing trailing whitespace on save
-* Refactor code base by renaming a variable throughout the entire project
+* Generate getter and setter methods for declared class variables using hot keys
 
-This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. It requires a frontend service that uses this service to display feature suggestions to the user. We recommend the [IDE-IT frontend plugin](https://github.com/AlyssaRicketts/IDE-IT-Frontend), as this framework is built specifically for IDE-IT. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
 
-## Current Status as of 3/11/19
+This repository / plugin is specifically for the backend service of IDE-IT. This is not designed to be a standalone plugin. If you would like to use your own custom frontend framework, see below on how to incorporate our service to your own plugin.
+
+To install and use the standalone IDE-IT plugin, look at the repository and installation instructions located at https://github.com/pujaram/Eclipse-IDE-IT.
+
+## Current Status as of 3/12/19
 
 We have completed the following milestones:
 
@@ -49,10 +52,11 @@ We have completed the following milestones:
 * Implemented a working build file
 * Implemented an initial test suite
 * Integrated with Travis for CI testing on Github
+* Designed a methodology and implemented tests to assess the success of IDE-IT
 
 Our next goals are:
 
-* Build up test suite for existing evaluation functions
+* Refine current evaluation functions
 
 ## Installation
 
@@ -74,15 +78,15 @@ If any of the above does not work, please inform us through the issue tracker.
 
 ### Generating Feature Evaluation Success Results
 
-Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how successful the IDE-IT backend is at correctly detecting when users could benefit from a feature. For each feature we support, we have compiled a list of all the ways (cases) we have determined that a user can circumvent using that feature, which we then translate into unit tests. We quantify the success of a given feature evaluation by comparing the number of cases we successfully cover for the feature to the total number of possible cases for that feature.
+Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how successful the IDE-IT backend is at correctly detecting when users could benefit from a feature. For each feature we support, we have compiled a list of all the ways (cases) we have determined that a user can circumvent using that feature, which we then translate into tests. We quantify the success of a given feature evaluation by comparing the number of cases we successfully cover for the feature to the total number of possible cases for that feature.
 
-To reproduce these results for each feature evaluator, run the following command from the 'backend_plugin' directory:
+To reproduce these results for each feature evaluator:
+* Clone this repo and build it with ```mvn clean install``` (see above for building the plugin)
+* Be in the IDE-IT/backend_plugin directory
+* Run the bash script "runTestCases.sh"
+	* Can be ran from a terminal command with ```bash ./runTestCases.sh```
 
-```
-mvn -Dtest=*Cases surefire-report:report
-```
-
-This command with place our cases testing results into an HTML file with the relative path 'target/site/surefire-report.html'. Opening this file in a browser, you will be able to see several tables showing the success rates of our tests.
+The results will be generated in a report located at /target/site/surefire-report.html in the backend_plugin director. Opening this file in a browser, you will be able to see several tables showing the success rates of our test cases.
 
 Interpreting the results:
   * The table under the 'test.java.evaluators.positiveCases' heading shows the results of our true positive cases. These are cases for which we have determined that a notification about the feature should be triggered and sent to the frontend.
