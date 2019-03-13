@@ -85,6 +85,7 @@ To reproduce these results for each feature evaluator:
 * Be in the IDE-IT/backend_plugin directory
 * Run the bash script "runTestCases.sh"
 	* Can be ran from a terminal command with ```bash ./runTestCases.sh```
+	* If you have permission errors that prevent you from running the script, make sure to run it with sudo, run it as an admin, or give yourself permission with chmod +x
 
 The results will be generated in a report located at /target/site/surefire-report.html in the backend_plugin director. Opening this file in a browser, you will be able to see several tables showing the success rates of our test cases.
 
