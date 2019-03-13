@@ -1,0 +1,61 @@
+-----------------------
+GOALS FROM PREVIOUS WEEK
+-----------------------	
+
+	- Finish converting false negative list to runnable tests 
+		- getter/setters
+		- correct indentation
+		- trailing white space
+	- Set up false postive tests that we can run
+	- Design and implement clean way to store one list of featureID strings throughout our plugin
+	- Update report based on feedback
+	- Update and implement the following evaluation functions:
+		- getter/setter
+		- remove import
+	- Write tests for merged/existing feature evaluators
+	- Possibly add more feature evaluators
+		- rename variable refactor
+		- "Generate hashCode() and equals()" feature
+		- "Generate toString()" feature
+	-Go through and clean/refactor classes as needed in preparation for final release
+	
+-----------------------
+PROGRESS MADE THIS WEEK
+-----------------------
+
+	- Refactored how success metric tests are organized
+	- Refactored how success metrics are generated and viewed
+	- Finished converting all use cases for each evaluator function into tests
+	- Updated implementation of RemoveImportEvaluator
+	- Finalized and implemented getter/setter evaluation function
+	- Implemented featureID string storage in a single central location that can be referenced from any class
+	- Updated report
+		- based on previous feedback
+		- added substantially more to the evaluation methodology and results analysis
+		- created state machine diagrams to provide a visual representation of each evaluation function
+	- Updated user manual
+	- Updated script to run success metric tests
+	- Cleaned up repository code
+		- Fixed comments, verified javadoc comments on all class fields
+	- Met with FE team to go over integration issues and concerns
+	
+----------------------------------
+PLANS AND GOALS FOR FOLLOWING WEEK
+----------------------------------
+	Responsible parties are listed after each goal (or subgoal, where applicable)
+
+	- Update manual and report (Eric/All)
+	- Fix getter/setter evaluation bug (John)
+	- Look into modifying trailing white space evaluator (John)
+	- Create presentation material for final presentation (Eric/David)
+	- Work with FE to resolve any integration issues (All)
+	- Work with FE to finalize the project as a whole (All)
+		- have a consumer friendly version available
+
+--------------
+MEETING AGENDA
+--------------
+For TA
+	- Presentation Questions
+		- Demo - do we show just the backend? Do we show the finished product? 
+		- If finished product, then how should we make sure it's different than the FE
