@@ -1,7 +1,6 @@
-package test.java.evaluators.positiveCases;
+package test.java.evaluators.negativeCases;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -16,7 +15,7 @@ import org.junit.Test;
 
 import main.evaluators.AddImportEvaluator;
 
-public class AddImportsPositiveCases {
+public class AddImportsNegativeCases {
 
 	/** Initial content that will be included in a document */
 	private static final String INITIAL_CONTENT = "\n\nLine1\n Line2\n Line3\n";
@@ -35,6 +34,7 @@ public class AddImportsPositiveCases {
 	/** AnnotationModel to be attached to the evaluator */
 	private AnnotationModel am;
 
+
 	/**
 	 * Initialize a new document and a new evaluator
 	 */
@@ -47,23 +47,19 @@ public class AddImportsPositiveCases {
 
 	/**
 	 * Tests the user starting a valid import statement by typing
-	 * "import " one character at a time when there are unresolved
+	 * "import " one character at a time when there are no unresolved
 	 * variables
 	 */
 	@Test
-	public void unresolvedTypesAddImportOneCharacterAtATime() {
+	public void noUnresolvedTypesAddImportOneCharacterAtATime() {
 		try {
 			int offset = 0;
 
-			// Add the unresolved type annotation to the annotation model
-			am.addAnnotation(ANNOTATION, POSITION);
-			eval.evaluateAnnotationModelChanges(am);
-
-			// Type "import ", which should trigger
+			// Type "import ", which should NOT trigger
 			for (char c : "import".toCharArray()) {
 				assertFalse(mockUserInput(String.valueOf(c), offset++));
 			}
-			assertTrue(mockUserInput(" ", offset++));
+			assertFalse(mockUserInput(" ", offset++));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -74,16 +70,12 @@ public class AddImportsPositiveCases {
 	/**
 	 * Tests the user starting a valid import statement by typing
 	 * "import " one character at a time, making and correcting
-	 * a typo along the way when there are unresolved variables
+	 * a typo along the way when there are no unresolved variables
 	 */
 	@Test
-	public void unresolvedTypesAddImportOneCharacterAtATimeCorrectingTypos() {
+	public void noUnresolvedTypesAddImportOneCharacterAtATimeCorrectingTypos() {
 		try {
 			int offset = 0;
-
-			// Add the unresolved type annotation to the annotation model
-			am.addAnnotation(ANNOTATION, POSITION);
-			eval.evaluateAnnotationModelChanges(am);
 
 			// Type "imort " (forgetting to add the p)
 			for (char c : "imort ".toCharArray()) {
@@ -95,11 +87,11 @@ public class AddImportsPositiveCases {
 				assertFalse(mockUserSingleBackspace(offset--));
 			}
 
-			// Retype the last part "port ", which should trigger
+			// Retype the last part "port ", which should NOT trigger
 			for (char c : "port".toCharArray()) {
 				assertFalse(mockUserInput(String.valueOf(c), offset++));
 			}
-			assertTrue(mockUserInput(" ", offset++));
+			assertFalse(mockUserInput(" ", offset++));
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
@@ -109,10 +101,29 @@ public class AddImportsPositiveCases {
 
 	/**
 	 * Tests the user copy-pasting an import statement into the document
-	 * when there are unresolved variables
+	 * when there are no unresolved variables
 	 */
 	@Test
-	public void unresolvedTypesAddImportStatementWithCopyPaste() {
+	public void noUnresolvedTypesAddImportStatementWithCopyPaste() {
+		try {
+			int offset = 0;
+
+			// Mock an import statement being copy-pasted into the document, which should NOT trigger
+			assertFalse(mockUserInput(MOCK_IMPORT, offset));
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests the user declaring a variable called "importantVar" to make sure
+	 * that typing "import" does not trigger the evaluator when unresolved
+	 * variables exist
+	 */
+	@Test
+	public void unresolvedVariablesImportInVariableName() {
 		try {
 			int offset = 0;
 
@@ -120,8 +131,35 @@ public class AddImportsPositiveCases {
 			am.addAnnotation(ANNOTATION, POSITION);
 			eval.evaluateAnnotationModelChanges(am);
 
-			// Mock an import statement being copy-pasted into the document, which should trigger
-			assertTrue(mockUserInput(MOCK_IMPORT, offset));
+			// Add a variable declaration named importantVar to the document, which should NOT trigger
+			for (char c : "int importantVar;".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
+		} catch (BadLocationException e) {
+			// Should never get here
+			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Tests the user typing "import " inside a comment line, rather than as
+	 * an import statement at the start of a line, when unresolved variables
+	 * exist
+	 */
+	@Test
+	public void unresolvedVariablesImportInComment() {
+		try {
+			int offset = 0;
+
+			// Add the unresolved type annotation to the annotation model
+			am.addAnnotation(ANNOTATION, POSITION);
+			eval.evaluateAnnotationModelChanges(am);
+
+			// Add comment line "//import ", which should NOT trigger
+			for (char c : "//import ".toCharArray()) {
+				assertFalse(mockUserInput(String.valueOf(c), offset++));
+			}
 		} catch (BadLocationException e) {
 			// Should never get here
 			fail("Should never see this error in: " + this.getClass().getSimpleName() + "::" + this.getClass().getName());
