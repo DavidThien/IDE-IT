@@ -74,7 +74,7 @@ If any of the above does not work, please inform us through the issue tracker.
 
 ### Generating Feature Evaluation Success Results
 
-Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how successful the IDE-IT backend is detecting different features. For each feature we support, we have compiled a list of all the ways (cases) we have determined that a user can circumvent using that feature, which we then translate into unit tests. We quantify the success of a given feature evaluation by comparing the number of cases we successfully cover for the feature to the total number of possible cases for that feature.
+Part of the IDE-IT testing infrastructure also includes a series of tests which give an idea of how successful the IDE-IT backend is at correctly detecting when users could benefit from a feature. For each feature we support, we have compiled a list of all the ways (cases) we have determined that a user can circumvent using that feature, which we then translate into unit tests. We quantify the success of a given feature evaluation by comparing the number of cases we successfully cover for the feature to the total number of possible cases for that feature.
 
 To reproduce these results for each feature evaluator, run the following command from the 'backend_plugin' directory:
 
