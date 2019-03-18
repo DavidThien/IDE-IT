@@ -64,7 +64,8 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 		try {
 			int lineOffset = document.getLineOffset(line);
 			int lineLength = document.getLineLength(line);
-			String lineText = document.get(lineOffset, lineLength).trim().toLowerCase();
+			String lineText = document.get(lineOffset, lineLength).toLowerCase();
+			lineText = trimStartAndNewLine(lineText);
 
 			// check for public or protected at the start of the line
 			if (lineText.startsWith("public ") || lineText.startsWith("protected ")) {
@@ -72,7 +73,7 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 				// check if we've already parsed the AST for this line change
 				if (this.lastLineChanged != line) {
 
-					// If not, then update the variable names while editing this line
+				    	// If not, then update the variable names while editing this line
 					// This operation is costly, so we limit it to only when it's necessary
 					updateKnownVariableNames();
 					this.lastLineChanged = line;
@@ -142,5 +143,14 @@ public class GetterSetterEvaluator extends FeatureEvaluator {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Helper method to remove the leading white space of a string and any newline characters
+	 * @param text to remove the leading white space from
+	 * @return a string with all leading white space removed
+	 */
+	private String trimStartAndNewLine(String text) {
+	    return text.replaceFirst("^\\s+", "").replace("\n", "");
 	}
 }

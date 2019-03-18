@@ -213,6 +213,23 @@ public class GetterSetterEvaluatorTest {
 	}
 
 	/**
+	 * Verify evaluation does NOT trigger when adding spaces to the end of the method declaration
+	 */
+	@Test
+	public void oneCharacterAtATimeGetXWithSpaces() {
+	    try {
+		int offset = doc.getLineOffset(4);
+		for (char c : "public int get".toCharArray()) {
+		    assertFalse(mockUserInput(String.valueOf(c), offset++));
+		}
+		assertTrue(mockUserInput(INT_VAR_NAME, offset++));
+
+		// Now add a space, and the evaluation should NOT trigger
+		assertFalse(mockUserInput(" ", offset++));
+	    } catch (BadLocationException e) {}
+	}
+
+	/**
 	 * Mocks the user typing the given string into the document at
 	 * the given offset. Evaluates the result to see if the feature
 	 * evaluation has been triggered
