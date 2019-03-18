@@ -35,7 +35,7 @@ This repository / plugin is specifically for the backend service of IDE-IT. This
 
 To install and use the standalone IDE-IT plugin, look at the repository and installation instructions located at https://github.com/pujaram/Eclipse-IDE-IT.
 
-## Current Status as of 3/12/19
+## Current Status as of 3/18/19
 
 We have completed the following milestones:
 
@@ -53,10 +53,6 @@ We have completed the following milestones:
 * Implemented an initial test suite
 * Integrated with Travis for CI testing on Github
 * Designed a methodology and implemented tests to assess the success of IDE-IT
-
-Our next goals are:
-
-* Refine current evaluation functions
 
 ## Installation
 
