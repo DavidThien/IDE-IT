@@ -3,5 +3,3 @@ script:
   - cd backend_plugin
   - mvn clean install
   - mvn clean test
-notifications:
-  slack: uw-cse-ugrad:QghBbR1mlo7Cv4fQ6Byigcks
